@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 23:40:57 by yslami            #+#    #+#             */
-/*   Updated: 2025/02/02 16:29:37 by yslami           ###   ########.fr       */
+/*   Updated: 2025/02/05 14:02:02 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <unistd.h>
 # include <stdarg.h>
 # include <limits.h>
+# include <stdint.h>
 
 /* LIBC Functions */
 int			ft_isalpha(int c);
