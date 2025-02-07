@@ -6,13 +6,13 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 00:10:10 by yslami            #+#    #+#             */
-/*   Updated: 2025/02/04 15:20:12 by yslami           ###   ########.fr       */
+/*   Updated: 2025/02/05 16:16:16 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-int	isalnum(char c)
+int	is_alnum(char c)
 {
 	if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z') || \
 		(c >= 'a' && c <= 'z') || c == '_')
@@ -20,7 +20,7 @@ int	isalnum(char c)
 	return (0);
 }
 
-int	isspace(char c)
+int	is_space(char c)
 {
 	if ((c >= 9 && c <= 13) ||c == 32)
 		return (1);

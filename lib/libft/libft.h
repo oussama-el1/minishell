@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 23:40:57 by yslami            #+#    #+#             */
-/*   Updated: 2025/02/05 14:02:02 by yslami           ###   ########.fr       */
+/*   Updated: 2025/02/05 16:16:16 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 /* LIBC Functions */
 int			ft_isalpha(int c);
 int			ft_isdigit(int c);
-int			ft_isalnum(int c);
+int			ft_is_alnum(int c);
 int			ft_isascii(int c);
 int			ft_isprint(int c);
 size_t		ft_strlen(const char *str);

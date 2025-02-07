@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 21:50:44 by yslami            #+#    #+#             */
-/*   Updated: 2025/02/04 14:30:52 by yslami           ###   ########.fr       */
+/*   Updated: 2025/02/07 15:58:59 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ t_token	*init_token(void)
 
 	token = (t_token *)barca_malloc(sizeof(t_token));// barca_malloc is a custom malloc function
 	token->value = NULL;
-	token->spaceafter = 0;
+	token->bef_space = 0;
 	token->visited = 0;
 	token->prev = NULL;
 	token->next = NULL;
@@ -43,7 +43,7 @@ void	ft_newnode(t_token **token, char *value, int before_space)
 	new_node = (t_token *)barca_malloc(sizeof(t_token));
 	new_node->value = value;
 	new_node->visited = 0;
-	new_node->spaceafter = before_space;
+	new_node->bef_space = before_space;
 	new_node->next = NULL;
 	while (curr->next)
 		curr = curr->next;

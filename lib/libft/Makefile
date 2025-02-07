@@ -6,7 +6,7 @@
 #    By: yslami <yslami@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/23 15:42:47 by yslami            #+#    #+#              #
-#    Updated: 2025/02/02 16:28:49 by yslami           ###   ########.fr        #
+#    Updated: 2025/02/05 16:16:16 by yslami           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ AR			=	ar rcs
 
 SRCS 		= 	ft_isalpha.c \
 				ft_isdigit.c \
-				ft_isalnum.c \
+				ft_is_alnum.c \
 				ft_isascii.c \
 				ft_isprint.c \
 				ft_strlen.c \
