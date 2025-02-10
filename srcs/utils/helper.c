@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 00:10:10 by yslami            #+#    #+#             */
-/*   Updated: 2025/02/05 16:16:16 by yslami           ###   ########.fr       */
+/*   Updated: 2025/02/07 20:34:45 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	special_d(char c)
 	return (0);
 }
 
-int	isparenthesis(char c)
+int	isparenth(char c)
 {
 	if (c == '(' || c == ')')
 		return (1);

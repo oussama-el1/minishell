@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/02/07 16:14:46 by yslami           ###   ########.fr       */
+/*   Updated: 2025/02/09 17:43:30 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,31 +20,41 @@
 # define OPEN_PARENTH 40
 # define CLOSE_PARENTH 41
 
-enum e_tree_type
+enum e_token_type
 {
-	AND,
-	OR,
-	PIPE,
-	CMD,
+	EXPR,
 	REDIR_IN,
 	REDIR_OUT,
-	HEREDOC,
 	REDIR_APPEND,
+	HEREDOC,
+	PIPE,
+	AND,
+	OR,
+	SPACE,
+	D_Q,
+	S_Q,
+	DOLLAR,
+	OPEN_BRACKET,
+	CLOSED_BRACKET,
+} ;
+
+enum e_tree_type
+{
+	T_AND,
+	T_OR,
+	T_PIPE,
+	T_CMD,
+	T_REDIR_IN,
+	T_REDIR_OUT,
+	T_HEREDOC,
+	T_REDIR_APPEND,
 } t_tree_type;
 
-typedef enum e_token_type
+typedef struct s_token_map
 {
-	WORD,
-	PIPE,       // |
-	REDIR_IN,   // <
-	REDIR_OUT,  // >
-	REDIR_APPEND, // >>
-	HEREDOC,    // <<
-	ENV_VAR,    // $VAR
-	QUOTE,      // " or '
-	LOGICAL_AND, // &&
-	LOGICAL_OR   // ||
-}	t_token_type;
+	const char			*key;
+	enum e_token_type	type;
+}	t_token_map;
 
 typedef struct s_token
 {
@@ -99,7 +109,7 @@ typedef struct s_cmd
 
 typedef struct s_tree
 {
-	char				*data; // command name
+	// char				*data; // command name
 	int					fd[2]; // file descriptors for pipe
 	t_cmd				*next; // next command in the pipe
 	struct s_tree		*left; // left child in the tree
@@ -115,27 +125,37 @@ typedef struct s_joinheredoc
 	int		heredoc_flag;
 }	t_joinheredoc;
 
-/* helper.c */
+/* helper.c && helper2.c && string_utils.c */
 int		is_space(char c);
+int		only_spaces(char *str);
 int		isquote(char c);
 int		special_d(char c);
-int		isparenthesis(char c);
+int		isparenth(char c);
 int		is_alnum(char c);
 int		special_d_1(char c);
-// char 	*ft_getstr(char *str, int start, int len);
+char	*remove_quotes(char *str);
+int		get_type(const char *str);
+int		ft_strcmp(const char *s1, const char *s2);
+// char 	*ft_substr(char *str, int start, int len);
+
 
 t_token	*init_token(void);
 int		before_space(char *str, int i);
 
 void	process_input(char *line, t_token **token, t_env *env_list);
 void	init_vars(t_vars **vars, char *line, t_env *env_list);
+void	ft_newnode(t_token **token, char *value, int before_space);
 
 /* parsing_type.c */
 void	ft_space(t_vars **vars, int *ret);
 void	parse_char(t_token **token, t_vars **vars, int *ret);
-void	parse_quote(t_token **token, t_vars **vars, int *ret);
+int		parse_quote(t_token **token, t_vars **vars, int *ret);
 void	parse_dollar(t_token **token, t_vars **vars, int *ret);
 void	parse_separator(t_token **token, t_vars **vars, int *ret);
 void	parse_parenthesis(t_token **token, t_vars **vars, int *ret);
+int		check_syntax(t_token **token);
+char	*ft_substr(const char *str, unsigned int start, size_t len);
+
+t_token	*join_heredocargs(t_token *token);
 
 # endif

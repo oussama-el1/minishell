@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 13:05:43 by yslami            #+#    #+#             */
-/*   Updated: 2025/02/07 15:58:59 by yslami           ###   ########.fr       */
+/*   Updated: 2025/02/09 14:24:34 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	parse_char(t_token **token, t_vars **vars, int *ret)
 	(*vars)->tmp = (*vars)->i;
 	c = (*vars)->cmd[(*vars)->i];
 	while (c && !isquote(c) && !special_d(c) && !is_space(c) && \
-		!isparenthesis(c))
+		!isparenth(c))
 	{
 		(*vars)->i++;
 		c = (*vars)->cmd[(*vars)->i];
@@ -28,13 +28,13 @@ void	parse_char(t_token **token, t_vars **vars, int *ret)
 	bef_space = before_space((*vars)->cmd, (*vars)->tmp - 1);
 	if ((*vars)->flag == 1)
 	{
-		(*token)->value = ft_getstr((*vars)->cmd, (*vars)->tmp, \
+		(*token)->value = ft_substr((*vars)->cmd, (*vars)->tmp, \
 			(*vars)->i - (*vars)->tmp);
 		(*token)->bef_space = bef_space;
 		(*vars)->flag = 0;
 	}
 	else
-		ft_newnode(token, ft_getstr((*vars)->cmd, (*vars)->tmp, \
+		ft_newnode(token, ft_substr((*vars)->cmd, (*vars)->tmp, \
 			(*vars)->i - (*vars)->tmp), bef_space);
 	*ret = 0;
 }
@@ -54,13 +54,13 @@ int	parse_quote(t_token **token, t_vars **vars, int *ret)
 		bef_space = before_space((*vars)->cmd, (*vars)->tmp - 1);
 		if ((*vars)->flag == 1)
 		{
-			(*token)->value = ft_getstr((*vars)->cmd, (*vars)->tmp, \
+			(*token)->value = ft_substr((*vars)->cmd, (*vars)->tmp, \
 				(*vars)->i - (*vars)->tmp);
 			(*token)->bef_space = bef_space;
 			(*vars)->flag = 0;
 		}
 		else
-			ft_newnode(token, ft_getstr((*vars)->cmd, (*vars)->tmp, \
+			ft_newnode(token, ft_substr((*vars)->cmd, (*vars)->tmp, \
 				(*vars)->i - (*vars)->tmp), bef_space);
 	}
 	else
@@ -82,13 +82,13 @@ void	parse_dollar(t_token **token, t_vars **vars, int *ret)
 	bef_space = before_space((*vars)->cmd, (*vars)->tmp - 1);
 	if ((*vars)->flag == 1)
 	{
-		(*token)->value = ft_getstr((*vars)->cmd, (*vars)->tmp, \
+		(*token)->value = ft_substr((*vars)->cmd, (*vars)->tmp, \
 			(*vars)->i - (*vars)->tmp);
 		(*token)->bef_space = bef_space;
 		(*vars)->flag = 0;
 	}
 	else
-		ft_newnode(token, ft_getstr((*vars)->cmd, (*vars)->tmp, \
+		ft_newnode(token, ft_substr((*vars)->cmd, (*vars)->tmp, \
 			(*vars)->i - (*vars)->tmp), bef_space);
 	*ret = 0;
 }
@@ -104,20 +104,20 @@ void	parse_separator(t_token **token, t_vars **vars, int *ret)
 	curr_sep = (*vars)->cmd[(*vars)->i];
 	while ((*vars)->cmd[(*vars)->i] && \
 		special_d((*vars)->cmd[(*vars)->i]) && \
-		!ft_isquote((*vars)->cmd[(*vars)->i]) && \
-		!ft_is_space((*vars)->cmd[(*vars)->i]) && \
+		!isquote((*vars)->cmd[(*vars)->i]) && \
+		!is_space((*vars)->cmd[(*vars)->i]) && \
 		count++ < 2 && curr_sep == (*vars)->cmd[(*vars)->i])
 		(*vars)->i++;
 	bef_space = before_space((*vars)->cmd, (*vars)->tmp - 1);
 	if ((*vars)->flag == 1)
 	{
-		(*token)->value = ft_getstr((*vars)->cmd, (*vars)->tmp, \
+		(*token)->value = ft_substr((*vars)->cmd, (*vars)->tmp, \
 			(*vars)->i - (*vars)->tmp);
 		(*token)->bef_space = bef_space;
 		(*vars)->flag = 0;
 	}
 	else
-		ft_newnode(token, ft_getstr((*vars)->cmd, (*vars)->tmp, \
+		ft_newnode(token, ft_substr((*vars)->cmd, (*vars)->tmp, \
 			(*vars)->i - (*vars)->tmp), bef_space);
 	*ret = 0;
 }
@@ -130,13 +130,13 @@ void	parse_parenthesis(t_token **token, t_vars **vars, int *ret)
 	bef_space = before_space((*vars)->cmd, (*vars)->tmp - 1);
 	if ((*vars)->flag == 1)
 	{
-		(*token)->value = ft_getstr((*vars)->cmd, (*vars)->tmp, \
+		(*token)->value = ft_substr((*vars)->cmd, (*vars)->tmp, \
 			(*vars)->i - (*vars)->tmp);
 		(*token)->bef_space = bef_space;
 		(*vars)->flag = 0;
 	}
 	else
-		ft_newnode(token, ft_getstr((*vars)->cmd, (*vars)->tmp, \
+		ft_newnode(token, ft_substr((*vars)->cmd, (*vars)->tmp, \
 			(*vars)->i - (*vars)->tmp), bef_space);
 	*ret = 0;
 }
