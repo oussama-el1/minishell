@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:13:20 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/02/09 19:08:30 by yslami           ###   ########.fr       */
+/*   Updated: 2025/02/10 16:34:29 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,51 @@
 
 static int	tokenizer(t_token **token, t_vars *vars);
 static void	give_type(t_token **token);
+
+const char *tree_type_names[] = {
+   "T_AND",
+	"T_OR",
+	"T_PIPE",
+	"T_CMD",
+	"T_REDIR_IN",
+	"T_REDIR_OUT",
+	"T_HEREDOC",
+	"T_REDIR_APPEND",
+};
+
+static void print_ast(t_tree *node, int depth, const char *relation)
+{
+    if (!node)
+        return;
+
+    // Indentation for tree depth visualization
+    for (int i = 0; i < depth; i++)
+        printf("  ");
+
+    // Print node type using the global array and relation (Left/Right)
+    printf("[%s] Node: %s", relation, tree_type_names[node->tree_type]);
+
+    // Print command arguments if it's a CMD node
+    if (node->tree_type == T_CMD)
+    {
+        t_cmd *cmd = (t_cmd *)node->next;
+        printf(" [CMD]: ");
+        while (cmd)
+        {
+            printf("%s ", cmd->cmd);
+            cmd = cmd->next;
+        }
+    }
+
+    printf("\n");
+
+    // Recursively print left and right children with proper relation
+    if (node->left)
+        print_ast(node->left, depth + 1, "Left");
+    if (node->right)
+        print_ast(node->right, depth + 1, "Right");
+}
+
 
 void	process_input(char *line, t_token **token, t_env *env_list)
 {
@@ -29,7 +74,14 @@ void	process_input(char *line, t_token **token, t_env *env_list)
 		if (!check_syntax(&new_token))
 			return ;
 
-		tree = build_tree(token);
+
+		tree = build_ast(new_token);
+
+
+		printf("\n===== AST Structure =====\n");
+		print_ast(tree, 0, "Root");
+		printf("=========================\n\n");
+
 		// execute(tree, env_list);
 	}
 	free(line);

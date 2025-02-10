@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/02/09 17:43:30 by yslami           ###   ########.fr       */
+/*   Updated: 2025/02/10 20:42:50 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,10 @@ enum e_token_type
 
 enum e_tree_type
 {
+	T_CMD,
 	T_AND,
 	T_OR,
 	T_PIPE,
-	T_CMD,
 	T_REDIR_IN,
 	T_REDIR_OUT,
 	T_HEREDOC,
@@ -109,7 +109,7 @@ typedef struct s_cmd
 
 typedef struct s_tree
 {
-	// char				*data; // command name
+	char				*data; // command name
 	int					fd[2]; // file descriptors for pipe
 	t_cmd				*next; // next command in the pipe
 	struct s_tree		*left; // left child in the tree
@@ -157,5 +157,10 @@ int		check_syntax(t_token **token);
 char	*ft_substr(const char *str, unsigned int start, size_t len);
 
 t_token	*join_heredocargs(t_token *token);
+
+/* tree.c */
+t_tree *build_ast(t_token *token);
+t_token	*skip_parenthesis_back(t_token *token);
+t_tree	*create_tree_node(t_token *token, int visit_flag);
 
 # endif
