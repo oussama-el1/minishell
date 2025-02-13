@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/02/10 20:42:50 by yslami           ###   ########.fr       */
+/*   Updated: 2025/02/13 21:50:42 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,9 @@
 
 # define OPEN_PARENTH 40
 # define CLOSE_PARENTH 41
+
+extern int g_exit_status;
+extern int g_received_signal;
 
 enum e_token_type
 {
@@ -38,7 +41,7 @@ enum e_token_type
 	CLOSED_BRACKET,
 } ;
 
-enum e_tree_type
+typedef enum e_tree_type
 {
 	T_CMD,
 	T_AND,
@@ -48,7 +51,25 @@ enum e_tree_type
 	T_REDIR_OUT,
 	T_HEREDOC,
 	T_REDIR_APPEND,
+	T_SUBSHELL,
 } t_tree_type;
+
+typedef struct s_env
+{
+	char			*key;
+	char			*value;
+	int				exported;
+	struct s_env	*next;
+}	t_env;
+
+typedef struct s_vars
+{
+	char			*cmd;
+	int				flag;
+	int				tmp;
+	int				i;
+	t_env			*env;
+}				t_vars;
 
 typedef struct s_token_map
 {
@@ -66,56 +87,19 @@ typedef struct s_token
 	struct s_token	*next;
 }	t_token;
 
-typedef struct s_env
-{
-	char			*key;       // Variable name
-	char			*value;     // Variable value
-	int				size;       // Size of the environment list
-	char			*pwd;       // Current working directory
-	int				env_null;   // Flag for empty environment
-	struct s_env	*prev;      // Previous variable
-	struct s_env	*next;      // Next environment variable
-}				t_env;
 
-typedef struct s_vars
-{
-	char			*cmd;
-	int				flag;
-	int				tmp;
-	int				i;
-	t_env			*env;
-}				t_vars;
-
-typedef struct s_args
-{
-	char			*cmd;        // Argument value
-	int				bef_space;  // Space handling
-	int				expand;      // Expansion flag (for `$VAR`)
-	struct s_args	*next;       // Next argument
-}				t_args;
-
-typedef struct s_cmd
-{
-	char			*cmd;
-	int				fd[2];
-	int				word;
-	int				bef_space;
-	int				heredocfd;
-	int				expandheredoc;
-	int				expandwildcard;
-	int				ambiguous;
-	struct s_cmd	*next;
-}				t_cmd;
 
 typedef struct s_tree
 {
-	char				*data; // command name
-	int					fd[2]; // file descriptors for pipe
-	t_cmd				*next; // next command in the pipe
-	struct s_tree		*left; // left child in the tree
-	struct s_tree		*right;// right child in the tree
-	enum e_tree_type	tree_type; // type of the node
-}				t_tree;
+	t_tree_type type;
+	char **argv;
+	char *filename;
+	char *heredoc_delim;
+	int is_subshell;
+	struct s_tree *left;
+	struct s_tree *right;
+} t_tree;
+
 
 typedef struct s_joinheredoc
 {
@@ -125,7 +109,15 @@ typedef struct s_joinheredoc
 	int		heredoc_flag;
 }	t_joinheredoc;
 
-/* helper.c && helper2.c && string_utils.c */
+typedef struct s_syntax
+{
+	int		inside_brackets;
+	int		bracket_level;
+	t_token	*start;
+	t_token	*next_after;
+}	t_syntax;
+
+/* helper.c && helper2.c && string_utils.c && list_utils.c */
 int		is_space(char c);
 int		only_spaces(char *str);
 int		isquote(char c);
@@ -133,11 +125,18 @@ int		special_d(char c);
 int		isparenth(char c);
 int		is_alnum(char c);
 int		special_d_1(char c);
+int	is_dilim(enum e_token_type type);
 char	*remove_quotes(char *str);
 int		get_type(const char *str);
 int		ft_strcmp(const char *s1, const char *s2);
 // char 	*ft_substr(char *str, int start, int len);
+t_token	*last_token(t_token *token);
 
+
+/* syntax_helper.c */
+int		print_syntax_error(char *token);
+int		check_brackets(t_token *token);
+void	while_ft(t_token **token, t_token **last, t_syntax *syntax);
 
 t_token	*init_token(void);
 int		before_space(char *str, int i);
@@ -146,21 +145,36 @@ void	process_input(char *line, t_token **token, t_env *env_list);
 void	init_vars(t_vars **vars, char *line, t_env *env_list);
 void	ft_newnode(t_token **token, char *value, int before_space);
 
-/* parsing_type.c */
+// /* parsing_type.c && parser.c */
 void	ft_space(t_vars **vars, int *ret);
 void	parse_char(t_token **token, t_vars **vars, int *ret);
 int		parse_quote(t_token **token, t_vars **vars, int *ret);
 void	parse_dollar(t_token **token, t_vars **vars, int *ret);
 void	parse_separator(t_token **token, t_vars **vars, int *ret);
 void	parse_parenthesis(t_token **token, t_vars **vars, int *ret);
-int		check_syntax(t_token **token);
-char	*ft_substr(const char *str, unsigned int start, size_t len);
+int		check_syntax(t_token *token, int inside_brackets);
+void	process_tokens(t_token *tken);
+// char	*ft_substr(const char *str, unsigned int start, size_t len);
 
 t_token	*join_heredocargs(t_token *token);
 
 /* tree.c */
 t_tree *build_ast(t_token *token);
-t_token	*skip_parenthesis_back(t_token *token);
-t_tree	*create_tree_node(t_token *token, int visit_flag);
+
+
+// env_utils
+t_env	*init_env(char **envp);
+void	add_env_var(t_env **env, char *key,
+		char *value, int exported);
+void	print_export(t_env *env, int declare);
+void	print_env(t_env *env);
+int		unset_env_var(t_env **env, char *key);
+char	*get_env_var(t_env *env, char *key);
+void	set_env_var(t_env **env, char *key, char *value, int exported);
+void	free_env(t_env *env);
+char	**get_env_array(t_env *env);
+t_env	*dup_env(t_env *original);
+int		set_name_and_value(char *env, char **name,
+		char **value);
 
 # endif

@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 21:50:44 by yslami            #+#    #+#             */
-/*   Updated: 2025/02/09 14:36:45 by yslami           ###   ########.fr       */
+/*   Updated: 2025/02/12 16:29:30 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,11 @@ void	ft_newnode(t_token **token, char *value, int before_space)
 		curr = curr->next;
 	curr->next = new_node;
 	new_node->prev = curr;
+}
+
+t_token	*last_token(t_token *token)
+{
+	while (token->next)
+		token = token->next;
+	return (token);
 }

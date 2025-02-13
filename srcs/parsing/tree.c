@@ -6,12 +6,38 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 19:07:45 by yslami            #+#    #+#             */
-/*   Updated: 2025/02/10 20:35:21 by yslami           ###   ########.fr       */
+/*   Updated: 2025/02/12 21:53:32 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
+// statuic void	find_lowest_precedence_operator(t_token *token, t_token **op_token)
+// {
+
+// }
+
+// static t_tree	*search_parse(t_token *token)
+// {
+// 	t_token	*op_token;
+
+// 	op_token = NULL;
+// 	find_lowest_precedence_operator(last_token(token), &op_token);
+// 	if (op_token)
+// 		return (create_node_recursive(op_token));
+// 	return (parse_command_or_sub(token));
+// }
+
+// t_tree	*build_ast(t_token *token)
+// {
+// 	if (!token)
+// 		return (NULL);
+// 	return (search_parse(token));
+// }
+
+// echo hello | grep d
+
+/*
 static t_tree	*parse_and_or(t_token *token);
 static void		recursive_parsing(t_token *token, t_tree **node);
 
@@ -28,10 +54,10 @@ static t_tree	*parse_and_or(t_token *token)
 	node = NULL;
 	while (token && token->visited != 1)
 	{
-		token = skip_parenthesis_back(token);
+		// skip_parenthesis_back(&token);
 		tmp = token;
-		if (token && token->visited != 1 && token->type == OPEN_BRACKET)
-			token = token->prev;
+		// if (token && token->visited != 1 && token->type == OPEN_BRACKET)
+			// token = token->prev;
 		if (token && token->visited != 1 && (token->type == AND || \
 			token->type == OR))
 			return (recursive_parsing(token, &node), node);
@@ -48,32 +74,46 @@ static void	recursive_parsing(t_token *token, t_tree **node)
 	(*node)->left = parse_and_or(token->prev);
 }
 
-/*
-
-t_tree	*search_logical_operator(t_token *token)
+static t_tree	*find_pipe(t_token *token)
 {
-	t_token	*save;
 	t_tree	*node;
 
+	if (!token)
+		return (NULL);
 	node = NULL;
 	while (token && token->visited != 1)
 	{
-		token = skip_brackets_prev(token);
-		save = token;
-		if (token && token->visited != 1 && token->type == TOKEN_OPEN_BRACKET)
-			token = token->prev;
-		if (token && token->visited != 1
-			&& (token->type == TOKEN_AND || token->type == TOKEN_OR))
-		{
-			node = make_node(&token, 1);
-			node->right = search_pipe(token->next);
-			node->left = search_logical_operator(token->prev);
-			return (node);
-		}
-		if (token)
-			token = token->prev;
+		// skip_parenthesis_next(&token) // still need an integer as refernece of brackets existence
+		if (token && token->visited != 1 && token->type == PIPE)
+			return ();
 	}
-	return (search_pipe(save));
+}
+
+
+t_tree	*search_pipe(t_token *token)
+{
+	t_token	*save;
+	t_tree	*node;
+	int		is_brackets;
+
+	node = NULL;
+	if (!token)
+		return (node);
+	is_brackets = 0;
+	while (token && token->visited != 1)
+	{
+		token = skip_brackets_next(token, &is_brackets);
+		save = token;
+		if (token && token->visited != 1 && token->type == TOKEN_CLOSED_BRACKET)
+			token->visited = 1;
+		if (token && token->visited != 1 && token->type == TOKEN_PIPE)
+			return (choose_function(node, token, is_brackets));// we are here
+		if (token)
+			token = token->next;
+	}
+	if (is_brackets)
+		return (search_logical_operator(save->prev));
+	return (make_command(save));
 }
 
 static t_tree	*make_command(t_token *token)
@@ -110,30 +150,5 @@ static t_tree	*choose_function(t_tree *node, t_token *token, int is_brackets)
 	return (node);
 }
 
-t_tree	*search_pipe(t_token *token)
-{
-	t_token	*save;
-	t_tree	*node;
-	int		is_brackets;
-
-	node = NULL;
-	if (!token)
-		return (node);
-	is_brackets = 0;
-	while (token && token->visited != 1)
-	{
-		token = skip_brackets_next(token, &is_brackets);
-		save = token;
-		if (token && token->visited != 1 && token->type == TOKEN_CLOSED_BRACKET)
-			token->visited = 1;
-		if (token && token->visited != 1 && token->type == TOKEN_PIPE)
-			return (choose_function(node, token, is_brackets));// we are here
-		if (token)
-			token = token->next;
-	}
-	if (is_brackets)
-		return (search_logical_operator(save->prev));
-	return (make_command(save));
-}
 
 */

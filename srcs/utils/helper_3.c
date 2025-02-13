@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 13:53:56 by yslami            #+#    #+#             */
-/*   Updated: 2025/02/09 14:25:01 by yslami           ###   ########.fr       */
+/*   Updated: 2025/02/13 18:58:19 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,4 +25,11 @@ int	only_spaces(char *str)
 			return (0);
 	}
 	return (1);
+}
+
+int	is_dilim(enum e_token_type type)
+{
+	if (type == PIPE || type == AND || type == OR)
+		return (1);
+	return (0);
 }
