@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 01:22:46 by yslami            #+#    #+#             */
-/*   Updated: 2025/02/13 11:09:00 by yslami           ###   ########.fr       */
+/*   Updated: 2025/02/15 12:43:00 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,10 +62,16 @@ int	get_type(const char *str)
 	{"|", PIPE}, {"&&", AND}, {"||", OR}, \
 	{"$", DOLLAR}, {"(", OPEN_BRACKET}, \
 	{")", CLOSED_BRACKET}, {"\"", D_Q}, {\
-	"'", S_Q}, {" ", SPACE}, {NULL, EXPR}
+	"'", S_Q}, {NULL, EXPR}
 	};
 	int					i;
 
+	if (*str == '"')
+		return (D_Q);
+	else if (*str == '\'')
+		return (S_Q);
+	else if (*str == '$')
+		return (DOLLAR);
 	i = 0;
 	while (token_map[i].key)
 	{

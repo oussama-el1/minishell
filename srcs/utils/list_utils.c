@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 21:50:44 by yslami            #+#    #+#             */
-/*   Updated: 2025/02/12 16:29:30 by yslami           ###   ########.fr       */
+/*   Updated: 2025/02/14 11:34:33 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,4 +56,30 @@ t_token	*last_token(t_token *token)
 	while (token->next)
 		token = token->next;
 	return (token);
+}
+
+t_token	*lst_dup(t_token *token)
+{
+	t_token	*head;
+	t_token	*tail;
+	t_token *new;
+
+	head = NULL;
+	tail = NULL;
+	while(token)
+	{
+		new = init_token();
+		new->value = ft_strdup(token->value);
+		new->type = token->type;
+		new->bef_space = token->bef_space;
+		new->visited = token->visited;
+		new->prev =tail;
+		if (!head)
+			head = new;
+		else
+			tail->next = new;
+		tail = new;
+		token = token->next;
+	}
+	return (head);
 }

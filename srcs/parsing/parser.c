@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:13:20 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/02/13 20:35:09 by yslami           ###   ########.fr       */
+/*   Updated: 2025/02/15 13:52:36 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,23 +25,6 @@ const char *tree_type_names[] = {
 	"T_REDIR_OUT",
 	"T_HEREDOC",
 	"T_REDIR_APPEND",
-};
-
-const char *token_type_names[] = {
-  	"EXPR",
-	"REDIR_IN",
-	"REDIR_OUT",
-	"REDIR_APPEND",
-	"HEREDOC",
-	"PIPE",
-	"AND",
-	"OR",
-	"SPACE",
-	"D_Q",
-	"S_Q",
-	"DOLLAR",
-	"OPEN_BRACKET",
-	"CLOSED_BRACKET",
 };
 
 static void print_ast(t_tree *node, int depth, const char *relation)
@@ -76,10 +59,7 @@ static void print_ast(t_tree *node, int depth, const char *relation)
     if (node->right)
         print_ast(node->right, depth + 1, "Right");
 }
-*/
-
 const char *token_type_names[] = {
-  	"EXPR",
 	"REDIR_IN",
 	"REDIR_OUT",
 	"REDIR_APPEND",
@@ -87,12 +67,29 @@ const char *token_type_names[] = {
 	"PIPE",
 	"AND",
 	"OR",
-	"SPACE",
-	"D_Q",
-	"S_Q",
 	"DOLLAR",
 	"OPEN_BRACKET",
 	"CLOSED_BRACKET",
+	"D_Q",
+	"S_Q",
+	"EXPR",
+};
+*/
+
+const char *token_type_names[] = {
+	"REDIR_IN",
+	"REDIR_OUT",
+	"REDIR_APPEND",
+	"HEREDOC",
+	"PIPE",
+	"AND",
+	"OR",
+	"DOLLAR",
+	"OPEN_BRACKET",
+	"CLOSED_BRACKET",
+	"D_Q",
+	"S_Q",
+	"EXPR",
 };
 
 void	process_input(char *line, t_token **token, t_env *env_list)
@@ -106,27 +103,18 @@ void	process_input(char *line, t_token **token, t_env *env_list)
 	{
 		give_type(token);
 
-		/* print the token list */
-		for (t_token *tmp = *token; tmp; tmp = tmp->next)
-			printf("[%s]\t{%s}\n", token_type_names[tmp->type], tmp->value);
-
-		if (!check_syntax(token, 0))
+		if (!check_syntax(*token, 0))
 			return ;
 
-		// print the token list
-		for (t_token *tmp = *token; tmp; tmp = tmp->next)
-			printf("[%s]\t{%s}\n", token_type_names[tmp->type], tmp->value);
-
 		// new_token = join_heredocargs(*token);
-		// // print new token list
-		// for (t_token *tmp = new_token; tmp; tmp = tmp->next)
-		// 	printf("[%s]\t{%s}\n", token_type_names[tmp->type], tmp->value);
 
 		/* print tokens with before space value */
-		// for (t_token *tmp = *token; tmp; tmp = tmp->next)
-		// 	printf("value: %s, before space: %d\n", tmp->value, tmp->bef_space);
 
-		//process_tokens(token);
+		process_tokens(*token, env_list);
+		for (t_token *tmp = *token; tmp; tmp = tmp->next)
+		{
+			printf("Token: %s, Type: %s\n", tmp->value, token_type_names[tmp->type]);
+		}
 
 
 		// tree = build_ast(*token);

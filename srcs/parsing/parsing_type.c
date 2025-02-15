@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 13:05:43 by yslami            #+#    #+#             */
-/*   Updated: 2025/02/09 14:24:34 by yslami           ###   ########.fr       */
+/*   Updated: 2025/02/15 11:08:30 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	parse_quote(t_token **token, t_vars **vars, int *ret)
 				(*vars)->i - (*vars)->tmp), bef_space);
 	}
 	else
-		return (*ret = 1, perror("minishell: open quotes!"), 1);
+		return (*ret = 1, printf("minishell: open quotes!\n"), 1);
 	return (*ret = 0, 0);
 }
 

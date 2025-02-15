@@ -1,8 +1,0 @@
-{
-	"files.associations": {
-		"minishell.h": "c",
-		"iterator": "c",
-		"istream": "c",
-		"string": "c"
-	}
-}

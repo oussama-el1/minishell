@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/02/13 21:50:42 by yslami           ###   ########.fr       */
+/*   Updated: 2025/02/15 16:39:05 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ extern int g_received_signal;
 
 enum e_token_type
 {
-	EXPR,
 	REDIR_IN,
 	REDIR_OUT,
 	REDIR_APPEND,
@@ -33,12 +32,12 @@ enum e_token_type
 	PIPE,
 	AND,
 	OR,
-	SPACE,
-	D_Q,
-	S_Q,
 	DOLLAR,
 	OPEN_BRACKET,
 	CLOSED_BRACKET,
+	D_Q,
+	S_Q,
+	EXPR,
 } ;
 
 typedef enum e_tree_type
@@ -125,18 +124,26 @@ int		special_d(char c);
 int		isparenth(char c);
 int		is_alnum(char c);
 int		special_d_1(char c);
-int	is_dilim(enum e_token_type type);
+int		isredirect(enum e_token_type type);
+int		is_dilim(enum e_token_type type);
 char	*remove_quotes(char *str);
 int		get_type(const char *str);
 int		ft_strcmp(const char *s1, const char *s2);
 // char 	*ft_substr(char *str, int start, int len);
 t_token	*last_token(t_token *token);
-
+t_token	*lst_dup(t_token *token);
+t_token	*sublist(t_token *start, t_token *end);
+int		contains_unquoted_ampersand(const char *str);
 
 /* syntax_helper.c */
 int		print_syntax_error(char *token);
 int		check_brackets(t_token *token);
 void	while_ft(t_token **token, t_token **last, t_syntax *syntax);
+int		check_operators(t_token *token);
+int		check_redirections(t_token *token);
+
+/* expander.c */
+void	expand_variables(t_token *token, t_env *env);
 
 t_token	*init_token(void);
 int		before_space(char *str, int i);
@@ -153,7 +160,7 @@ void	parse_dollar(t_token **token, t_vars **vars, int *ret);
 void	parse_separator(t_token **token, t_vars **vars, int *ret);
 void	parse_parenthesis(t_token **token, t_vars **vars, int *ret);
 int		check_syntax(t_token *token, int inside_brackets);
-void	process_tokens(t_token *tken);
+void	process_tokens(t_token *tken, t_env *env);
 // char	*ft_substr(const char *str, unsigned int start, size_t len);
 
 t_token	*join_heredocargs(t_token *token);
