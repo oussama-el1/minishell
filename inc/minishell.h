@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/02/16 15:58:06 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/02/17 14:38:15 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # include <signal.h>
 # include <termios.h>
 
-extern int g_received_signal;
+int g_received_signal;
 
 typedef enum e_tree_type
 {

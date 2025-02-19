@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:08:50 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/02/16 12:08:20 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/02/17 14:38:56 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void handle_sigint(int sig)
 {
-	(void)sig;
+	g_received_signal = sig;
 	ft_putstr_fd("\n", 1);
 	rl_replace_line("", 0);
 	rl_on_new_line();
@@ -57,7 +57,6 @@ void shell_loop(t_env *env)
 		}
 		if (*input)
 			add_history(input);
-		// printf("test echo \n");
 		test(env, &exit_status);
 		free(input);
 	}

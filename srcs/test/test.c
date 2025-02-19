@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 00:59:24 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/02/16 15:41:37 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/02/16 17:21:19 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,10 +107,10 @@ int test(t_env *env, int *exit_status)
 	char *echo_argv[] = {"echo", "Hello world", "", NULL};
 	char *cat_argv[] = {"cat", "-e", NULL};
 
-	t_tree echo_cmd = {CMD, echo_argv, NULL, 0, NULL, NULL};
-	t_tree cat_cmd = {CMD, cat_argv, NULL, 0, NULL, NULL};
+	t_tree echo_cmd = {CMD, echo_argv, NULL, NULL, NULL};
+	t_tree cat_cmd = {CMD, cat_argv, NULL, NULL, NULL};
 
-	t_tree pipe = {PIPE, NULL, NULL, 0, &echo_cmd, &cat_cmd};
+	t_tree pipe = {PIPE, NULL, NULL, &echo_cmd, &cat_cmd};
 	execute_ast(&pipe, env, exit_status);
 	return (0);
 }

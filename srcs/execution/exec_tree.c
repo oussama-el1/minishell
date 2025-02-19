@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 18:06:55 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/02/16 15:56:14 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/02/16 17:19:41 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,12 +81,3 @@ int	execute_ast(t_tree *node, t_env *env, int *exit_status)
 
 	return (*exit_status);
 }
-
-
-/*
-
-cat < input.txt > EOF << output.txt
-
-[file1, file2, file3, NULL]
-
-*/
