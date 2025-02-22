@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 18:28:01 by yslami            #+#    #+#             */
-/*   Updated: 2025/02/14 17:10:31 by yslami           ###   ########.fr       */
+/*   Updated: 2025/02/21 17:07:03 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ int	check_operators(t_token *token)
 
 int	check_redirections(t_token *token)
 {
-	if (!token->next || token->next->type != EXPR || \
-		token->next->type == CLOSED_BRACKET)
+	if (!token->next || token->next->type == CLOSED_BRACKET || \
+		!is_regular(token->next->type))
 	{
 		if (token->next)
 			return (print_syntax_error(token->next->value));

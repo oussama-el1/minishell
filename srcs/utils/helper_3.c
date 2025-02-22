@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 13:53:56 by yslami            #+#    #+#             */
-/*   Updated: 2025/02/15 11:14:03 by yslami           ###   ########.fr       */
+/*   Updated: 2025/02/19 11:11:46 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,20 @@ int	isredirect(enum e_token_type type)
 {
 	if (type == REDIR_IN || type == REDIR_OUT || type == REDIR_APPEND ||\
 		type == HEREDOC)
+		return (1);
+	return (0);
+}
+
+int	non_control(enum e_token_type type)
+{
+	if (!is_dilim(type) && !isredirect(type))
+		return (1);
+	return (0);
+}
+
+int	islogical(enum e_token_type type)
+{
+	if (type == AND || type == OR)
 		return (1);
 	return (0);
 }

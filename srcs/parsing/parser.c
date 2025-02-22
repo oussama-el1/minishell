@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:13:20 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/02/15 13:52:36 by yslami           ###   ########.fr       */
+/*   Updated: 2025/02/21 17:24:34 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,49 +16,7 @@ static int	tokenizer(t_token **token, t_vars *vars);
 static void	give_type(t_token **token);
 
 /*
-const char *tree_type_names[] = {
-   "T_AND",
-	"T_OR",
-	"T_PIPE",
-	"T_CMD",
-	"T_REDIR_IN",
-	"T_REDIR_OUT",
-	"T_HEREDOC",
-	"T_REDIR_APPEND",
-};
 
-static void print_ast(t_tree *node, int depth, const char *relation)
-{
-    if (!node)
-        return;
-
-    // Indentation for tree depth visualization
-    for (int i = 0; i < depth; i++)
-        printf("  ");
-
-    // Print node type using the global array and relation (Left/Right)
-    printf("[%s] Node: %s", relation, tree_type_names[node->tree_type]);
-
-    // Print command arguments if it's a CMD node
-    if (node->tree_type == T_CMD)
-    {
-        t_cmd *cmd = (t_cmd *)node->next;
-        printf(" [CMD]: ");
-        while (cmd)
-        {
-            printf("%s ", cmd->cmd);
-            cmd = cmd->next;
-        }
-    }
-
-    printf("\n");
-
-    // Recursively print left and right children with proper relation
-    if (node->left)
-        print_ast(node->left, depth + 1, "Left");
-    if (node->right)
-        print_ast(node->right, depth + 1, "Right");
-}
 const char *token_type_names[] = {
 	"REDIR_IN",
 	"REDIR_OUT",
@@ -76,6 +34,14 @@ const char *token_type_names[] = {
 };
 */
 
+const char *type_names[] = {
+   "T_AND",
+	"T_OR",
+	"T_PIPE",
+	"T_CMD",
+	"T_SUBSHELL",
+};
+
 const char *token_type_names[] = {
 	"REDIR_IN",
 	"REDIR_OUT",
@@ -92,37 +58,75 @@ const char *token_type_names[] = {
 	"EXPR",
 };
 
+static void print_redir_list(t_redir *redir)
+{
+    while (redir)
+    {
+        printf("  -> Redir: Type = %s, Filename = \"%s\"\n",
+               token_type_names[redir->type], redir->filename);
+        redir = redir->next;
+    }
+}
+
+static void print_ast(t_tree *node, int depth, const char *relation)
+{
+    if (!node)
+        return;
+
+    // Indentation for tree depth visualization
+    for (int i = 0; i < depth; i++)
+        printf("  ");
+
+    // Print node type using the global array and relation (Left/Right)
+    printf("[%s] Node: %s", relation, type_names[node->type]);
+
+    // If the node is a command, print its argv
+    if (node->type == T_CMD && node->args)
+    {
+        printf(" (argv: ");
+        for (int i = 0; node->args->argv[i]; i++)
+        {
+            printf("\"%s\"", node->args->argv[i]);
+            if (node->args->argv[i + 1])
+                printf(", "); // Print comma between arguments
+        }
+        printf(")");
+
+        // Print redirections if any exist
+        if (node->args->redir)
+        {
+            printf("\n");
+            print_redir_list(node->args->redir);
+        }
+    }
+
+    printf("\n");
+
+    // Recursively print left and right children with proper relation
+    if (node->left)
+        print_ast(node->left, depth + 1, "Left");
+    if (node->right)
+        print_ast(node->right, depth + 1, "Right");
+}
+
 void	process_input(char *line, t_token **token, t_env *env_list)
 {
-	// t_tree	*tree;
+	t_tree	*tree;
 	t_vars	*vars;
-	// t_token	*new_token;
 
 	init_vars(&vars, line, env_list);
 	if (tokenizer(token, vars) == 0)
 	{
 		give_type(token);
-
 		if (!check_syntax(*token, 0))
 			return ;
-
 		// new_token = join_heredocargs(*token);
+		// process_tokens(*token, env_list);
+		tree = build_ast(*token);
 
-		/* print tokens with before space value */
-
-		process_tokens(*token, env_list);
-		for (t_token *tmp = *token; tmp; tmp = tmp->next)
-		{
-			printf("Token: %s, Type: %s\n", tmp->value, token_type_names[tmp->type]);
-		}
-
-
-		// tree = build_ast(*token);
-
-		// printf("\n===== AST Structure =====\n");
-		// print_ast(tree, 0, "Root");
-		// printf("=========================\n\n");
-
+		printf("\n===== AST Structure =====\n");
+		print_ast(tree, 0, "Root");
+		printf("=========================\n\n");
 	}
 	free(line);
 }
