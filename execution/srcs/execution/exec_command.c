@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:04:38 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/02/16 15:42:01 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/02/22 22:04:44 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	run_binary(char **argv, t_env *env, int exit_status)
 	exit(1);
 }
 
-int exec_binary(char **argv, t_env *env, int exit_status)
+int	exec_binary(char **argv, t_env *env, int exit_status)
 {
 	pid_t	pid;
 	int		status;
@@ -79,7 +79,7 @@ int exec_binary(char **argv, t_env *env, int exit_status)
 	else if (pid > 0)
 	{
 		waitpid(pid, &status, 0);
-		return WEXITSTATUS(status);
+		return (WEXITSTATUS(status));
 	}
 	ft_putendl_fd("unable to fork child process", 2);
 	return (1);

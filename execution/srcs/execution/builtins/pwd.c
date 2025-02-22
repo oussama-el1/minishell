@@ -6,11 +6,11 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 15:10:32 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/02/15 13:32:51 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/02/22 21:28:43 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/minishell.h"
+#include "../../../inc/minishell.h"
 
 int	ft_pwd(t_env *env, int exit_status)
 {

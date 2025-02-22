@@ -6,11 +6,11 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 18:03:00 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/02/04 15:01:08 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/02/22 21:28:48 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/minishell.h"
+#include "../../../inc/minishell.h"
 
 int	ft_unset(char **argv, t_env *env)
 {

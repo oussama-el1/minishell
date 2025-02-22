@@ -6,11 +6,11 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 15:25:02 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/02/15 13:25:57 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/02/22 22:01:52 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/minishell.h"
+#include "../../../inc/minishell.h"
 
 int	validate_var_name(const char *var)
 {
@@ -35,10 +35,12 @@ static char	*getname(char *env, char *equal_ptr, int concat_flag)
 	name = NULL;
 	if (equal_ptr)
 	{
-		name = malloc(sizeof(char) * (ft_strlen(env) - ft_strlen(equal_ptr)) + 1);
+		name = malloc(sizeof(char) * (ft_strlen(env)
+					- ft_strlen(equal_ptr)) + 1);
 		if (!name)
 			return (NULL);
-		ft_strlcpy(name, env, ft_strlen(env) - ft_strlen(equal_ptr) + 1 - concat_flag);
+		ft_strlcpy(name, env, ft_strlen(env)
+			- ft_strlen(equal_ptr) + 1 - concat_flag);
 	}
 	return (name);
 }
@@ -69,23 +71,15 @@ static int	process_env(char *env, t_env *env_ls, int exit_status)
 {
 	char	*name;
 	char	*value;
+	char	*env_value;
 	int		concat_flag;
 
 	concat_flag = set_name_and_value(env, &name, &value);
-	
 	if (!validate_var_name(name))
-	{
-		ft_putstr_fd("minishell: export: `", 2);
-		ft_putstr_fd(env, 2);
-		ft_putstr_fd("': not a valid identifier\n", 2);
-		free(name);
-		if (value)
-			free(value);
-		return (1);
-	}
+		return (not_valid_idenrifier(env, name, value));
 	if (value)
 	{
-		char *env_value = get_env_var(env_ls, name, exit_status);
+		env_value = get_env_var(env_ls, name, exit_status);
 		if (concat_flag && env_value)
 			set_env_var(&env_ls, name, ft_strjoin(env_value, value), 1);
 		else
@@ -114,4 +108,3 @@ int	ft_export(char **argv, t_env *env, int exit_status)
 	}
 	return (0);
 }
-

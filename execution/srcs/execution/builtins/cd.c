@@ -6,11 +6,11 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:16:05 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/02/15 13:25:01 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/02/22 21:28:18 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/minishell.h"
+#include "../../../inc/minishell.h"
 
 static int	change_home_dir(char **argv, t_env *env, int exit_status)
 {
