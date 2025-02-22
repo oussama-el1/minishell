@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 13:58:51 by yslami            #+#    #+#             */
-/*   Updated: 2025/02/21 15:54:26 by yslami           ###   ########.fr       */
+/*   Updated: 2025/02/22 12:02:13 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ char	*quoted_process(t_token **curr)
 	}
 	return (arg);
 }
-
 
 char *remove_quote(t_token *curr, char *str)
 {

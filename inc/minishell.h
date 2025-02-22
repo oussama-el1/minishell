@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/02/21 17:06:38 by yslami           ###   ########.fr       */
+/*   Updated: 2025/02/22 12:03:41 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,26 +186,28 @@ int		check_syntax(t_token *token, int inside_brackets);
 t_token	*join_heredocargs(t_token *token);
 
 /* tree.c */
-t_tree *build_ast(t_token *token);
-t_tree	*fetch_pipe_or_subshell(t_token *token);
-t_tree	*found_logical(t_token *token);
-t_tree	*found_pipe(t_token *token, int subshell);
-t_tree	*create_node(t_token *token);
-void	skip_brackets_next(t_token **token, int *has_brackets);
-void	skip_brackets_prev(t_token **token);
-t_tree	*create_subshell(t_token *token);
-t_tree	*create_cmd(t_token *token);
-void	extract_args(t_args *args, t_token *token);
+t_tree 		*build_ast(t_token *token);
+t_tree		*fetch_pipe_or_subshell(t_token *token);
+t_tree		*found_logical(t_token *token);
+t_tree		*found_pipe(t_token *token, int subshell);
+t_tree		*create_node(t_token *token);
+void		skip_brackets_next(t_token **token, int *has_brackets);
+void		skip_brackets_prev(t_token **token);
+t_tree		*create_subshell(t_token *token);
+t_tree		*create_cmd(t_token *token);
+void		extract_args(t_args *args, t_token *token);
 t_tree_type get_tree_type(int type);
-t_token	*back_prev(t_token *token);
-char	*quoted_process(t_token **curr);
-t_token	*left_back(t_token *token);
+t_token		*back_prev(t_token *token);
+char		*quoted_process(t_token **curr);
+t_token		*left_back(t_token *token);
+int			args_count(t_token *token);
 
 // redirections
 t_redir			*create_redir_node(int type, char *filename);
 void			append_redir_node(t_redir **redir_list, t_redir *new_redir);
 void			handle_redirection(t_redir **redir_list, t_token **curr);
 t_redir_type	get_redir_type(int type);
+void 			extract_subshell_args(t_args *args, t_token *token);
 
 // env_utils
 t_env	*init_env(char **envp);

@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 19:07:45 by yslami            #+#    #+#             */
-/*   Updated: 2025/02/21 17:30:52 by yslami           ###   ########.fr       */
+/*   Updated: 2025/02/22 12:02:41 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,11 @@ t_tree	*fetch_pipe_or_subshell(t_token *token)
 			curr = curr->next;
 	}
 	if (bracket)
+	{
+		// printf("bracket\n");
 		return (create_subshell(token));
+	}
+	// printf("cmd\n");
 	return (create_cmd(token));
 }
 
@@ -137,7 +141,6 @@ void	skip_brackets_next(t_token **token, int *has_brackets)
 
 	if ((*token) && (*token)->type == OPEN_BRACKET)
 	{
-		level = 1;
 		(*token)->visited = 1;
 		level = 1;
 		if (has_brackets)
@@ -163,14 +166,12 @@ t_tree	*create_subshell(t_token *token)
 	t_tree	*node;
 	t_args	*args;
 
-	// node = create_node(token);
 	if(!token)
 		return (NULL);
-	printf("%s\n", token->value);
 	node = (t_tree *)malloc(sizeof(t_tree));
 	node->type = T_SUBSHELL;
 	args = (t_args *)malloc(sizeof(t_args));
-	extract_args(args, token);
+	extract_subshell_args(args, token);
 	node->args = args;
 	node->left = build_ast(token);
 	node->right = NULL;
@@ -198,31 +199,15 @@ void	extract_args(t_args *args, t_token *token)
 {
 	t_token	*curr;
 	char	**res;
-	t_redir	*redir = NULL;
-	int		i = 0;
-	int		arg_count = 0;
+	t_redir	*redir;
+	int		i;
+	int		arg_count;
 
-	curr = token;
-
-	while (curr && curr->visited != 1)
-	{
-		if (isredirect(curr->type))
-		{
-			if (curr->next) // Skip the filename
-				curr = curr->next;
-		}
-		else
-		{
-			arg_count++;
-		}
-		curr = curr->next;
-	}
-
-	printf("arg_count: %d\n", arg_count);
-
+	arg_count = args_count(token);
 	res = (char **)malloc((arg_count + 1) * sizeof(char *));
-
 	curr = token;
+	i = 0;
+	redir = NULL;
 	while (curr && curr->visited != 1)
 	{
 		if (isredirect(curr->type))
@@ -286,7 +271,7 @@ void	handle_redirection(t_redir **redir_list, t_token **curr)
 		return ;
 
 	int type = (*curr)->type;
-	*curr = (*curr)->next; // Move to filename
+	*curr = (*curr)->next;
 
 	if (*curr)
 	{
@@ -304,4 +289,25 @@ t_tree_type get_tree_type(int type)
 	if (type == OR)
 		return (T_OR);
 	return (T_PIPE);
+}
+
+void extract_subshell_args(t_args *args, t_token *token)
+{
+	t_token	*curr;
+	t_redir	*redir;
+
+	redir = NULL;
+	curr = token;
+	skip_brackets_next(&curr, NULL);
+	if (curr && curr->type == CLOSED_BRACKET)
+		curr = curr->next;
+	while (curr && curr->visited != 1)
+	{
+		if (isredirect(curr->type))
+			handle_redirection(&redir, &curr);
+		else
+			curr = curr->next;
+	}
+	args->argv = NULL;
+	args->redir = redir;
 }

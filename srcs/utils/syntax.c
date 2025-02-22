@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 13:18:10 by yslami            #+#    #+#             */
-/*   Updated: 2025/02/15 11:14:53 by yslami           ###   ########.fr       */
+/*   Updated: 2025/02/22 14:00:52 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 static int	handle_bracket_content(t_token **curr, t_syntax *syntax);
 static int	handle_special_tokens(t_token *curr);
 static int	check_syntax_1(t_token **token, int inside_brackets);
+static int	check_next_closed(t_token *token);
 
 int	check_syntax(t_token *token, int inside_brackets)
 {
@@ -75,15 +76,34 @@ static int	handle_bracket_content(t_token **curr, t_syntax *syntax)
 		return (print_syntax_error("("));
 	last = token;
 	while_ft(&token, &last, syntax);
-	if (token->type == CLOSED_BRACKET && token->next && \
-		!is_dilim(token->next->type) && token->next->type !=\
-			CLOSED_BRACKET && !isredirect(token->next->type))
-			return (print_syntax_error(token->next->value));
+	if (token->type == CLOSED_BRACKET && !check_next_closed(token))
+			return (0);
 	if (!token || syntax->bracket_level > 0)
 		return (print_syntax_error("("));
 	bracket_list = sublist(syntax->start, token);
 	if (!check_syntax_1(&bracket_list, 1))
 		return (0);
 	*curr = token;
+	return (1);
+}
+
+static int	check_next_closed(t_token *token)
+{
+	t_token	*curr;
+
+	if (token->next && token->next->type != CLOSED_BRACKET && non_control(token->next->type))
+		return (print_syntax_error(token->next->value));
+	curr = token->next;
+	while(curr)
+	{
+		if (curr->type == EXPR || curr->type == DOLLAR || is_quote(curr->type))
+			return (print_syntax_error(curr->value));
+		if (curr->type == isredirect(curr->type))
+			curr = curr->next;
+		if (curr)
+			curr = curr->next;
+		if (curr && is_dilim(curr->type))
+			break ;
+	}
 	return (1);
 }

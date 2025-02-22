@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:13:20 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/02/21 17:24:34 by yslami           ###   ########.fr       */
+/*   Updated: 2025/02/22 11:40:57 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,17 +81,19 @@ static void print_ast(t_tree *node, int depth, const char *relation)
     printf("[%s] Node: %s", relation, type_names[node->type]);
 
     // If the node is a command, print its argv
-    if (node->type == T_CMD && node->args)
+    if ((node->type == T_CMD || node->type == T_SUBSHELL) && node->args)
     {
-        printf(" (argv: ");
-        for (int i = 0; node->args->argv[i]; i++)
-        {
-            printf("\"%s\"", node->args->argv[i]);
-            if (node->args->argv[i + 1])
-                printf(", "); // Print comma between arguments
-        }
-        printf(")");
-
+		if (node->type != T_SUBSHELL)
+		{
+        	printf(" (argv: ");
+        	for (int i = 0; node->args->argv[i]; i++)
+        	{
+            	printf("\"%s\"", node->args->argv[i]);
+            	if (node->args->argv[i + 1])
+                	printf(", "); // Print comma between arguments
+        	}
+        	printf(")");
+		}
         // Print redirections if any exist
         if (node->args->redir)
         {
