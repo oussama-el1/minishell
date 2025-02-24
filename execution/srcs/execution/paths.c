@@ -6,22 +6,11 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 20:12:48 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/02/15 13:34:28 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/02/23 13:17:43 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
-
-static int	is_absolute(char *path)
-{
-	return (path[0] == '/');
-}
-
-static int	is_relative(char *path)
-{
-	return (path[0] == '.' && path[1] == '/')
-			|| (path[0] == '.' && path[1] == '.' && path[2] == '/');
-}
 
 static int	is_executable(char *path)
 {
@@ -32,7 +21,7 @@ static int	is_executable(char *path)
 
 static void	free_str_array(char **arr)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (arr[i])
@@ -43,25 +32,11 @@ static void	free_str_array(char **arr)
 	free(arr);
 }
 
-static char	*find_binary_in_path(char *cmd, t_env *env, int exit_status)
+static char	*find_binary_in_path_helper(char **dirs, char *cmd)
 {
-	char	**dirs;
-	char	*secure_dirs;
 	char	*full_path;
 	int		i;
 
-	secure_dirs = get_env_var(env, "PATH", exit_status);
-	if (!secure_dirs)
-	{
-		ft_putendl_fd("$PATH var not found", 2);
-		return (NULL);
-	}
-	dirs = ft_split(secure_dirs, ':');
-	if (!dirs || !*dirs)
-	{
-		ft_putendl_fd("No secure directory found", 2);
-		return (NULL);
-	}
 	i = 0;
 	while (dirs[i])
 	{
@@ -79,9 +54,30 @@ static char	*find_binary_in_path(char *cmd, t_env *env, int exit_status)
 	return (NULL);
 }
 
+static char	*find_binary_in_path(char *cmd, t_env *env, int exit_status)
+{
+	char	**dirs;
+	char	*secure_dirs;
+
+	secure_dirs = get_env_var(env, "PATH", exit_status);
+	if (!secure_dirs)
+	{
+		ft_putendl_fd("$PATH var not found", 2);
+		return (NULL);
+	}
+	dirs = ft_split(secure_dirs, ':');
+	if (!dirs || !*dirs)
+	{
+		ft_putendl_fd("No secure directory found", 2);
+		return (NULL);
+	}
+	return (find_binary_in_path_helper(dirs, cmd));
+}
+
 char	*get_executable_path(char *cmd, t_env *env, int exit_status)
 {
-	if (is_absolute(cmd) || is_relative(cmd))
+	if (cmd[0] == '/' || ((cmd[0] == '.' && cmd[1] == '/')
+			|| (cmd[0] == '.' && cmd[1] == '.' && cmd[2] == '/')))
 	{
 		if (is_executable(cmd))
 			return (ft_strdup(cmd));
@@ -89,4 +85,3 @@ char	*get_executable_path(char *cmd, t_env *env, int exit_status)
 	}
 	return (find_binary_in_path(cmd, env, exit_status));
 }
-

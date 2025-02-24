@@ -6,13 +6,13 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:08:50 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/02/17 14:38:56 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/02/24 22:51:04 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-void handle_sigint(int sig)
+void	handle_sigint(int sig)
 {
 	g_received_signal = sig;
 	ft_putstr_fd("\n", 1);
@@ -21,16 +21,15 @@ void handle_sigint(int sig)
 	rl_redisplay();
 }
 
-void setup_signals(void)
+void	setup_signals(void)
 {
-	struct termios term;
-	
+	struct termios	term;
+
 	if (isatty(STDIN_FILENO))
 	{
 		tcgetattr(STDIN_FILENO, &term);
 		term.c_lflag &= ~ECHOCTL;
 		tcsetattr(STDIN_FILENO, TCSANOW, &term);
-		
 		signal(SIGINT, handle_sigint);
 		signal(SIGQUIT, SIG_IGN);
 	}
@@ -40,8 +39,22 @@ void setup_signals(void)
 		signal(SIGQUIT, SIG_DFL);
 	}
 }
+static int test(t_env *env, int *exit_status)
+{
+	char *argv[] = {"echo", "expande $?", NULL};
+	// char *cd[] = {"cd", "hh", NULL};
 
-void shell_loop(t_env *env)
+	t_expand expandArr[] = {
+		{true, 0, 4},
+		{true, 0, 10},
+	};
+
+	argv_expander(argv, expandArr, env, *exit_status);
+	t_tree cmd = {CMD, argv, NULL, NULL, NULL};
+	return (execute_ast(&cmd, env, exit_status));
+}
+
+void	shell_loop(t_env *env)
 {
 	char		*input;
 	static int	exit_status;
@@ -58,6 +71,7 @@ void shell_loop(t_env *env)
 		if (*input)
 			add_history(input);
 		test(env, &exit_status);
+		printf("exit_status : %d\n", exit_status);
 		free(input);
 	}
 }
