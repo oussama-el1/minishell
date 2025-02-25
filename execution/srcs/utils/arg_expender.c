@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 21:12:37 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/02/25 11:31:29 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/02/25 13:16:26 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ char	*extract_key(char *str)
 	while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
 		i++;
 	key = ft_substr(str, 0, i);
-	printf("condition : %d\n", key[0] == '\0');
 	return (key);
 }
 

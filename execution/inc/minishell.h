@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/02/25 10:13:58 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/02/25 13:41:38 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,21 +61,23 @@ typedef struct s_redir
 	struct s_redir	*next;
 }	t_redir;
 
-typedef struct s_tree
-{
-	t_tree_type		type;
-	char			**argv;
-	t_redir			*redirections;
-	struct s_tree	*left;
-	struct s_tree	*right;
-} t_tree;
-
 
 typedef struct s_expand {
 	bool	expanded;
 	int		start;
 	int		end;
 } t_expand;
+
+typedef struct s_tree
+{
+	t_tree_type		type;
+	char			**argv;
+	t_expand		*expandArr;
+	t_redir			*redirections;
+	struct s_tree	*left;
+	struct s_tree	*right;
+} t_tree;
+
 
 // builtins
 int	ft_cd(char **argv, t_env *env, int exit_status);
@@ -130,10 +132,10 @@ t_env	*dup_env(t_env *original);
 
 // exec
 char	*get_executable_path(char *cmd, t_env *env, int exit_status);
-int		execute_ast(t_tree *node, t_env *env, int *exit_status, t_expand *expandArr);
+int		execute_ast(t_tree *node, t_env *env, int *exit_status);
 int		exec_binary(char **argv, t_env *env, int exit_status);
 int		exec_cmd(t_tree *node, t_env *env, int exit_status);
-int		exec_pipe(t_tree *node, t_env *env, int *exit_status, t_expand *expandArr);
+int		exec_pipe(t_tree *node, t_env *env, int *exit_status);
 
 void	setup_signals(void);
 void	rl_replace_line(const char *text, int clear_undo);

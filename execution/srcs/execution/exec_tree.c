@@ -6,13 +6,13 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 18:06:55 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/02/25 11:25:40 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/02/25 13:42:43 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-static void	subshell_handler(t_tree *node, t_env *env, int *exit_status, pid_t pid, t_expand *expandArr)
+static void	subshell_handler(t_tree *node, t_env *env, int *exit_status, pid_t pid)
 {
 	t_env	*env_cpy;
 	int		status;
@@ -22,7 +22,7 @@ static void	subshell_handler(t_tree *node, t_env *env, int *exit_status, pid_t p
 		env_cpy = dup_env(env);
 		if (node->left) 
 		{
-			int exit_code = execute_ast(node->left, env_cpy, exit_status, expandArr);
+			int exit_code = execute_ast(node->left, env_cpy, exit_status);
 			free_env(env_cpy);
 			exit(exit_code);
 		}
@@ -36,7 +36,7 @@ static void	subshell_handler(t_tree *node, t_env *env, int *exit_status, pid_t p
 	}
 }
 
-int	execute_ast(t_tree *node, t_env *env, int *exit_status, t_expand *expandArr)
+int	execute_ast(t_tree *node, t_env *env, int *exit_status)
 {
 	int		left_status;
 	pid_t	pid;
@@ -48,23 +48,24 @@ int	execute_ast(t_tree *node, t_env *env, int *exit_status, t_expand *expandArr)
 	}
 	setup_signals();
 	if (node->argv)
-		argv_expander(node->argv, expandArr, env, *exit_status);
+		argv_expander(node->argv, node->expandArr, env, *exit_status);
+
 	if (node->type == CMD)
 		*exit_status = exec_cmd(node, env, *exit_status);
 	if (node->type == PIPE)
-		*exit_status =  exec_pipe(node, env, exit_status, expandArr);
+		*exit_status =  exec_pipe(node, env, exit_status);
 	if (node->type == AND)
 	{
-		left_status = execute_ast(node->left, env, exit_status, expandArr);
+		left_status = execute_ast(node->left, env, exit_status);
 		if (left_status == 0)
-			*exit_status =  execute_ast(node->right, env, exit_status, expandArr);
+			*exit_status =  execute_ast(node->right, env, exit_status);
 		*exit_status =  left_status;
 	}
 	if (node->type == OR)
 	{
-		left_status = execute_ast(node->left, env, exit_status, expandArr);
+		left_status = execute_ast(node->left, env, exit_status);
 		if (left_status != 0)
-			*exit_status =  execute_ast(node->right, env, exit_status, expandArr);
+			*exit_status =  execute_ast(node->right, env, exit_status);
 		else
 			*exit_status = left_status;
 	}
@@ -77,7 +78,7 @@ int	execute_ast(t_tree *node, t_env *env, int *exit_status, t_expand *expandArr)
 			*exit_status = 1;
 		}
 		else
-			subshell_handler(node, env, exit_status, pid, expandArr);
+			subshell_handler(node, env, exit_status, pid);
 	}
 	return (*exit_status);
 }

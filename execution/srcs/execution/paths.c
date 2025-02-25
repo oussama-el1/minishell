@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 20:12:48 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/02/23 13:17:43 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/02/25 13:29:37 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ static char	*find_binary_in_path_helper(char **dirs, char *cmd)
 		full_path = ft_strjoin_free(full_path, cmd);
 		if (is_executable(full_path))
 		{
+			printf("dirs[i] : %s , i : %d\n", dirs[i], i);
 			free_str_array(dirs);
 			return (full_path);
 		}

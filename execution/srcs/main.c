@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:08:50 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/02/25 11:36:18 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/02/25 13:48:02 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,17 +39,36 @@ void	setup_signals(void)
 		signal(SIGQUIT, SIG_DFL);
 	}
 }
-static int test(t_env *env, int *exit_status)
-{
-	char *argv[] = {"echo", "$_", NULL};
 
-	t_expand expandArr[] = {
-		{true, 0, 4},
-		{true, 0, 2},
+static int	test(t_env *env, int *exit_status)
+{
+	
+	char *argvl[] = {"export", "MYROOT=..", NULL};
+	char *argvr[] = {"cd", "$MYROOT", NULL};
+	char *argvpwd[] = {"pwd", NULL};
+
+	t_expand expandpwd[] = {
+		{true, 0, 3},
 	};
 
-	t_tree cmd = {CMD, argv, NULL, NULL, NULL};
-	return (execute_ast(&cmd, env, exit_status, expandArr));
+	t_expand expandl[] = {
+		{true, 0, 6},
+		{true, 0, 9},
+	};
+
+	t_expand expandr[] = {
+		{true, 0, 2},
+		{true, 0, 7},
+	};
+
+	t_tree cmdl = {CMD, argvl, expandl, NULL, NULL, NULL};
+	t_tree cmdr = {CMD, argvr, expandr, NULL, NULL, NULL};
+	t_tree cmd = {AND, NULL, NULL, NULL, &cmdl, &cmdr};
+	t_tree pwd = {CMD, argvpwd, expandpwd, NULL, NULL, NULL};
+
+	execute_ast(&pwd, env, exit_status);
+	execute_ast(&cmd, env, exit_status);
+	return (execute_ast(&pwd, env, exit_status));
 }
 
 void	shell_loop(t_env *env)

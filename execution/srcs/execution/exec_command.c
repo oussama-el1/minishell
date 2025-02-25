@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:04:38 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/02/25 10:30:21 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/02/25 13:31:24 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,8 @@ int	exec_binary(char **argv, t_env *env, int exit_status)
 	pid_t	pid;
 	int		status;
 
+	if (!argv || !*argv[0])
+		return (0);
 	pid = fork();
 	if (pid == 0)
 		run_binary(argv, env, exit_status);

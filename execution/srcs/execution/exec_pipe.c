@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 21:40:37 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/02/25 10:13:46 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/02/25 13:42:36 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static void	exec_pipe_side(int *fd, int left)
 	}
 }
 
-int	exec_pipe(t_tree *node, t_env *env, int *exit_status, t_expand *expandArr)
+int	exec_pipe(t_tree *node, t_env *env, int *exit_status)
 {
 	int		fd[2];
 	pid_t	left_cmd;
@@ -59,7 +59,7 @@ int	exec_pipe(t_tree *node, t_env *env, int *exit_status, t_expand *expandArr)
 	if (left_cmd == 0)
 	{
 		exec_pipe_side(fd, 1);
-		exit(execute_ast(node->left, env, exit_status, expandArr));
+		exit(execute_ast(node->left, env, exit_status));
 	}
 	right_cmd = fork();
 	if (right_cmd == -1)
@@ -67,7 +67,7 @@ int	exec_pipe(t_tree *node, t_env *env, int *exit_status, t_expand *expandArr)
 	if (right_cmd == 0)
 	{
 		exec_pipe_side(fd, 0);
-		exit(execute_ast(node->right, env, exit_status, expandArr));
+		exit(execute_ast(node->right, env, exit_status));
 	}
 	return (wait_and_cleanup(fd, left_cmd, right_cmd));
 }
