@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 21:12:37 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/02/24 22:47:48 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/02/25 11:31:29 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ char	*extract_key(char *str)
 	while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
 		i++;
 	key = ft_substr(str, 0, i);
+	printf("condition : %d\n", key[0] == '\0');
 	return (key);
 }
 
@@ -41,7 +42,7 @@ void expand_string(char **string, t_env *env, int exit_status)
 	prefix = NULL;
 	while ((*string)[i])
 	{
-		if ((*string)[i] == '$')
+		if ((*string)[i] == '$' && (*string)[i + 1] != '\0')
 		{
 			prefix = ft_substr(*string, start, i - start);
 			temp = ft_strjoin(expanded, prefix);
@@ -49,9 +50,13 @@ void expand_string(char **string, t_env *env, int exit_status)
 			expanded = temp;
 
 			key = extract_key(&(*string)[i + 1]);
-			value = get_env_var(env, key, exit_status);
-
-			temp = ft_strjoin(expanded, value ? value : "");
+			if (key[0] == '\0')
+				temp = ft_strjoin(expanded, "$");
+			else
+			{
+				value = get_env_var(env, key, exit_status);
+				temp = ft_strjoin(expanded, value ? value : "");
+			} 
 			free(expanded);
 			expanded = temp;
 

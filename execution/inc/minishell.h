@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/02/24 15:05:51 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/02/25 10:13:58 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,10 +130,10 @@ t_env	*dup_env(t_env *original);
 
 // exec
 char	*get_executable_path(char *cmd, t_env *env, int exit_status);
-int		execute_ast(t_tree *node, t_env *env, int *exit_status);
+int		execute_ast(t_tree *node, t_env *env, int *exit_status, t_expand *expandArr);
 int		exec_binary(char **argv, t_env *env, int exit_status);
 int		exec_cmd(t_tree *node, t_env *env, int exit_status);
-int		exec_pipe(t_tree *node, t_env *env, int *exec_pipe);
+int		exec_pipe(t_tree *node, t_env *env, int *exit_status, t_expand *expandArr);
 
 void	setup_signals(void);
 void	rl_replace_line(const char *text, int clear_undo);

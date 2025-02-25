@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:08:50 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/02/24 22:51:04 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/02/25 11:36:18 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,17 +41,15 @@ void	setup_signals(void)
 }
 static int test(t_env *env, int *exit_status)
 {
-	char *argv[] = {"echo", "expande $?", NULL};
-	// char *cd[] = {"cd", "hh", NULL};
+	char *argv[] = {"echo", "$_", NULL};
 
 	t_expand expandArr[] = {
 		{true, 0, 4},
-		{true, 0, 10},
+		{true, 0, 2},
 	};
 
-	argv_expander(argv, expandArr, env, *exit_status);
 	t_tree cmd = {CMD, argv, NULL, NULL, NULL};
-	return (execute_ast(&cmd, env, exit_status));
+	return (execute_ast(&cmd, env, exit_status, expandArr));
 }
 
 void	shell_loop(t_env *env)
@@ -71,7 +69,6 @@ void	shell_loop(t_env *env)
 		if (*input)
 			add_history(input);
 		test(env, &exit_status);
-		printf("exit_status : %d\n", exit_status);
 		free(input);
 	}
 }
