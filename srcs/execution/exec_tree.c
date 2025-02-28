@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 18:06:55 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/02/28 16:32:18 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/02/28 20:47:20 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,27 +41,27 @@ int	execute_ast(t_tree *node, t_env *env, int *exit_status)
 	int		left_status;
 	pid_t	pid;
 
+	// printf("node type is : %d , %d\n", node->type, T_CMD);
 	if (!node)
 	{
 		*exit_status = 1;
 		return (*exit_status);
 	}
 	setup_signals();
-	if (node->args->argv)
+	if (node->args)
 		argv_expander(node->args->argv, *node->args->expand_list, env, *exit_status);
-
 	if (node->type == T_CMD)
 		*exit_status = exec_cmd(node, env, *exit_status);
-	if (node->type == PIPE)
+	if (node->type == T_PIPE)
 		*exit_status =  exec_pipe(node, env, exit_status);
-	if (node->type == AND)
+	if (node->type == T_AND)
 	{
 		left_status = execute_ast(node->left, env, exit_status);
 		if (left_status == 0)
 			*exit_status =  execute_ast(node->right, env, exit_status);
 		*exit_status =  left_status;
 	}
-	if (node->type == OR)
+	if (node->type == T_OR)
 	{
 		left_status = execute_ast(node->left, env, exit_status);
 		if (left_status != 0)

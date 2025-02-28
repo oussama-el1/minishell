@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 14:43:35 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/02/28 16:31:11 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/02/28 20:46:37 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	get_last_in(t_redir *redirection, t_redir **last_in, int *error_found)
 	*last_in = NULL;
 	while (redirection && !*error_found)
 	{
-		if (redirection->type == REDIR_IN)
+		if (redirection->type == R_REDIR_IN)
 		{
 			if (access(redirection->filename, F_OK) == -1)
 				file_error_handler(redirection, error_found);
@@ -46,10 +46,10 @@ void	iterate_output_redirection(t_redir *redirection,
 	*last_out = NULL;
 	while (redirection && !*error_found)
 	{
-		if ((redirection->type == REDIR_OUT
-				|| redirection->type == REDIR_APPEND))
+		if ((redirection->type == R_REDIR_OUT
+				|| redirection->type == R_REDIR_APPEND))
 		{
-			if (redirection->type == REDIR_OUT)
+			if (redirection->type == R_REDIR_OUT)
 				fd = open(redirection->filename,
 						O_WRONLY | O_CREAT | O_TRUNC, 0644);
 			else
@@ -98,8 +98,11 @@ void	redir_output(t_redir	*last_out, int *error_found)
 {
 	int	fd;
 
-	if (last_out->type == REDIR_OUT)
+	if (last_out->type == R_REDIR_OUT)
+	{
+		printf("open on trunc mode\n");
 		fd = open(last_out->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	}
 	else
 		fd = open(last_out->filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd < 0)
@@ -138,7 +141,13 @@ int	exec_cmd(t_tree *node, t_env *env, int exit_status)
 			&last_heredoc, exit_status, env);
 	last_in_index = get_last_in(node->args->redir, &last_in, &error_found);
 	iterate_output_redirection(node->args->redir, &last_out, &error_found);
-	if (!error_found && (last_in || last_out))
+	// if (last_out)
+	// 	printf("out file : %s\n", last_out->filename);
+	// if (last_in) 
+	// 	printf("in file : %s\n", last_in->filename);
+	// if (last_heredoc)
+	// 	printf("last herdoc : %s\n", last_heredoc->filename); // change to herdoc_delim
+	if (!error_found && (last_in || last_heredoc))
 		redir_input(last_heredoc_index, last_in_index, &error_found, last_in);
 	if (last_out && !error_found)
 		redir_output(last_out, &error_found);

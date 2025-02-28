@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:08:50 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/02/28 18:00:30 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/02/28 20:08:24 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 static void	bash_loop(t_env *env)
 {
 	t_token		*token;
+	t_tree		*ast;
 	char		*line;
 	char		*tmp;
 	static int	exit_status;
@@ -25,7 +26,10 @@ static void	bash_loop(t_env *env)
 		init_token(&token, 1);
 		line = readline("minishell$> ");
 		if (!line)
-			return (perror("readline error!"));
+		{
+			ft_printf("exit\n");
+			exit(exit_status);
+		}
 		if (empty(line))
 		{
 			free(line);
@@ -33,8 +37,8 @@ static void	bash_loop(t_env *env)
 		}
 		tmp = ft_strdup(line);
 		free(line);
-		process_input(tmp, &token);
-		execute_ast(build_ast(token), env, &exit_status);
+		process_input(tmp, &token, &ast);
+		execute_ast(ast, env, &exit_status);
 	}
 }
 

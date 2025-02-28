@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/02/28 17:32:20 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/02/28 20:10:18 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,7 +197,7 @@ int		check_redirections(t_token *token);
 void	init_token(t_token **token, int allocate);
 int		before_space(char *str, int i);
 
-void	process_input(char *line, t_token **token);
+void	process_input(char *line, t_token **token, t_tree **tree);
 void	init_vars(t_vars **vars, char *line);
 void	ft_newnode(t_token **token, char *value, int before_space);
 
@@ -281,6 +281,9 @@ int		get_last_heredoc(t_redir *redirection, t_redir **last_heredoc, int exit_sta
 void	file_error_handler(t_redir *redirection, int *error_found);
 void	clean_resources(int saved_in, int saved_out);
 void	argv_expander(char **argv, t_expand *expandArr, t_env *env, int exit_status);
+
+
+void print_ast(t_tree *node, int depth, const char *relation);
 
 
 # endif

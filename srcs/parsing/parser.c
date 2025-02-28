@@ -4,11 +4,10 @@
 static int	tokenizer(t_token **token, t_vars *vars);
 static int	end_with_operator(char *line);
 static void	give_type(t_token **token);
-static int	handle_end_of_line(char **line, t_token **token);
+static int	handle_end_of_line(char **line, t_token **token, t_tree **tree);
 
-void	process_input(char *line, t_token **token)
+void	process_input(char *line, t_token **token, t_tree **tree)
 {
-	t_tree	*tree;
 	t_vars	*vars;
 
 	init_vars(&vars, line);
@@ -18,13 +17,13 @@ void	process_input(char *line, t_token **token)
 		give_type(token);
 		if (!check_syntax(*token, 0))
 			return (add_history(line), (void)0);
-		if (handle_end_of_line(&line, token))
+		if (handle_end_of_line(&line, token, tree))
 			return ;
 		if (line)
 			add_history(line);
-		tree = build_ast(*token);
+		*tree = build_ast(*token);
 		// printf("\n===== AST Structure =====\n");
-		// print_ast(tree, 0, "Root");
+		// print_ast(*tree, 0, "Root");
 		// printf("=========================\n\n");
 	}
 }
@@ -83,7 +82,7 @@ static int end_with_operator(char *line)
 	return (0);
 }
 
-static int	handle_end_of_line(char **line, t_token **token)
+static int	handle_end_of_line(char **line, t_token **token, t_tree **tree)
 {
 	char	*new_line;
 
@@ -95,13 +94,12 @@ static int	handle_end_of_line(char **line, t_token **token)
 		*line = ft_strjoin(*line, " ");
 		*line = ft_strjoin(*line, new_line);
 		free(new_line);
-		process_input(*line, token);
+		process_input(*line, token, tree);
 		return (1);
 	}
 	return (0);
 }
 
-/*
 const char *type_names[] = {
    "T_AND",
 	"T_OR",
@@ -133,26 +131,26 @@ static void print_redir_list(t_redir *redir)
     {
         printf("  -> Redir: Type = %s, Filename = \"%s\"\n",
                token_type_names[redir->type], redir->filename);
-		for (t_expand *tmp = redir->expand_list; tmp; tmp = tmp->next)
-		{
-			 printf("  -> Expand: Start = %zu, End = %zu, Expanded = %s\n",
-               tmp->start, tmp->end, tmp->expanded ? "true" : "false");
-		}
+		// for (t_expand *tmp = redir->expand_list; tmp; tmp = tmp->next)
+		// {
+		// 	 printf("  -> Expand: Start = %zu, End = %zu, Expanded = %s\n",
+        //        tmp->start, tmp->end, tmp->expanded ? "true" : "false");
+		// }
         redir = redir->next;
     }
 }
 
-static void print_expand_list(t_expand *expand)
-{
-    while (expand)
-    {
-        printf("  -> Expand: Start = %zu, End = %zu, Expanded = %s\n",
-               expand->start, expand->end, expand->expanded ? "true" : "false");
-        expand = expand->next;
-    }
-}
+// static void print_expand_list(t_expand *expand)
+// {
+//     while (expand)
+//     {
+//         printf("  -> Expand: Start = %zu, End = %zu, Expanded = %s\n",
+//                expand->start, expand->end, expand->expanded ? "true" : "false");
+//         expand = expand->next;
+//     }
+// }
 
-static void print_ast(t_tree *node, int depth, const char *relation)
+void print_ast(t_tree *node, int depth, const char *relation)
 {
     if (!node)
         return;
@@ -210,4 +208,3 @@ static void print_ast(t_tree *node, int depth, const char *relation)
     if (node->right)
         print_ast(node->right, depth + 1, "Right");
 }
-*/
