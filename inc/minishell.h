@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/02/27 18:52:54 by yslami           ###   ########.fr       */
+/*   Updated: 2025/02/28 12:56:52 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,7 @@ typedef struct s_gc_manager
 
 /* helper.c && helper2.c && string_utils.c && list_utils.c */
 int		is_space(char c);
-int		only_spaces(char *str);
+int		empty(char *str);
 int		isquote(char c);
 int		special_d(char c);
 int		isparenth(char c);

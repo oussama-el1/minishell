@@ -6,7 +6,7 @@ static int	end_with_operator(char *line);
 static void	give_type(t_token **token);
 static int	handle_end_of_line(char **line, t_token **token);
 
-/*  tested things
+/*
 const char *type_names[] = {
    "T_AND",
 	"T_OR",
@@ -86,18 +86,18 @@ static void print_ast(t_tree *node, int depth, const char *relation)
         }
 
         // Print expansion list if it exists
-        if (node->args->expand_list)
-        {
-            printf("\n");
-            for (int i = 0; node->args->argv[i]; i++)
-            {
-                if (node->args->expand_list[i])
-                {
-                    printf("  -> Arg[%d]: \"%s\" Expansion Details:\n", i, node->args->argv[i]);
-                    print_expand_list(node->args->expand_list[i]);
-                }
-            }
-        }
+        // if (node->args->expand_list)
+        // {
+        //     printf("\n");
+        //     for (int i = 0; node->args->argv[i]; i++)
+        //     {
+        //         if (node->args->expand_list[i])
+        //         {
+        //             printf("  -> Arg[%d]: \"%s\" Expansion Details:\n", i, node->args->argv[i]);
+        //             print_expand_list(node->args->expand_list[i]);
+        //         }
+        //     }
+        // }
 
         // Print redirections if they exist
         if (node->args->redir)
@@ -128,9 +128,11 @@ void	process_input(char *line, t_token **token)
 	{
 		give_type(token);
 		if (!check_syntax(*token, 0))
-			return (free(line));
+			return (add_history(line), (void)0);
 		if (handle_end_of_line(&line, token))
 			return ;
+		if (line)
+			add_history(line);
 		tree = build_ast(*token);
 		// printf("\n===== AST Structure =====\n");
 		// print_ast(tree, 0, "Root");

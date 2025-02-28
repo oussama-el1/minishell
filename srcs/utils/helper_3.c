@@ -6,13 +6,13 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 13:53:56 by yslami            #+#    #+#             */
-/*   Updated: 2025/02/19 11:11:46 by yslami           ###   ########.fr       */
+/*   Updated: 2025/02/28 12:56:52 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-int	only_spaces(char *str)
+int	empty(char *str)
 {
 	int	i;
 
