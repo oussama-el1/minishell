@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 13:58:51 by yslami            #+#    #+#             */
-/*   Updated: 2025/02/22 12:02:13 by yslami           ###   ########.fr       */
+/*   Updated: 2025/02/27 20:05:26 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_token	*sublist(t_token *start, t_token *end)
 	tail = NULL;
 	while(start)
 	{
-		new = init_token();
+		init_token(&new, 1);
 		new->value = ft_strdup(start->value);
 		new->type = start->type;
 		new->bef_space = start->bef_space;
@@ -40,25 +40,31 @@ t_token	*sublist(t_token *start, t_token *end)
 	return (head);
 }
 
-char	*quoted_process(t_token **curr)
+char	*quoted_process(t_token **curr, t_expand **expansion_list)
 {
-	char	*tmp;
-	char	*arg;
+	char		*tmp;
+	char		*arg;
+	t_expand	*head;
+	size_t		start;
 
+	head = NULL;
 	arg = NULL;
+	start = 0;
 	while (*curr && (*curr)->visited != 1 && non_control((*curr)->type))
 	{
-		tmp = (*curr)->value;
-		if (is_quote((*curr)->type))
-			tmp = remove_quote(*curr, tmp);
+		if (*curr)
+			tmp = (*curr)->value;
+		expansion_func(&head, *curr, &tmp, &start);
 		if (arg && !(*curr)->bef_space)
 			arg = ft_strjoin(arg, tmp);
 		else
 			arg = ft_strdup(tmp);
+		start += ft_strlen(tmp);
 		*curr = (*curr)->next;
 		if (!*curr || (*curr)->visited == 1 || (*curr)->bef_space == 1)
 			break ;
 	}
+	*expansion_list = head;
 	return (arg);
 }
 
@@ -71,4 +77,27 @@ char *remove_quote(t_token *curr, char *str)
 	else
 		res = ft_strtrim(str, "'");
 	return (res);
+}
+
+void	expansion_func(t_expand	**head, t_token *curr, char **str, size_t *start)
+{
+	size_t			end;
+	t_expand		*new;
+	static t_expand	*tail = NULL;
+
+	if (!curr)
+		return ;
+	if (is_quote(curr->type))
+		*str = remove_quote(curr, *str);
+	end = *start + (ft_strlen(*str) - 1) * (**str != 0);
+	new = (t_expand *)malloc(sizeof(t_expand));
+	new->expanded = (curr->type == D_Q || curr->type == DOLLAR);
+	new->start = *start;
+	new->end = end;
+	new->next = NULL;
+	if (!*head)
+		*head = new;
+	else
+		tail->next = new;
+	tail = new;
 }

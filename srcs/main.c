@@ -6,44 +6,43 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:08:50 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/02/13 08:27:39 by yslami           ###   ########.fr       */
+/*   Updated: 2025/02/27 11:52:43 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-static void	bash_loop(char **env);
-int	g_exit_status = 0;
+static void	bash_loop(void);
 
-
-int	main(int ac, char **av, char **env)
+int	main(int ac, char **av)
 {
 	(void)ac;
 	(void)av;
-	(void)env;
-	bash_loop(env);
+	bash_loop();
 	return (0);
 }
 
-static void	bash_loop(char **env)
+static void	bash_loop(void)
 {
-	t_env	*env_list;
 	t_token	*token;
 	char	*line;
+	char	*tmp;
 
-	env_list = init_env(env);
-	// print_export(env_list, 0);
-	while (1)
+	while (YASSINE)
 	{
-		token = init_token();
+		init_token(&token, 1);
 		line = readline("minishell$> ");
 		if (!line)
 			return ((void)ft_printf("readline error!\n"));
 		if (*line)
 			add_history(line);
 		if (only_spaces(line))
+		{
 			free(line);
-		else
-			process_input(line, &token, env_list);
+			continue ;
+		}
+		tmp = ft_strdup(line);
+		free(line);
+		process_input(tmp, &token);
 	}
 }

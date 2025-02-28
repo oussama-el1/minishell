@@ -6,30 +6,27 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 21:50:44 by yslami            #+#    #+#             */
-/*   Updated: 2025/02/19 14:54:09 by yslami           ###   ########.fr       */
+/*   Updated: 2025/02/24 11:27:59 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-t_token	*init_token(void)
+void	init_token(t_token **token, int create)
 {
-	t_token	*token;
-
-	token = (t_token *)malloc(sizeof(t_token));// malloc is a custom malloc function
-	token->value = NULL;
-	token->bef_space = 0;
-	token->visited = 0;
-	token->prev = NULL;
-	token->next = NULL;
-	return (token);
+	if (create)
+		*token = (t_token *)malloc(sizeof(t_token));
+	(*token)->value = NULL;
+	(*token)->bef_space = 0;
+	(*token)->visited = 0;
+	(*token)->prev = NULL;
+	(*token)->next = NULL;
 }
 
-void	init_vars(t_vars **vars, char *line, t_env *env_list)
+void	init_vars(t_vars **vars, char *line)
 {
 	*vars = (t_vars *)malloc(sizeof(t_vars));
 	(*vars)->cmd = line;
-	(*vars)->env = env_list;
 	(*vars)->i = 0;
 	(*vars)->flag = 1;
 }
@@ -56,7 +53,7 @@ t_token	*last_token(t_token *token)
 	if (!token)
 		return (NULL);
 	if (token && token->visited == 1 && \
-		token->type != OPEN_BRACKET)// added
+		token->type != OPEN_BRACKET)
 		return (token->prev);
 	while (token->next && token->next->visited != 1)
 		token = token->next;
@@ -73,7 +70,7 @@ t_token	*lst_dup(t_token *token)
 	tail = NULL;
 	while(token)
 	{
-		new = init_token();
+		init_token(&new, 1);
 		new->value = ft_strdup(token->value);
 		new->type = token->type;
 		new->bef_space = token->bef_space;

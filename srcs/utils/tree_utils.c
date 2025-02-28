@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 20:05:21 by yslami            #+#    #+#             */
-/*   Updated: 2025/02/22 12:02:04 by yslami           ###   ########.fr       */
+/*   Updated: 2025/02/27 15:52:22 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,20 @@ int	args_count(t_token *token)
 	arg_count = 0;
 	while (curr && curr->visited != 1)
 	{
-		if (isredirect(curr->type))
+		while (curr && curr->next && !curr->next->bef_space && \
+			!isredirect(curr->next->type) && !isredirect(curr->type))
+			curr = curr->next;
+		if (curr && isredirect(curr->type))
 		{
-			if (curr->next)
-				curr = curr->next;
+			curr = curr->next;
+			while (curr && curr->next && !curr->next->bef_space && \
+			!isredirect(curr->next->type) && !isredirect(curr->type))
+			curr = curr->next;
 		}
 		else
-		{
 			arg_count++;
-		}
-		curr = curr->next;
+		if (curr)
+			curr = curr->next;
 	}
 	return (arg_count);
 }

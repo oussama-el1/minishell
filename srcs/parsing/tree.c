@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 19:07:45 by yslami            #+#    #+#             */
-/*   Updated: 2025/02/22 12:02:41 by yslami           ###   ########.fr       */
+/*   Updated: 2025/02/27 18:50:21 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,6 +205,7 @@ void	extract_args(t_args *args, t_token *token)
 
 	arg_count = args_count(token);
 	res = (char **)malloc((arg_count + 1) * sizeof(char *));
+	args->expand_list = (t_expand **)malloc((arg_count + 1) * sizeof(t_expand *));
 	curr = token;
 	i = 0;
 	redir = NULL;
@@ -214,12 +215,13 @@ void	extract_args(t_args *args, t_token *token)
 			handle_redirection(&redir, &curr);
 		else
 		{
-			res[i] = quoted_process(&curr);
+			res[i] = quoted_process(&curr, &args->expand_list[i]);
 			if (res[i])
 				i++;
 		}
 	}
 	res[i] = NULL;
+	args->expand_list[i] = NULL;
 	args->argv = res;
 	args->redir = redir;
 }
@@ -265,20 +267,22 @@ void	append_redir_node(t_redir **redir_list, t_redir *new_redir)
 
 void	handle_redirection(t_redir **redir_list, t_token **curr)
 {
-	t_redir	*new_redir;
+	t_redir		*new_redir;
+	t_expand	*expand_list;
+	int			type;
 
 	if (!curr || !(*curr) || !isredirect((*curr)->type))
 		return ;
-
-	int type = (*curr)->type;
+	expand_list = NULL;
+	type = (*curr)->type;
 	*curr = (*curr)->next;
-
 	if (*curr)
 	{
-		char *filename = quoted_process(curr);
+		char *filename = quoted_process(curr, &expand_list);
 		new_redir = create_redir_node(type, filename);
 		if (new_redir)
 			append_redir_node(redir_list, new_redir);
+		(*redir_list)->expand_list = expand_list;
 	}
 }
 
