@@ -6,19 +6,23 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 22:24:50 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/01 01:23:43 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/01 16:28:03 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-void	expand_env_herdoc(t_env *env, char *line, int fd, int exit_status)
+char	*expand_env_herdoc(t_env *env, char *line, int fd, int exit_status, const char *delimiter)
 {
 	char	*var_value;
 
 	var_value = get_env_var(env, &line[1], exit_status);
-	if (var_value)
+	if (var_value && ft_strcmp(var_value, delimiter))
+	{
 		write(fd, var_value, ft_strlen(var_value));
+		return (var_value);
+	}
+	return (NULL);
 }
 
 void	herdoc_loop(const char *delimiter, t_env *env, int fd, int exit_status)
@@ -31,14 +35,18 @@ void	herdoc_loop(const char *delimiter, t_env *env, int fd, int exit_status)
 		line = readline("> ");
 		if (!line)
 			break ;
+		// here : improve expanding
 		if (ft_strcmp(line, delimiter) == 0)
 		{
 			free(line);
 			break ;
 		}
-		if (line[0] == '$')
-			expand_env_herdoc(env, line, fd, exit_status);
-		else
+		if (line[0] == '$' && !expand_env_herdoc(env, line, fd, exit_status, delimiter))
+		{
+			free(line);
+			break ;
+		}
+		if (line[0] != '$')
 			write(fd, line, ft_strlen(line));
 		write(fd, "\n", 1);
 		free(line);

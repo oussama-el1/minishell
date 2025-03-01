@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/01 02:05:43 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/01 16:26:24 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -275,7 +275,7 @@ int		exec_binary(char **argv, t_env *env, int exit_status);
 int		redirect_and_exec(t_tree *node, t_env *env, int exit_status);
 int		exec_pipe(t_tree *node, t_env *env, int *exit_status);
 void	rl_replace_line(const char *text, int clear_undo);
-void	expand_env_herdoc(t_env *env, char *line, int fd, int exit_status);
+char	*expand_env_herdoc(t_env *env, char *line, int fd, int exit_status, const char *delimiter);
 void	herdoc_loop(const char *delimiter, t_env *env, int fd, int exit_status);
 void	handle_heredoc(const char *delimiter, t_env *env, int exit_status);
 int		get_last_heredoc(t_redir *redirection, t_redir **last_heredoc, int exit_status, t_env *env);

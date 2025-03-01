@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 14:43:35 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/01 02:34:41 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/01 16:14:31 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,9 +123,9 @@ void expand_filnames(t_redir *redirection, t_env *env, int exit_status)
 {
 	while (redirection)
 	{
-		// if (redirection->type == R_HEREDOC)
-		// 	expand_one_arg(&redirection->heredoc_delim, redirection->expand_list, env, exit_status);
-		// else
+		if (redirection->type == R_HEREDOC)
+			expand_one_arg(&redirection->heredoc_delim, redirection->expand_list, env, exit_status);
+		else
 			expand_one_arg(&redirection->filename, redirection->expand_list, env, exit_status);
 		redirection = redirection->next;
 	}
