@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:08:50 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/02/28 20:08:24 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/01 01:20:08 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,10 @@ static void	bash_loop(t_env *env)
 		}
 		tmp = ft_strdup(line);
 		free(line);
-		process_input(tmp, &token, &ast);
-		execute_ast(ast, env, &exit_status);
+		if (!process_input(tmp, &token, &ast))
+			continue ;
+		(void)env;
+		//execute_ast(ast, env, &exit_status);
 	}
 }
 

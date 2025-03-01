@@ -6,7 +6,7 @@ static int	end_with_operator(char *line);
 static void	give_type(t_token **token);
 static int	handle_end_of_line(char **line, t_token **token, t_tree **tree);
 
-void	process_input(char *line, t_token **token, t_tree **tree)
+int	process_input(char *line, t_token **token, t_tree **tree)
 {
 	t_vars	*vars;
 
@@ -16,16 +16,17 @@ void	process_input(char *line, t_token **token, t_tree **tree)
 	{
 		give_type(token);
 		if (!check_syntax(*token, 0))
-			return (add_history(line), (void)0);
+			return (add_history(line), 0);
 		if (handle_end_of_line(&line, token, tree))
-			return ;
+			return (0);
 		if (line)
 			add_history(line);
 		*tree = build_ast(*token);
-		printf("\n===== AST Structure =====\n");
-		print_ast(*tree, 0, "Root");
-		printf("=========================\n\n");
+		// printf("\n===== AST Structure =====\n");
+		// print_ast(*tree, 0, "Root");
+		// printf("=========================\n\n");
 	}
+	return (1);
 }
 
 static int	tokenizer(t_token **token, t_vars *vars)
@@ -94,8 +95,8 @@ static int	handle_end_of_line(char **line, t_token **token, t_tree **tree)
 		*line = ft_strjoin(*line, " ");
 		*line = ft_strjoin(*line, new_line);
 		free(new_line);
-		process_input(*line, token, tree);
-		return (1);
+		if (!process_input(*line, token, tree))
+			return (1);
 	}
 	return (0);
 }
@@ -129,8 +130,12 @@ static void print_redir_list(t_redir *redir)
 {
     while (redir)
     {
-        printf("  -> Redir: Type = %s, Filename = \"%s\"\n",
-               token_type_names[redir->type], redir->filename);
+		if (redir->type != HEREDOC)
+        	printf("  -> Redir: Type = %s, Filename = \"%s\"\n",
+               		token_type_names[redir->type], redir->filename);
+		else
+			printf("  -> Redir: Type = %s, Delimiter = \"%s\"\n",
+               		token_type_names[redir->type], redir->heredoc_delim);
 		for (t_expand *tmp = redir->expand_list; tmp; tmp = tmp->next)
 		{
 			 printf("  -> Expand: Start = %zu, End = %zu, Expanded = %s\n",

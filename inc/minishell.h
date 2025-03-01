@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/01 00:03:10 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/01 01:03:31 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,7 +198,7 @@ int		check_redirections(t_token *token);
 void	init_token(t_token **token, int allocate);
 int		before_space(char *str, int i);
 
-void	process_input(char *line, t_token **token, t_tree **tree);
+int		process_input(char *line, t_token **token, t_tree **tree);
 void	init_vars(t_vars **vars, char *line);
 void	ft_newnode(t_token **token, char *value, int before_space);
 
@@ -237,7 +237,7 @@ t_redir			*create_redir_node(int type, char *filename);
 void			append_redir_node(t_redir **redir_list, t_redir *new_redir);
 void			handle_redirection(t_redir **redir_list, t_token **curr);
 t_redir_type	get_redir_type(int type);
-void 			extract_subshell_args(t_args *args, t_token *token);
+void 			extract_subshell_args(t_args **args, t_token *token);
 
 
 // builtins

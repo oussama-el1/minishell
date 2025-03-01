@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 19:07:45 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/01 00:01:45 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/01 00:56:37 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,8 +170,8 @@ t_tree	*create_subshell(t_token *token)
 		return (NULL);
 	node = (t_tree *)malloc(sizeof(t_tree));
 	node->type = T_SUBSHELL;
-	args = (t_args *)malloc(sizeof(t_args));
-	extract_subshell_args(args, token);
+	args = NULL;
+	extract_subshell_args(&args, token);
 	node->args = args;
 	node->left = build_ast(token);
 	node->right = NULL;
@@ -233,8 +233,13 @@ t_redir	*create_redir_node(int type, char *filename)
 	new_redir = (t_redir *)malloc(sizeof(t_redir));
 	if (!new_redir)
 		return (NULL);
+	new_redir->filename = NULL;
+	new_redir->heredoc_delim = NULL;
 	new_redir->type = get_redir_type(type);
-	new_redir->filename = filename;
+	if (new_redir->type != R_HEREDOC)
+		new_redir->filename = filename;
+	else
+		new_redir->heredoc_delim = filename;
 	new_redir->next = NULL;
 	return (new_redir);
 }
@@ -295,7 +300,7 @@ t_tree_type get_tree_type(int type)
 	return (T_PIPE);
 }
 
-void extract_subshell_args(t_args *args, t_token *token)
+void extract_subshell_args(t_args **args, t_token *token)
 {
 	t_token	*curr;
 	t_redir	*redir;
@@ -312,6 +317,10 @@ void extract_subshell_args(t_args *args, t_token *token)
 		else
 			curr = curr->next;
 	}
-	args->argv = NULL;
-	args->redir = redir;
+	if (redir)
+	{
+		*args = (t_args *)malloc(sizeof(t_args));
+		(*args)->redir = redir;
+		(*args)->argv = NULL;
+	}
 }
