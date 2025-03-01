@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 19:07:45 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/01 00:56:37 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/01 17:34:52 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,7 +226,7 @@ void	extract_args(t_args *args, t_token *token)
 	args->redir = redir;
 }
 
-t_redir	*create_redir_node(int type, char *filename)
+t_redir	*create_redir_node(int type, char *filename, t_expand *expand_list)
 {
 	t_redir	*new_redir;
 
@@ -240,6 +240,7 @@ t_redir	*create_redir_node(int type, char *filename)
 		new_redir->filename = filename;
 	else
 		new_redir->heredoc_delim = filename;
+	new_redir->expand_list = expand_list;
 	new_redir->next = NULL;
 	return (new_redir);
 }
@@ -284,10 +285,9 @@ void	handle_redirection(t_redir **redir_list, t_token **curr)
 	if (*curr)
 	{
 		char *filename = quoted_process(curr, &expand_list);
-		new_redir = create_redir_node(type, filename);
+		new_redir = create_redir_node(type, filename, expand_list);
 		if (new_redir)
 			append_redir_node(redir_list, new_redir);
-		(*redir_list)->expand_list = expand_list;
 	}
 }
 
