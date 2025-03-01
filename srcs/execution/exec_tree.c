@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 18:06:55 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/01 02:32:16 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/01 20:38:54 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,8 @@ int	 execute_ast(t_tree *node, t_env *env, int *exit_status)
 		left_status = execute_ast(node->left, env, exit_status);
 		if (left_status == 0)
 			*exit_status =  execute_ast(node->right, env, exit_status);
-		*exit_status =  left_status;
+		else
+			*exit_status =  left_status;
 	}
 	if (node->type == T_OR)
 	{

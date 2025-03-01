@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 14:43:35 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/01 17:53:59 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/01 20:33:32 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,12 @@ int	get_last_in(t_redir *redirection, t_redir **last_in, int *error_found)
 		if (redirection->type == R_REDIR_IN)
 		{
 			if (access(redirection->filename, F_OK) == -1)
-				file_error_handler(redirection, error_found);
-			else
 			{
-				*last_in = redirection;
-				last_in_index = i;
+				file_error_handler(redirection, error_found);
+				return (i);
 			}
+			*last_in = redirection;
+			last_in_index = i;
 		}
 		redirection = redirection->next;
 		i++;
@@ -130,6 +130,32 @@ void expand_filnames(t_redir *redirection, t_env *env, int exit_status)
 		redirection = redirection->next;
 	}
 }
+void open_output_error(t_redir *redirection, int last_in_index, int *error_found)
+{
+	int	fd;
+	int	i;
+
+	i = 0;
+	while (redirection && i < last_in_index)
+	{
+		if ((redirection->type == R_REDIR_OUT
+				|| redirection->type == R_REDIR_APPEND))
+		{
+			if (redirection->type == R_REDIR_OUT)
+				fd = open(redirection->filename,
+						O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			else
+				fd = open(redirection->filename,
+						O_WRONLY | O_CREAT | O_APPEND, 0644);
+			if (fd < 0)
+				file_error_handler(redirection, error_found);
+			else
+				close(fd);
+		}
+		i++;
+		redirection = redirection->next;
+	}
+}
 
 int	redirect_and_exec(t_tree *node, t_env *env, int exit_status)
 {
@@ -140,7 +166,7 @@ int	redirect_and_exec(t_tree *node, t_env *env, int exit_status)
 	int		last_in_index;
 	int		res;
 	t_redir	*last_in;
-	t_redir	*last_out;
+	t_redir	*last_out = NULL;
 	t_redir	*last_heredoc;
 
 	error_found = 0;
@@ -152,7 +178,11 @@ int	redirect_and_exec(t_tree *node, t_env *env, int exit_status)
 	last_heredoc_index = get_last_heredoc(node->args->redir,
 			&last_heredoc, exit_status, env);
 	last_in_index = get_last_in(node->args->redir, &last_in, &error_found);
-	iterate_output_redirection(node->args->redir, &last_out, &error_found);
+
+	if (error_found)
+		open_output_error(node->args->redir, last_in_index, &error_found);
+	else
+		iterate_output_redirection(node->args->redir, &last_out, &error_found);
 	if (!error_found && (last_in || last_heredoc))
 		redir_input(last_heredoc_index, last_in_index, &error_found, last_in);
 	if (last_out && !error_found)
