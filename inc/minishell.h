@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/01 17:17:49 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/01 21:18:28 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,7 +198,7 @@ int		check_redirections(t_token *token);
 void	init_token(t_token **token, int allocate);
 int		before_space(char *str, int i);
 
-int		process_input(char *line, t_token **token, t_tree **tree);
+int		process_input(char *line, t_token **token, t_tree **tree, int base);
 void	init_vars(t_vars **vars, char *line);
 void	ft_newnode(t_token **token, char *value, int before_space);
 

@@ -6,7 +6,7 @@ static int	end_with_operator(char *line);
 static void	give_type(t_token **token);
 static int	handle_end_of_line(char **line, t_token **token, t_tree **tree);
 
-int	process_input(char *line, t_token **token, t_tree **tree)
+int	process_input(char *line, t_token **token, t_tree **tree, int base)
 {
 	t_vars	*vars;
 
@@ -17,10 +17,10 @@ int	process_input(char *line, t_token **token, t_tree **tree)
 		give_type(token);
 		if (!check_syntax(*token, 0))
 			return (add_history(line), 0);
-		if (handle_end_of_line(&line, token, tree))
+		if (!handle_end_of_line(&line, token, tree)) // 0
 			return (0);
-		if (line)
-			add_history(line);
+		if (!base)
+			return (1);
 		*tree = build_ast(*token);
 		// printf("\n===== AST Structure =====\n");
 		// print_ast(*tree, 0, "Root");
@@ -85,20 +85,21 @@ static int end_with_operator(char *line)
 
 static int	handle_end_of_line(char **line, t_token **token, t_tree **tree)
 {
-	char	*new_line;
+	char *new_line;
 
-	while (end_with_operator(*line))
+	if (!end_with_operator(*line))
 	{
-		new_line = readline("> ");
-		if (!new_line)
-			return (ft_printf("Error\nReadline Error!\n"), 1);
-		*line = ft_strjoin(*line, " ");
-		*line = ft_strjoin(*line, new_line);
-		free(new_line);
-		if (!process_input(*line, token, tree))
-			return (1);
+		if (*line)
+			add_history(*line);
+		return (1);
 	}
-	return (0);
+	new_line = readline("> ");
+	if (!new_line)
+		return (ft_printf("Error\nReadline Error!\n"), 1);
+	*line = ft_strjoin(*line, " ");
+	*line = ft_strjoin(*line, new_line);
+	free(new_line);
+	return (process_input(*line, token, tree, 0));
 }
 
 const char *type_names[] = {
