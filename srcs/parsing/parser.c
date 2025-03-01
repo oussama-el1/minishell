@@ -22,9 +22,9 @@ void	process_input(char *line, t_token **token, t_tree **tree)
 		if (line)
 			add_history(line);
 		*tree = build_ast(*token);
-		// printf("\n===== AST Structure =====\n");
-		// print_ast(*tree, 0, "Root");
-		// printf("=========================\n\n");
+		printf("\n===== AST Structure =====\n");
+		print_ast(*tree, 0, "Root");
+		printf("=========================\n\n");
 	}
 }
 
@@ -131,24 +131,24 @@ static void print_redir_list(t_redir *redir)
     {
         printf("  -> Redir: Type = %s, Filename = \"%s\"\n",
                token_type_names[redir->type], redir->filename);
-		// for (t_expand *tmp = redir->expand_list; tmp; tmp = tmp->next)
-		// {
-		// 	 printf("  -> Expand: Start = %zu, End = %zu, Expanded = %s\n",
-        //        tmp->start, tmp->end, tmp->expanded ? "true" : "false");
-		// }
+		for (t_expand *tmp = redir->expand_list; tmp; tmp = tmp->next)
+		{
+			 printf("  -> Expand: Start = %zu, End = %zu, Expanded = %s\n",
+               tmp->start, tmp->end, tmp->expanded ? "true" : "false");
+		}
         redir = redir->next;
     }
 }
 
-// static void print_expand_list(t_expand *expand)
-// {
-//     while (expand)
-//     {
-//         printf("  -> Expand: Start = %zu, End = %zu, Expanded = %s\n",
-//                expand->start, expand->end, expand->expanded ? "true" : "false");
-//         expand = expand->next;
-//     }
-// }
+static void print_expand_list(t_expand *expand)
+{
+    while (expand)
+    {
+        printf("  -> Expand: Start = %zu, End = %zu, Expanded = %s\n",
+               expand->start, expand->end, expand->expanded ? "true" : "false");
+        expand = expand->next;
+    }
+}
 
 void print_ast(t_tree *node, int depth, const char *relation)
 {
@@ -179,18 +179,18 @@ void print_ast(t_tree *node, int depth, const char *relation)
         }
 
         // Print expansion list if it exists
-        // if (node->args->expand_list)
-        // {
-        //     printf("\n");
-        //     for (int i = 0; node->args->argv[i]; i++)
-        //     {
-        //         if (node->args->expand_list[i])
-        //         {
-        //             printf("  -> Arg[%d]: \"%s\" Expansion Details:\n", i, node->args->argv[i]);
-        //             print_expand_list(node->args->expand_list[i]);
-        //         }
-        //     }
-        // }
+        if (node->args->expand_list)
+        {
+            printf("\n");
+            for (int i = 0; node->args->argv[i]; i++)
+            {
+                if (node->args->expand_list[i])
+                {
+                    printf("  -> Arg[%d]: \"%s\" Expansion Details:\n", i, node->args->argv[i]);
+                    print_expand_list(node->args->expand_list[i]);
+                }
+            }
+        }
 
         // Print redirections if they exist
         if (node->args->redir)

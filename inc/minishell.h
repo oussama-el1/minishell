@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/02/28 20:10:18 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/01 00:03:10 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,13 +90,14 @@ typedef struct s_expand
 	size_t			start;
 	size_t			end;
 	struct s_expand	*next;
+	struct s_expand	*prev;
 }	t_expand;
 
 typedef struct s_redir
 {
 	char			*filename;
 	char			*heredoc_delim;
-	t_expand		*c;
+	t_expand		*expand_list;
 	t_redir_type	type;
 	struct s_redir	*next;
 }	t_redir;
@@ -280,8 +281,7 @@ void	handle_heredoc(const char *delimiter, t_env *env, int exit_status);
 int		get_last_heredoc(t_redir *redirection, t_redir **last_heredoc, int exit_status, t_env *env);
 void	file_error_handler(t_redir *redirection, int *error_found);
 void	clean_resources(int saved_in, int saved_out);
-void	argv_expander(char **argv, t_expand *expandArr, t_env *env, int exit_status);
-
+void	argv_expander(char **argv, t_expand **expandArr, t_env *env, int exit_status);
 
 void print_ast(t_tree *node, int depth, const char *relation);
 

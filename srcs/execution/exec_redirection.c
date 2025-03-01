@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redirection.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 14:43:35 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/02/28 20:46:37 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/01 00:04:50 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,10 +99,7 @@ void	redir_output(t_redir	*last_out, int *error_found)
 	int	fd;
 
 	if (last_out->type == R_REDIR_OUT)
-	{
-		printf("open on trunc mode\n");
 		fd = open(last_out->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	}
 	else
 		fd = open(last_out->filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd < 0)
@@ -143,7 +140,7 @@ int	exec_cmd(t_tree *node, t_env *env, int exit_status)
 	iterate_output_redirection(node->args->redir, &last_out, &error_found);
 	// if (last_out)
 	// 	printf("out file : %s\n", last_out->filename);
-	// if (last_in) 
+	// if (last_in)
 	// 	printf("in file : %s\n", last_in->filename);
 	// if (last_heredoc)
 	// 	printf("last herdoc : %s\n", last_heredoc->filename); // change to herdoc_delim

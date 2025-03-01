@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 13:58:51 by yslami            #+#    #+#             */
-/*   Updated: 2025/02/27 20:05:26 by yslami           ###   ########.fr       */
+/*   Updated: 2025/02/28 23:58:34 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,15 +89,19 @@ void	expansion_func(t_expand	**head, t_token *curr, char **str, size_t *start)
 		return ;
 	if (is_quote(curr->type))
 		*str = remove_quote(curr, *str);
-	end = *start + (ft_strlen(*str) - 1) * (**str != 0);
+	end = *start + ft_strlen(*str) * (**str != 0);
 	new = (t_expand *)malloc(sizeof(t_expand));
 	new->expanded = (curr->type == D_Q || curr->type == DOLLAR);
 	new->start = *start;
 	new->end = end;
 	new->next = NULL;
+	new->prev = NULL;
 	if (!*head)
 		*head = new;
 	else
+	{
+		new->prev = tail;
 		tail->next = new;
+	}
 	tail = new;
 }
