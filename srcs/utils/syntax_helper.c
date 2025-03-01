@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 18:28:01 by yslami            #+#    #+#             */
-/*   Updated: 2025/02/24 10:34:35 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/01 17:50:38 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	check_operators(t_token *token)
 {
-	if ((!token->prev) && is_dilim(token->type))// here i was checking if !token->next
+	if (is_dilim(token->type) && (!token->prev))
 		return (print_syntax_error(token->value));
 	if (token->next && is_dilim(token->type) && \
 		is_dilim(token->next->type))

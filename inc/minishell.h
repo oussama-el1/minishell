@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/01 16:26:24 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/01 17:17:49 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,7 +233,7 @@ int			args_count(t_token *token);
 void		expansion_func(t_expand	**head, t_token *curr, char **str, size_t *start);
 
 // redirections
-t_redir			*create_redir_node(int type, char *filename);
+t_redir			*create_redir_node(int type, char *filename, t_expand *expand);
 void			append_redir_node(t_redir **redir_list, t_redir *new_redir);
 void			handle_redirection(t_redir **redir_list, t_token **curr);
 t_redir_type	get_redir_type(int type);
