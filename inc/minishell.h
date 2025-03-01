@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
+/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/01 01:28:18 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/01 02:05:43 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -272,7 +272,7 @@ void	setup_signals(void);
 char	*get_executable_path(char *cmd, t_env *env, int exit_status);
 int		execute_ast(t_tree *node, t_env *env, int *exit_status);
 int		exec_binary(char **argv, t_env *env, int exit_status);
-int		exec_cmd(t_tree *node, t_env *env, int exit_status);
+int		redirect_and_exec(t_tree *node, t_env *env, int exit_status);
 int		exec_pipe(t_tree *node, t_env *env, int *exit_status);
 void	rl_replace_line(const char *text, int clear_undo);
 void	expand_env_herdoc(t_env *env, char *line, int fd, int exit_status);

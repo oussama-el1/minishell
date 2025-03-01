@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 14:43:35 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/01 01:12:24 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/01 02:34:41 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ void expand_filnames(t_redir *redirection, t_env *env, int exit_status)
 	}
 }
 
-int	exec_cmd(t_tree *node, t_env *env, int exit_status)
+int	redirect_and_exec(t_tree *node, t_env *env, int exit_status)
 {
 	int		saved_in;
 	int		saved_out;
@@ -144,6 +144,7 @@ int	exec_cmd(t_tree *node, t_env *env, int exit_status)
 	t_redir	*last_heredoc;
 
 	error_found = 0;
+	res = 0;
 	saved_in = dup(STDIN_FILENO);
 	saved_out = dup(STDOUT_FILENO);
 	expand_filnames(node->args->redir, env, exit_status);
@@ -157,8 +158,9 @@ int	exec_cmd(t_tree *node, t_env *env, int exit_status)
 		redir_output(last_out, &error_found);
 	if (error_found)
 		res = 1;
-	else
+	else if (node->type == T_CMD)
 		res = exec_command(node, env, exit_status);
-	clean_resources(saved_in, saved_out);
+	if (node->type != T_SUBSHELL)
+		clean_resources(saved_in, saved_out);
 	return (res);
 }
