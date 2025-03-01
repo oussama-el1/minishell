@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 21:40:37 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/02/25 13:42:36 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/01 21:20:55 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,15 @@ static int	error_handler(char *message)
 	return (1);
 }
 
-static int	wait_and_cleanup(int *fd, pid_t left_cmd, pid_t right_cmd)
+static void	wait_and_cleanup(int *fd, pid_t left_cmd, pid_t right_cmd, int *exit_status)
 {
+	int	status;
+
 	close(fd[0]);
 	close(fd[1]);
-	waitpid(left_cmd, NULL, 0);
-	waitpid(right_cmd, NULL, 0);
-	return (0);
+	waitpid(left_cmd, &status, 0);
+	waitpid(right_cmd, &status, 0);
+	*exit_status = WEXITSTATUS(status);
 }
 
 static void	exec_pipe_side(int *fd, int left)
@@ -69,5 +71,5 @@ int	exec_pipe(t_tree *node, t_env *env, int *exit_status)
 		exec_pipe_side(fd, 0);
 		exit(execute_ast(node->right, env, exit_status));
 	}
-	return (wait_and_cleanup(fd, left_cmd, right_cmd));
+	return (wait_and_cleanup(fd, left_cmd, right_cmd, exit_status), *exit_status);
 }

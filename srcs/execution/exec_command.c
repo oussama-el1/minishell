@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:04:38 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/02/28 16:30:37 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/01 22:04:07 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,22 +31,22 @@ int	is_builtin(char *cmd)
 	return (0);
 }
 
-int	exec_builtin(t_tree *cmd, t_env *env, int exit_status)
+int	exec_builtin(char **argv, t_env *env, int exit_status)
 {
-	if (ft_strcmp(cmd->args->argv[0], "echo") == 0)
-		return (ft_echo(cmd->args->argv));
-	if (ft_strcmp(cmd->args->argv[0], "cd") == 0)
-		return (ft_cd(cmd->args->argv, env, exit_status));
-	if (ft_strcmp(cmd->args->argv[0], "pwd") == 0)
+	if (ft_strcmp(argv[0], "echo") == 0)
+		return (ft_echo(argv));
+	if (ft_strcmp(argv[0], "cd") == 0)
+		return (ft_cd(argv, env, exit_status));
+	if (ft_strcmp(argv[0], "pwd") == 0)
 		return (ft_pwd(env, exit_status));
-	if (ft_strcmp(cmd->args->argv[0], "export") == 0)
-		return (ft_export(cmd->args->argv, env, exit_status));
-	if (ft_strcmp(cmd->args->argv[0], "unset") == 0)
-		return (ft_unset(cmd->args->argv, env));
-	if (ft_strcmp(cmd->args->argv[0], "env") == 0)
-		return (ft_env(cmd->args->argv, env));
-	if (ft_strcmp(cmd->args->argv[0], "exit") == 0)
-		return (ft_exit(cmd->args->argv));
+	if (ft_strcmp(argv[0], "export") == 0)
+		return (ft_export(argv, env, exit_status));
+	if (ft_strcmp(argv[0], "unset") == 0)
+		return (ft_unset(argv, env));
+	if (ft_strcmp(argv[0], "env") == 0)
+		return (ft_env(argv, env));
+	if (ft_strcmp(argv[0], "exit") == 0)
+		return (ft_exit(argv));
 	return (0);
 }
 
@@ -73,8 +73,8 @@ int	exec_binary(char **argv, t_env *env, int exit_status)
 	pid_t	pid;
 	int		status;
 
-	if (!argv || !*argv[0])
-		return (0);
+	if (!argv)
+		return (1);
 	pid = fork();
 	if (pid == 0)
 		run_binary(argv, env, exit_status);
@@ -90,9 +90,17 @@ int	exec_binary(char **argv, t_env *env, int exit_status)
 int	exec_command(t_tree *cmd, t_env *env, int exit_status)
 {
 	char **argv;
+	int	i;
 
-	argv = cmd->args->argv; 
+	argv = cmd->args->argv;
+	if (!*argv[0])
+	{
+		i = 0;
+		while (argv[i] && !*argv[i])
+			i++;
+		argv = &argv[i];
+	}
 	if (is_builtin(argv[0]))
-		return (exec_builtin(cmd, env, exit_status));
+		return (exec_builtin(argv, env, exit_status));
 	return (exec_binary(argv, env, exit_status));
 }
