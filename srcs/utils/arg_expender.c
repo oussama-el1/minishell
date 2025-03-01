@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   arg_expender.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
+/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 21:12:37 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/02/28 23:54:58 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/01 01:19:40 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,48 +75,28 @@ void expand_string(char **string, t_env *env, int exit_status)
 	*string = expanded;
 }
 
-// void	argv_expander(char **argv, t_expand *expandArr, t_env *env, int exit_status)
-// {
-// 	int		i;
-// 	int		expanded_idx;
-// 	int		save;
-// 	int		stop;
-// 	int		len;
-// 	char	*new_arg;
+void	expand_one_arg(char **argument, t_expand *curr, t_env *env, int exit_status)
+{
+	char		*new_arg;
 
-// 	i = 0;
-// 	expanded_idx = 0;
-// 	while (argv[i])
-// 	{
-// 		if (ft_strchr(argv[i], '$'))
-// 		{
-// 			stop = expanded_idx;
-// 			len = ft_strlen(argv[i]);
-// 			while (expandArr[expanded_idx].end != (unsigned int)len)
-// 				expanded_idx++;
-// 			save = expanded_idx;
-// 			new_arg = NULL;
-// 			while (expanded_idx >= stop)
-// 			{
-// 				char *sub = ft_substr(argv[i], expandArr[expanded_idx].start, expandArr[expanded_idx].end - expandArr[expanded_idx].start);
-// 				if (expandArr[expanded_idx].expanded && ft_strchr(argv[i], '$'))
-// 					expand_string(&sub, env, exit_status);
-// 				new_arg = ft_strjoin(sub, new_arg);
-// 				expanded_idx--;
-// 			}
-// 			argv[i] = new_arg;
-// 			expanded_idx = save;
-// 		}
-// 		expanded_idx++;
-// 		i++;
-// 	}
-// }
+	while (curr->next != NULL)
+		curr = curr->next;
+	new_arg = NULL;
+	while (curr != NULL)
+	{
+		char *sub = ft_substr(*argument, curr->start, curr->end - curr->start);
+		if (curr->expanded && ft_strchr(*argument, '$'))
+		expand_string(&sub, env, exit_status);
+		new_arg = ft_strjoin(sub, new_arg);
+		curr = curr->prev;
+	}
+	*argument = new_arg;
+}
 
 void	argv_expander(char **argv, t_expand **expandArr, t_env *env, int exit_status)
 {
-	int		i;
-	char	*new_arg;
-	t_expand *curr;
+	t_expand	*curr;
+	int			i;
 
 	i = 0;
 	while (argv[i])
@@ -124,19 +104,10 @@ void	argv_expander(char **argv, t_expand **expandArr, t_env *env, int exit_statu
 		if (ft_strchr(argv[i], '$'))
 		{
 			curr = expandArr[i];
-			while (curr->next != NULL)
-				curr = curr->next;
-			new_arg = NULL;
-			while (curr != NULL)
-			{
-				char *sub = ft_substr(argv[i], curr->start, curr->end - curr->start);
-				if (curr->expanded && ft_strchr(argv[i], '$'))
-					expand_string(&sub, env, exit_status);
-				new_arg = ft_strjoin(sub, new_arg);
-				curr = curr->prev;
-			}
-			argv[i] = new_arg;
+			expand_one_arg(&argv[i], curr, env, exit_status);
 		}
 		i++;
 	}
 }
+
+

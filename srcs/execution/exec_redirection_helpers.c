@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 22:24:50 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/02/28 20:41:59 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/01 01:23:43 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int	get_last_heredoc(t_redir *redirection, t_redir **last_heredoc,
 	{
 		if (redirection->type == R_HEREDOC)
 		{
-			handle_heredoc(redirection->filename, env, exit_status); // Error here
+			handle_heredoc(redirection->heredoc_delim, env, exit_status);
 			*last_heredoc = redirection;
 			last_heredoc_index = i;
 		}

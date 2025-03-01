@@ -22,9 +22,9 @@ void	process_input(char *line, t_token **token, t_tree **tree)
 		if (line)
 			add_history(line);
 		*tree = build_ast(*token);
-		printf("\n===== AST Structure =====\n");
-		print_ast(*tree, 0, "Root");
-		printf("=========================\n\n");
+		// printf("\n===== AST Structure =====\n");
+		// print_ast(*tree, 0, "Root");
+		// printf("=========================\n\n");
 	}
 }
 

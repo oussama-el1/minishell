@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redirection.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
+/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 14:43:35 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/01 00:04:50 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/01 01:12:24 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,18 @@ void	redir_output(t_redir	*last_out, int *error_found)
 	}
 }
 
+void expand_filnames(t_redir *redirection, t_env *env, int exit_status)
+{
+	while (redirection)
+	{
+		// if (redirection->type == R_HEREDOC)
+		// 	expand_one_arg(&redirection->heredoc_delim, redirection->expand_list, env, exit_status);
+		// else
+			expand_one_arg(&redirection->filename, redirection->expand_list, env, exit_status);
+		redirection = redirection->next;
+	}
+}
+
 int	exec_cmd(t_tree *node, t_env *env, int exit_status)
 {
 	int		saved_in;
@@ -134,16 +146,11 @@ int	exec_cmd(t_tree *node, t_env *env, int exit_status)
 	error_found = 0;
 	saved_in = dup(STDIN_FILENO);
 	saved_out = dup(STDOUT_FILENO);
+	expand_filnames(node->args->redir, env, exit_status);
 	last_heredoc_index = get_last_heredoc(node->args->redir,
 			&last_heredoc, exit_status, env);
 	last_in_index = get_last_in(node->args->redir, &last_in, &error_found);
 	iterate_output_redirection(node->args->redir, &last_out, &error_found);
-	// if (last_out)
-	// 	printf("out file : %s\n", last_out->filename);
-	// if (last_in)
-	// 	printf("in file : %s\n", last_in->filename);
-	// if (last_heredoc)
-	// 	printf("last herdoc : %s\n", last_heredoc->filename); // change to herdoc_delim
 	if (!error_found && (last_in || last_heredoc))
 		redir_input(last_heredoc_index, last_in_index, &error_found, last_in);
 	if (last_out && !error_found)
