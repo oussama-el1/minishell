@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 14:43:35 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/01 16:14:31 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/01 17:53:59 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,7 +147,8 @@ int	redirect_and_exec(t_tree *node, t_env *env, int exit_status)
 	res = 0;
 	saved_in = dup(STDIN_FILENO);
 	saved_out = dup(STDOUT_FILENO);
-	expand_filnames(node->args->redir, env, exit_status);
+	if (node->args->redir)
+		expand_filnames(node->args->redir, env, exit_status);
 	last_heredoc_index = get_last_heredoc(node->args->redir,
 			&last_heredoc, exit_status, env);
 	last_in_index = get_last_in(node->args->redir, &last_in, &error_found);
