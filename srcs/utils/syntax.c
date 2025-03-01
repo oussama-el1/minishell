@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 13:18:10 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/01 17:51:39 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/01 21:59:08 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,12 +98,12 @@ static int	check_next_closed(t_token *token)
 	{
 		if (curr->type == EXPR || curr->type == DOLLAR || is_quote(curr->type))
 			return (print_syntax_error(curr->value));
-		if (curr->type == isredirect(curr->type))
-			curr = curr->next;
-		if (curr)
+		if (isredirect(curr->type))
 			curr = curr->next;
 		if (curr && is_dilim(curr->type))
 			break ;
+		if (curr)
+			curr = curr->next;
 	}
 	return (1);
 }
