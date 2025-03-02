@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/02 00:06:05 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/02 14:01:02 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,6 @@
 # include <stdbool.h>
 # include <sys/stat.h>
 # include <errno.h>
-
-
-# define OPEN_PARENTH 40
-# define CLOSE_PARENTH 41
-# define YASSINE 1
 
 int g_received_signal;
 
@@ -70,11 +65,12 @@ typedef enum e_redir_type
 	R_HEREDOC,
 } t_redir_type;
 
-enum e_flag
+enum e_gc
 {
 	ALLOC,
 	FREE,
 	FULLFREE,
+	CMD,
 } ;
 
 typedef struct s_token
@@ -151,10 +147,11 @@ typedef struct s_env
 }	t_env;
 
 
-/* // Garbage Collector
+// Garbage Collector
 typedef struct s_gc
 {
 	void		*mallocedptr;
+	int			type;
 	struct s_gc	*next;
 	struct s_gc	*prev;
 }	t_gc;
@@ -164,7 +161,7 @@ typedef struct s_gc_manager
 	t_gc	*gc;
 	int		first_iter;
 }	t_gc_manager;
-*/
+
 
 /* helper.c && helper2.c && string_utils.c && list_utils.c */
 int		is_space(char c);
@@ -288,5 +285,7 @@ void	expand_one_arg(char **argument, t_expand *curr, t_env *env, int exit_status
 void	argv_expander(char **argv, t_expand **expandArr, t_env *env, int exit_status);
 void	print_ast(t_tree *node, int depth, const char *relation);
 
+/*  Garbage Collector */
+void	*maroc(size_t size, int flag, int type);
 
 # endif

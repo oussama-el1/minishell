@@ -1,111 +1,116 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   garbage_collec.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/02 00:40:05 by yslami            #+#    #+#             */
+/*   Updated: 2025/03/02 13:59:10 by yslami           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-/*
-// void	ft_exit(const char *msg)
-// {
-// 	if (msg)
-// 		perror(msg);
-// 	rl_clear_history();
-// 	addfd(0, 0);
-// 	maroc(0, FULLFREE);
-// 	exit(1);
-// }
+static void	maroc_free(t_gc_manager **manager, int flag, int type);
+static void	full_freemaroc(t_gc_manager **manager);
+static void	init_gc_manager(t_gc_manager	**manager);
+static void	append_ptrnode(t_gc_manager *manager, void *ptr, int type);
 
-// static t_gc_manager*	init_gc_manager(void)
-// {
-// 	t_gc_manager	*manager;
+void	*maroc(size_t size, int flag, int type)
+{
+	static t_gc_manager	*gc_manager = NULL;
+	void				*ptr;
 
-// 	manager = malloc(sizeof(t_gc_manager));
-// 	if (!manager)
-// 		ft_exit("Failed to initialize GC manager");
-// 	manager->gc = NULL;
-// 	manager->first_iter = 0;
-// }
+	init_gc_manager(&gc_manager);
+	if (flag == ALLOC)
+	{
+		ptr = malloc(size);
+		if (!ptr)
+			return (ft_exit(NULL), NULL);
+	}
+	if (flag == FREE || flag == FULLFREE)
+		return (maroc_free(&gc_manager, flag, type), NULL);
+	append_ptrnode(gc_manager, ptr, type);
+	return (ptr);
+}
 
-// static void addmallocedptr(void *ptr) {
-//     t_gc *new;
-//     static t_gc *last = NULL;
+static void	append_ptrnode(t_gc_manager *manager, void *ptr, int type)
+{
+	t_gc		*new;
+	static t_gc	*last;
 
-//     new = malloc(sizeof(t_gc));
-//     if (!new) {
-//         ft_exit("Failed to allocate memory for GC node");
-//         return;
-//     }
+	new = malloc(sizeof(t_gc));
+	if (!new)
+		return (ft_exit(NULL), (void)0);
+	new->mallocedptr = ptr;
+	new->type = type;
+	new->next = NULL;
+	new->prev = last;
+	if (last)
+		last->next = new;
+	last = new;
+	if (!manager->first_iter)
+	{
+		manager->gc = new;
+		manager->first_iter = 1;
+	}
+}
 
-//     new->mallocedptr = ptr;
-//     new->next = NULL;
-//     new->prev = last;
-//     if (last) {
-//         last->next = new;
-//     }
-//     last = new;
+static void	init_gc_manager(t_gc_manager **manager)
+{
+	if (!*manager)
+	{
+		*manager = malloc(sizeof(t_gc_manager));
+		if (!*manager)
+			ft_exit(NULL);
+		(*manager)->gc = NULL;
+		(*manager)->first_iter = 0;
+	}
+}
 
-//     if (!manager->gc) {
-//         manager->gc = new;
-//     }
-// }
+static void	maroc_free(t_gc_manager **manager, int flag, int type)
+{
+	t_gc	*curr;
 
-// Free memory of a specific type
-// static void free_type(t_gc *gc)
-//     t_gc *curr = manager->gc;
+	if (flag == FULLFREE)
+		full_freemaroc(manager);
+	else
+	{
+		curr = (*manager)->gc;
+		while (curr->next)
+			curr = curr->next;
+		while (curr)
+		{
+			if (curr->type == type && curr->mallocedptr)
+			{
+				free(curr->mallocedptr);
+				curr->mallocedptr = NULL;
+			}
+			curr = curr->prev;
+		}
+	}
+}
 
-//     while (curr) {
-//         if (curr->type == type) {
-//             if (curr->mallocedptr) {
-//                 free(curr->mallocedptr);
-//             }
-//             curr->mallocedptr = NULL;
-//         }
-//         curr = curr->next;
-//     }
-// }
+static void	full_freemaroc(t_gc_manager **manager)
+{
+	t_gc	*curr;
+	t_gc	*tmp;
+	void	*tmp_ptr;
 
-// static void	maroc_free(t_gc_manager **manager, int free_type)
-// {
-// 	if (free_type == FULLFREE)
-// 		full_freemaroc(manager);
-// 	else
-// 		release((*manager)->gc);
-// }
-
-// void	*maroc(size_t size, int flag)
-// {
-// 	void				*ptr;
-// 	static t_gc_manager	*gc_manager = NULL;
-
-// 	if (!gc_manager)// first run of the program
-// 		gc_manager = init_gc_manager();
-// 	if (flag == ALLOC)
-// 	{
-// 		ptr = malloc(size);
-// 		if (!ptr)
-// 			return (ft_exit("Malloc failed"), NULL);
-// 	}
-	// else if (flag == FREE || flag == FULLFREE)
-	// 	return (maroc_free(&gc_manager, flag), NULL);
-	// if (gc_manager->first_iter == 0)
-	// {
-	// 	gc_manager->gc = malloc(sizeof(t_gc));
-	// 	if (!gc_manager->gc)
-	// 	{
-	// 		ft_exit("Failed to allocate memory for GC manager");
-	// 		return (NULL);
-	// 	}
-	// 	gc_manager->gc->next = NULL;
-	// 	gc_manager->gc->prev = NULL;
-	// 	addmallocedptr(ptr);
-	// 	gc_manager->first_iter = 1;
-	// }
-	// else
-	// 	addmallocedptr(ptr);
-	// return (ptr);
-// }
-
-// Free all memory tracked by the garbage collector
-// void maroc_free(int type) {
-//     if (gc_manager) {
-//         maroc_free_all(type);
-//     }
-// }
-*/
+	if (!*manager)
+		return ;
+	curr = (*manager)->gc;
+	while (curr->next)
+		curr = curr->next;
+	while (curr)
+	{
+		tmp = curr;
+		tmp_ptr = curr->mallocedptr;
+		curr = curr->prev;
+		free(tmp);
+		free(tmp_ptr);
+	}
+	if (*manager)
+		free(*manager);
+}
