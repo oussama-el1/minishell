@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/02 00:36:12 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/02 19:45:58 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/02 22:15:01 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ int	process_input(char *line, t_token **token, t_tree **tree, int base)
 		// print_ast(*tree, 0, "Root");
 		// printf("=========================\n\n");
 	}
+	else
+		return (add_history(line), 0);
 	return (1);
 }
 
@@ -113,6 +115,7 @@ static int	handle_end_of_line(char **line, t_token **token, t_tree **tree)
 	return (process_input(*line, token, tree, 0));
 }
 
+/*
 const char *type_names[] = {
    "T_AND",
 	"T_OR",
@@ -231,3 +234,4 @@ void print_ast(t_tree *node, int depth, const char *relation)
     if (node->right)
         print_ast(node->right, depth + 1, "Right");
 }
+*/

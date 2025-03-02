@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:08:50 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/02 22:29:49 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/02 22:35:18 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,18 +20,13 @@ static void	bash_loop(t_env *env)
 	char		*tmp;
 	static int	exit_status;
 
-
 	setup_signals();
 	while (1)
 	{
 		init_token(&token, 1);
 		line = readline("minishell$> ");
 		if (!line)
-		{
-			ft_printf("exit\n");
-			exit(exit_status);
-		}
-
+			ft_exit(NULL);
 		if (empty(line))
 		{
 			free(line);
