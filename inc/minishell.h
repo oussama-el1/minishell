@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/02 00:06:05 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/02 01:04:17 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 # include <stdbool.h>
 # include <sys/stat.h>
 # include <errno.h>
+# include <dirent.h>
 
 
 # define OPEN_PARENTH 40
@@ -288,5 +289,7 @@ void	expand_one_arg(char **argument, t_expand *curr, t_env *env, int exit_status
 void	argv_expander(char **argv, t_expand **expandArr, t_env *env, int exit_status);
 void	print_ast(t_tree *node, int depth, const char *relation);
 
+void	expand_wildcard(char ***argv);
+int		contain_wildcard(char **argv);
 
 # endif
