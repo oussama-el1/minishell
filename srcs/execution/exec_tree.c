@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 18:06:55 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/01 20:38:54 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/02 01:06:05 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,11 @@ int	 execute_ast(t_tree *node, t_env *env, int *exit_status)
 	}
 	setup_signals();
 	if (node->args && node->args->argv && node->args->expand_list)
+	{
 		argv_expander(node->args->argv, node->args->expand_list, env, *exit_status);
+		if (contain_wildcard(node->args->argv))
+			expand_wildcard(&node->args->argv);
+	}
 	if (node->type == T_CMD)
 		*exit_status = redirect_and_exec(node, env, *exit_status);
 	if (node->type == T_PIPE)
