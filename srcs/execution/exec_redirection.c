@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 14:43:35 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/01 21:01:22 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/01 23:15:21 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,10 @@ void	iterate_output_redirection(t_redir *redirection,
 				fd = open(redirection->filename,
 						O_WRONLY | O_CREAT | O_APPEND, 0644);
 			if (fd < 0)
+			{
 				file_error_handler(redirection, error_found);
+				break ;
+			}
 			else
 			{
 				close(fd);
@@ -148,7 +151,10 @@ void open_output_error(t_redir *redirection, int last_in_index, int *error_found
 				fd = open(redirection->filename,
 						O_WRONLY | O_CREAT | O_APPEND, 0644);
 			if (fd < 0)
+			{
 				file_error_handler(redirection, error_found);
+				break ;
+			}
 			else
 				close(fd);
 		}

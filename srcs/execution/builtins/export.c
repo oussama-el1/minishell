@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 15:25:02 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/02/28 16:23:48 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/01 23:25:54 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,8 +93,10 @@ static int	process_env(char *env, t_env *env_ls, int exit_status)
 int	ft_export(char **argv, t_env *env, int exit_status)
 {
 	int	i;
+	int	status;
 
 	i = 1;
+	status = 0;
 	if (!argv[1])
 	{
 		print_export(env, 1);
@@ -103,8 +105,8 @@ int	ft_export(char **argv, t_env *env, int exit_status)
 	while (argv[i])
 	{
 		if (process_env(argv[i], env, exit_status))
-			return (1);
+			status = 1;
 		i++;
 	}
-	return (0);
+	return (status);
 }

@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:16:05 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/02/22 21:28:18 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/02 00:03:41 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ static int	change_home_dir(char **argv, t_env *env, int exit_status)
 			ft_putstr_fd("cd: HOME not set\n", 2);
 			return (1);
 		}
+		if (!*home)
+			return (0);
 		if (chdir(home) == -1)
 		{
 			perror("cd");

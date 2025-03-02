@@ -6,18 +6,28 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 20:12:48 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/02/28 18:01:01 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/01 22:52:30 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
+#include <sys/stat.h>
+#include <unistd.h>
+
 static int	is_executable(char *path)
 {
+	struct stat	buf;
+
 	if (!path)
+		return (0);
+	if (stat(path, &buf) != 0)
+		return (0); 
+	if (S_ISDIR(buf.st_mode))
 		return (0);
 	return (access(path, X_OK) == 0);
 }
+
 
 static void	free_str_array(char **arr)
 {

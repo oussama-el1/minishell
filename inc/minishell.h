@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
+/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/01 21:18:28 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/02 00:06:05 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,9 @@
 # include <signal.h>
 # include <termios.h>
 # include <stdbool.h>
+# include <sys/stat.h>
+# include <errno.h>
+
 
 # define OPEN_PARENTH 40
 # define CLOSE_PARENTH 41
