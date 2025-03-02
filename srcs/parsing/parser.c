@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/02 00:36:12 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/02 00:36:14 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/02 19:45:58 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,6 +215,12 @@ void print_ast(t_tree *node, int depth, const char *relation)
             printf("\n");
             print_redir_list(node->args->redir);
         }
+
+		// print wildcards bool array
+		for (int i = 0; node->args->argv[i]; i++)
+		{
+			printf("  -> Arg[%d]: \"%s\" Wildcard: %s\n", i, node->args->argv[i], node->args->wildcards[i] ? "true" : "false");
+		}
     }
 
     printf("\n");

@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 13:58:51 by yslami            #+#    #+#             */
-/*   Updated: 2025/02/28 23:58:34 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/02 17:46:28 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,18 +40,22 @@ t_token	*sublist(t_token *start, t_token *end)
 	return (head);
 }
 
-char	*quoted_process(t_token **curr, t_expand **expansion_list)
+char	*quoted_process(t_token **curr, t_expand **expansion_list, bool *wildcard)
 {
 	char		*tmp;
 	char		*arg;
 	t_expand	*head;
+	t_token		*save;
 	size_t		start;
+	int			level;
 
 	head = NULL;
 	arg = NULL;
 	start = 0;
+	level = 0;
 	while (*curr && (*curr)->visited != 1 && non_control((*curr)->type))
 	{
+		save = *curr;
 		if (*curr)
 			tmp = (*curr)->value;
 		expansion_func(&head, *curr, &tmp, &start);
@@ -63,6 +67,14 @@ char	*quoted_process(t_token **curr, t_expand **expansion_list)
 		*curr = (*curr)->next;
 		if (!*curr || (*curr)->visited == 1 || (*curr)->bef_space == 1)
 			break ;
+		level = 1;
+	}
+	if (!level && is_wildcard(save) && wildcard)
+		*wildcard = true;
+	else
+	{
+		if (wildcard)
+			*wildcard = false;
 	}
 	*expansion_list = head;
 	return (arg);

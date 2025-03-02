@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/02 14:08:57 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/02 17:46:58 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ typedef struct s_args
 {
 	char		**argv;
 	t_expand	**expand_list;
+	bool		*wildcards;
 	t_redir		*redir;
 }	t_args;
 
@@ -187,6 +188,7 @@ t_token	*lst_dup(t_token *token);
 t_token	*sublist(t_token *start, t_token *end);
 int		contains_unquoted_ampersand(const char *str);
 char 	*remove_quote(t_token *curr, char *str);
+int		is_wildcard(t_token *curr);
 
 /* syntax_helper.c */
 int		print_syntax_error(char *token);
@@ -228,7 +230,7 @@ t_tree		*create_cmd(t_token *token);
 void		extract_args(t_args *args, t_token *token);
 t_tree_type get_tree_type(int type);
 t_token		*back_prev(t_token *token);
-char		*quoted_process(t_token **curr, t_expand **expansion_list);
+char		*quoted_process(t_token **curr, t_expand **expansion_list, bool *wildcard);
 t_token		*left_back(t_token *token);
 int			args_count(t_token *token);
 void		expansion_func(t_expand	**head, t_token *curr, char **str, size_t *start);

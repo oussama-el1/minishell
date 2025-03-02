@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 19:07:45 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/01 17:34:52 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/02 17:57:54 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,12 +199,14 @@ void	extract_args(t_args *args, t_token *token)
 {
 	t_token	*curr;
 	char	**res;
+	bool	*wildcards;
 	t_redir	*redir;
 	int		i;
 	int		arg_count;
 
 	arg_count = args_count(token);
 	res = (char **)malloc((arg_count + 1) * sizeof(char *));
+	wildcards = (bool *)malloc((arg_count + 1) * sizeof(bool));
 	args->expand_list = (t_expand **)malloc((arg_count + 1) * sizeof(t_expand *));
 	curr = token;
 	i = 0;
@@ -213,16 +215,15 @@ void	extract_args(t_args *args, t_token *token)
 	{
 		if (isredirect(curr->type))
 			handle_redirection(&redir, &curr);
-		else
-		{
-			res[i] = quoted_process(&curr, &args->expand_list[i]);
-			if (res[i])
-				i++;
-		}
+		res[i] = quoted_process(&curr, &args->expand_list[i], &wildcards[i]);
+		if (res[i])
+			i++;
 	}
 	res[i] = NULL;
+	wildcards[i] = false;
 	args->expand_list[i] = NULL;
 	args->argv = res;
+	args->wildcards = wildcards;
 	args->redir = redir;
 }
 
@@ -284,7 +285,7 @@ void	handle_redirection(t_redir **redir_list, t_token **curr)
 	*curr = (*curr)->next;
 	if (*curr)
 	{
-		char *filename = quoted_process(curr, &expand_list);
+		char *filename = quoted_process(curr, &expand_list, 0);
 		new_redir = create_redir_node(type, filename, expand_list);
 		if (new_redir)
 			append_redir_node(redir_list, new_redir);
