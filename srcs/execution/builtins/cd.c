@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:16:05 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/02 00:03:41 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/02 22:33:26 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,26 +49,47 @@ static void	update_env(char *old_pwd, t_env *env)
 	}
 }
 
+int	handle_oldpwd(char *oldpwd)
+{
+	if (!oldpwd)
+	{
+		ft_putstr_fd("minishell: cd: OLDPWD not set\n", 2);
+		return (1);
+	}
+	else
+	{
+		ft_putstr_fd("minishell: cd: ", 2);
+		ft_putstr_fd(oldpwd, 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
+		return (1);
+	}
+	return (0);
+}
+
 int	ft_cd(char **argv, t_env *env, int exit_status)
 {
-	char	*old_pwd;
-	int		home_res;
+	char		*old_pwd;
+	int			home_res;
+	const char	*oldpwd;
 
 	old_pwd = get_env_var(env, "PWD", exit_status);
 	home_res = change_home_dir(argv, env, exit_status);
 	if (home_res == 1)
 		return (1);
 	if (home_res == 0)
+		return (update_env(old_pwd, env), 0);
+	if (argv[1] && !ft_strcmp(argv[1], "-"))
 	{
-		update_env(old_pwd, env);
-		return (0);
+		oldpwd = get_env_var(env, "OLDPWD", exit_status);
+		if (chdir(oldpwd) == -1 && handle_oldpwd((char *)oldpwd))
+			return (1);
+		printf("%s\n", oldpwd);
 	}
-	if (argv[1] && chdir(argv[1]) == -1)
+	else if (argv[1] && chdir(argv[1]) == -1)
 	{
 		ft_putstr_fd("cd: ", 2);
 		ft_putstr_fd(argv[1], 2);
-		ft_putstr_fd(": No such file or directory\n", 2);
-		return (1);
+		return (ft_putstr_fd(": No such file or directory\n", 2), 1);
 	}
 	update_env(old_pwd, env);
 	return (0);
