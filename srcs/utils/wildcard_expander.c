@@ -6,20 +6,20 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/02 00:34:27 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/02 02:03:41 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/02 20:56:29 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-int	contain_wildcard(char **argv)
+int	contain_wildcard(char **argv, bool *wildcards)
 {
 	int	i;
 
 	i = 0;
 	while (argv[i])
 	{
-		if (ft_strcmp(argv[i], "*") == 0)
+		if (wildcards[i] == 1)
 			return (1);
 		i++;
 	}
@@ -88,7 +88,7 @@ char	**get_files_in_directory(int *count)
 	return (files);
 }
 
-int	count_wildcard(char **old_argv)
+int	count_wildcard(char **old_argv, bool *wildcards)
 {
 	int	i;
 	int	count;
@@ -98,7 +98,7 @@ int	count_wildcard(char **old_argv)
 	count = 0;
 	while (old_argv[i])
 	{
-		if (ft_strcmp(old_argv[i], "*") == 0)
+		if (wildcards[i])
 		{
 			get_files_in_directory(&file_count);
 			count += file_count;
@@ -110,7 +110,7 @@ int	count_wildcard(char **old_argv)
 	return (count);
 }
 
-void	fill_new_argv(char **new_argv, char **old_argv)
+void	fill_new_argv(char **new_argv, char **old_argv, bool *wildcards)
 {
 	int		i;
 	int		j;
@@ -122,7 +122,7 @@ void	fill_new_argv(char **new_argv, char **old_argv)
 	k = 0;
 	while (old_argv[i])
 	{
-		if (ft_strcmp(old_argv[i], "*") == 0)
+		if (wildcards[i])
 		{
 			files = get_files_in_directory(&file_count);
 			j = 0;
@@ -137,18 +137,18 @@ void	fill_new_argv(char **new_argv, char **old_argv)
 	new_argv[k] = NULL;
 }
 
-void	expand_wildcard(char ***argv)
+void	expand_wildcard(char ***argv, bool *wildcards)
 {
 	char	**old_argv;
 	char	**new_argv;
 	int		count;
 
 	old_argv = *argv;
-	count = count_wildcard(old_argv);
+	count = count_wildcard(old_argv, wildcards);
 	new_argv = malloc((count + 1) * sizeof(char *));
 	if (!new_argv)
 		return ;
-	fill_new_argv(new_argv, old_argv);
+	fill_new_argv(new_argv, old_argv, wildcards);
 	free(old_argv);
 	*argv = new_argv;
 }
