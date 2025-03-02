@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
+/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/02 17:46:58 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/02 20:50:15 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -291,7 +291,7 @@ void	print_ast(t_tree *node, int depth, const char *relation);
 /*  Garbage Collector */
 void	*maroc(size_t size, int flag, int type);
 
-void	expand_wildcard(char ***argv);
-int		contain_wildcard(char **argv);
+void	expand_wildcard(char ***argv, bool *wildcards);
+int		contain_wildcard(char **argv, bool *wildcards);
 
 # endif
