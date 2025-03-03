@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/02 00:36:12 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/03 00:15:14 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/03 00:58:13 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ static int end_with_operator(char *line)
 
 	if (!line || !*line)
 		return (0);
-	len = ft_strlen_0(line);
+	len = ft_strlen(line);
 	while (len > 0 && (line[len -1] == ' ' || line[len - 1] == '\t'))
 		len--;
 	if (len >= 1 && line[len - 1] == '|')
@@ -109,8 +109,8 @@ static int	handle_end_of_line(char **line, t_token **token, t_tree **tree)
 	new_line = readline("> ");
 	if (!new_line)
 		return (printf("Error\nReadline Error!\n"), 1);
-	*line = ft_strjoin(*line, " ");
-	*line = ft_strjoin(*line, new_line);
+	*line = ft_strjoin(*line, " ", CMD);
+	*line = ft_strjoin(*line, new_line, CMD);
 	return (process_input(*line, token, tree, 0));
 }
 
