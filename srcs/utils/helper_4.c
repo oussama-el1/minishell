@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 21:26:48 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/02 17:56:23 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/03 20:19:24 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ int is_regular(enum e_token_type type)
 
 int	is_wildcard(t_token *curr)
 {
-	if (curr && curr->bef_space && only_wild(curr->value))
+	if (curr && (curr->bef_space || (!curr->bef_space && \
+		!curr->prev)) && only_wild(curr->value))
 		return (1);
 	return (0);
 }
