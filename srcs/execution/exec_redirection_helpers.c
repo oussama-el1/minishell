@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 22:24:50 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/03 02:37:19 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/03 17:49:02 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,22 +28,21 @@ char	*expand_env_herdoc(t_env *env, char *line, int fd, int exit_status, const c
 void	herdoc_loop(const char *delimiter, t_env *env, int fd, int exit_status)
 {
 	char	*line;
+	char	*tmp;
 
 	line = NULL;
 	while (1)
 	{
 		line = readline("> ");
+		tmp = line;
 		if (!line)
 			break ;
-		// here : improve expanding
+		expand_string(&line, env, exit_status);
 		if (ft_strcmp(line, delimiter) == 0)
-			return (free(line), (void)0);
-		if (line[0] == '$' && !expand_env_herdoc(env, line, fd, exit_status, delimiter))
-			return (free(line), (void)0);
-		if (line[0] != '$')
-			write(fd, line, ft_strlen(line));
+			return (free(tmp), (void)0);
+		write(fd, line, ft_strlen(line));
 		write(fd, "\n", 1);
-		free(line);
+		free(tmp);
 	}
 }
 

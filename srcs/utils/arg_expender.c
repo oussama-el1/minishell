@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 21:12:37 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/03 00:28:28 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/03 17:32:22 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void	expand_one_arg(char **argument, t_expand *curr, t_env *env, int exit_status
 	{
 		char *sub = ft_substr(*argument, curr->start, curr->end - curr->start, CMD);
 		if (curr->expanded && ft_strchr(*argument, '$'))
-		expand_string(&sub, env, exit_status);
+			expand_string(&sub, env, exit_status);
 		new_arg = ft_strjoin(sub, new_arg, CMD);
 		curr = curr->prev;
 	}

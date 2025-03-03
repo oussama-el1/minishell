@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
+/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/03 01:03:49 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/03 17:33:14 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -277,6 +277,7 @@ int		get_last_heredoc(t_redir *redirection, t_redir **last_heredoc, int exit_sta
 void	file_error_handler(t_redir *redirection, int *error_found);
 void	clean_resources(int saved_in, int saved_out);
 void	expand_one_arg(char **argument, t_expand *curr, t_env *env, int exit_status);
+void	expand_string(char **string, t_env *env, int exit_status);
 void	argv_expander(char **argv, t_expand **expandArr, t_env *env, int exit_status);
 void	print_ast(t_tree *node, int depth, const char *relation);
 
