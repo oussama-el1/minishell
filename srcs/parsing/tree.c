@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 19:07:45 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/02 17:57:54 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/03 00:43:07 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ t_tree	*create_node(t_token *token)
 
 	if (!token)
 		return (NULL);
-	node = (t_tree *)malloc(sizeof(t_tree));
+	node = (t_tree *)maroc(sizeof(t_tree), ALLOC, CMD);
 	node->type = get_tree_type(token->type);
 	node->args = NULL;// when its T_SUB this should be filled
 	node->left = NULL;
@@ -168,7 +168,7 @@ t_tree	*create_subshell(t_token *token)
 
 	if(!token)
 		return (NULL);
-	node = (t_tree *)malloc(sizeof(t_tree));
+	node = (t_tree *)maroc(sizeof(t_tree), ALLOC, CMD);
 	node->type = T_SUBSHELL;
 	args = NULL;
 	extract_subshell_args(&args, token);
@@ -185,9 +185,9 @@ t_tree	*create_cmd(t_token *token)
 
 	if(!token)
 		return (NULL);
-	node = (t_tree *)malloc(sizeof(t_tree));
+	node = (t_tree *)maroc(sizeof(t_tree), ALLOC, CMD);
 	node->type = T_CMD;
-	args = (t_args *)malloc(sizeof(t_args));
+	args = (t_args *)maroc(sizeof(t_args), ALLOC, CMD);
 	extract_args(args, token);
 	node->args = args;
 	node->left = NULL;
@@ -205,9 +205,9 @@ void	extract_args(t_args *args, t_token *token)
 	int		arg_count;
 
 	arg_count = args_count(token);
-	res = (char **)malloc((arg_count + 1) * sizeof(char *));
-	wildcards = (bool *)malloc((arg_count + 1) * sizeof(bool));
-	args->expand_list = (t_expand **)malloc((arg_count + 1) * sizeof(t_expand *));
+	res = (char **)maroc((arg_count + 1) * sizeof(char *), ALLOC, CMD);
+	wildcards = (bool *)maroc((arg_count + 1) * sizeof(bool), ALLOC, CMD);
+	args->expand_list = (t_expand **)maroc((arg_count + 1) * sizeof(t_expand *), ALLOC, CMD);
 	curr = token;
 	i = 0;
 	redir = NULL;
@@ -231,9 +231,7 @@ t_redir	*create_redir_node(int type, char *filename, t_expand *expand_list)
 {
 	t_redir	*new_redir;
 
-	new_redir = (t_redir *)malloc(sizeof(t_redir));
-	if (!new_redir)
-		return (NULL);
+	new_redir = (t_redir *)maroc(sizeof(t_redir), ALLOC, CMD);
 	new_redir->filename = NULL;
 	new_redir->heredoc_delim = NULL;
 	new_redir->type = get_redir_type(type);
@@ -320,7 +318,7 @@ void extract_subshell_args(t_args **args, t_token *token)
 	}
 	if (redir)
 	{
-		*args = (t_args *)malloc(sizeof(t_args));
+		*args = (t_args *)maroc(sizeof(t_args), ALLOC, CMD);
 		(*args)->redir = redir;
 		(*args)->argv = NULL;
 	}

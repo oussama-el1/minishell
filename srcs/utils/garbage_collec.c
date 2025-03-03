@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/02 00:40:05 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/02 13:59:10 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/02 23:08:49 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ static void	full_freemaroc(t_gc_manager **manager)
 	if (!*manager)
 		return ;
 	curr = (*manager)->gc;
-	while (curr->next)
+	while (curr && curr->next)
 		curr = curr->next;
 	while (curr)
 	{
