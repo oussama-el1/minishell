@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 23:46:35 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/02/22 21:53:12 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/03 00:33:41 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ void	add_env_var(t_env **env, char *key,
 	t_env	*new;
 	t_env	*tmp;
 
-	new = malloc(sizeof(t_env));
+	// new = malloc(sizeof(t_env));
+	new = maroc(sizeof(t_env), ALLOC, ENV);
 	if (!new)
 		return ;
 	new->key = key;
@@ -80,9 +81,6 @@ int	unset_env_var(t_env **env, char *key)
 				prev->next = tmp->next;
 			else
 				*env = tmp->next;
-			free(tmp->key);
-			free(tmp->value);
-			free(tmp);
 			return (1);
 		}
 		prev = tmp;
@@ -94,7 +92,7 @@ int	unset_env_var(t_env **env, char *key)
 char	*get_env_var(t_env *env, char *key, int exit_status)
 {
 	if (ft_strcmp(key, "?") == 0)
-		return (ft_itoa(exit_status));
+		return (ft_itoa(exit_status, CMD));
 	while (env)
 	{
 		if (ft_strcmp(env->key, key) == 0)
@@ -113,8 +111,6 @@ void	set_env_var(t_env **env, char *key, char *value, int exported)
 	{
 		if (ft_strcmp(tmp->key, key) == 0)
 		{
-			free(tmp->value);
-			free(key);
 			tmp->value = value;
 			tmp->exported = exported;
 			return ;

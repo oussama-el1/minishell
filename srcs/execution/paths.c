@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 20:12:48 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/01 22:52:30 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/03 00:17:55 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,20 +28,6 @@ static int	is_executable(char *path)
 	return (access(path, X_OK) == 0);
 }
 
-
-static void	free_str_array(char **arr)
-{
-	int	i;
-
-	i = 0;
-	while (arr[i])
-	{
-		free(arr[i]);
-		i++;
-	}
-	free(arr);
-}
-
 static char	*find_binary_in_path_helper(char **dirs, char *cmd)
 {
 	char	*full_path;
@@ -50,17 +36,12 @@ static char	*find_binary_in_path_helper(char **dirs, char *cmd)
 	i = 0;
 	while (dirs[i])
 	{
-		full_path = ft_strjoin(dirs[i], "/");
-		full_path = ft_strjoin_free(full_path, cmd);
+		full_path = ft_strjoin(dirs[i], "/", CMD);
+		full_path = ft_strjoin(full_path, cmd, CMD);
 		if (is_executable(full_path))
-		{
-			free_str_array(dirs);
 			return (full_path);
-		}
-		free(full_path);
 		i++;
 	}
-	free_str_array(dirs);
 	return (NULL);
 }
 
@@ -75,7 +56,7 @@ static char	*find_binary_in_path(char *cmd, t_env *env, int exit_status)
 		ft_putendl_fd("$PATH var not found", 2);
 		return (NULL);
 	}
-	dirs = ft_split(secure_dirs, ':');
+	dirs = ft_split(secure_dirs, ':', CMD);
 	if (!dirs || !*dirs)
 	{
 		ft_putendl_fd("No secure directory found", 2);
@@ -90,7 +71,7 @@ char	*get_executable_path(char *cmd, t_env *env, int exit_status)
 			|| (cmd[0] == '.' && cmd[1] == '.' && cmd[2] == '/')))
 	{
 		if (is_executable(cmd))
-			return (ft_strdup(cmd));
+			return (ft_strdup(cmd, CMD));
 		return (NULL);
 	}
 	return (find_binary_in_path(cmd, env, exit_status));

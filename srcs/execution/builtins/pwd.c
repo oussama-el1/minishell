@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 15:10:32 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/02/22 21:28:43 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/02 23:27:56 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,5 @@ int	ft_pwd(t_env *env, int exit_status)
 		ft_putendl_fd(cwd_from_env, 1);
 	else
 		ft_putendl_fd(cwd_from_getcwd, 1);
-	if (!cwd_from_env)
-		free(cwd_from_getcwd);
 	return (0);
 }

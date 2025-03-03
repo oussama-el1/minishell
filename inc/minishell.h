@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/02 20:50:15 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/02 23:34:01 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ enum e_gc
 	FREE,
 	FULLFREE,
 	CMD,
+	ENV,
 } ;
 
 typedef struct s_token
@@ -252,7 +253,7 @@ int	ft_export(char **argv, t_env *env, int exit_status);
 int	ft_unset(char **argv, t_env *env);
 int	ft_env(char **argv, t_env *env);
 int	ft_exit(char **argv);
-int	not_valid_idenrifier(char *env, char *name, char *value);
+int	not_valid_idenrifier(char *env);
 
 // env_utils
 t_env	*init_env(char **envp);
@@ -263,7 +264,6 @@ void	print_env(t_env *env);
 int		unset_env_var(t_env **env, char *key);
 char	*get_env_var(t_env *env, char *key, int exit_status);
 void	set_env_var(t_env **env, char *key, char *value, int exported);
-void	free_env(t_env *env);
 char	**get_env_array(t_env *env);
 t_env	*dup_env(t_env *original);
 int		validate_var_name(const char *var);

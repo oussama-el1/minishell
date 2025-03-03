@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 18:06:55 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/02 20:57:11 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/02 23:34:39 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,9 @@ static void	subshell_handler(t_tree *node, t_env *env, int *exit_status, pid_t p
 			if (node->args && node->args->redir)
 				redirect_and_exec(node, env_cpy, *exit_status);
 			exit_code = execute_ast(node->left, env_cpy, exit_status);
-			free_env(env_cpy);
 			clean_resources(saved_in, saved_out);
 			exit(exit_code);
 		}
-		free_env(env_cpy);
 		exit(0);
 	}
 	else

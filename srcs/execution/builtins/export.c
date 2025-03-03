@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 15:25:02 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/01 23:25:54 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/03 00:22:15 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,9 @@ static char	*getname(char *env, char *equal_ptr, int concat_flag)
 	name = NULL;
 	if (equal_ptr)
 	{
-		name = malloc(sizeof(char) * (ft_strlen(env)
-					- ft_strlen(equal_ptr)) + 1);
+		// name = malloc(sizeof(char) * (ft_strlen(env)
+		// 			- ft_strlen(equal_ptr)) + 1);
+		name = maroc(ft_strlen(env) - ft_strlen(equal_ptr) + 1, ALLOC, ENV);
 		if (!name)
 			return (NULL);
 		ft_strlcpy(name, env, ft_strlen(env)
@@ -56,12 +57,12 @@ int	set_name_and_value(char *env, char **name, char **value)
 	equal_ptr = ft_strchr(env, '=');
 	if (equal_ptr)
 	{
-		*value = ft_strdup(equal_ptr + 1);
+		*value = ft_strdup(equal_ptr + 1, ENV);
 		*name = getname(env, equal_ptr, concat_flag);
 	}
 	else
 	{
-		*name = ft_strdup(env);
+		*name = ft_strdup(env, ENV);
 		*value = NULL;
 	}
 	return (concat_flag);
@@ -76,12 +77,12 @@ static int	process_env(char *env, t_env *env_ls, int exit_status)
 
 	concat_flag = set_name_and_value(env, &name, &value);
 	if (!validate_var_name(name))
-		return (not_valid_idenrifier(env, name, value));
+		return (not_valid_idenrifier(env));
 	if (value)
 	{
 		env_value = get_env_var(env_ls, name, exit_status);
 		if (concat_flag && env_value)
-			set_env_var(&env_ls, name, ft_strjoin(env_value, value), 1);
+			set_env_var(&env_ls, name, ft_strjoin(env_value, value, ENV), 1);
 		else
 			set_env_var(&env_ls, name, value, 1);
 	}

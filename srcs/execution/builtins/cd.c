@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:16:05 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/02 22:33:26 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/03 00:18:52 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,8 @@ static void	update_env(char *old_pwd, t_env *env)
 	new_pwd = getcwd(NULL, 0);
 	if (new_pwd)
 	{
-		set_env_var(&env, ft_strdup("OLDPWD"), ft_strdup(old_pwd), 1);
-		set_env_var(&env, ft_strdup("PWD"), ft_strdup(new_pwd), 1);
-		free(new_pwd);
+		set_env_var(&env, ft_strdup("OLDPWD", ENV), ft_strdup(old_pwd, ENV), 1);
+		set_env_var(&env, ft_strdup("PWD", ENV), ft_strdup(new_pwd, ENV), 1);
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/02 00:34:27 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/02 20:56:29 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/03 00:37:27 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ char	**set_files(DIR *dir, int count)
 	int				i;
 	char			**files;
 
-	files = malloc((count + 1) * sizeof(char *));
+	// files = malloc((count + 1) * sizeof(char *));
+	files = maroc((count + 1) * sizeof(char *), ALLOC, CMD);
 	if (!files)
 		return (NULL);
 	i = 0;
@@ -64,7 +65,7 @@ char	**set_files(DIR *dir, int count)
 	{
 		if (entry->d_name[0] != '.')
 		{
-			files[i] = ft_strdup(entry->d_name);
+			files[i] = ft_strdup(entry->d_name, CMD);
 			i++;
 		}
 		entry = readdir(dir);
@@ -128,10 +129,9 @@ void	fill_new_argv(char **new_argv, char **old_argv, bool *wildcards)
 			j = 0;
 			while (j < file_count)
 				new_argv[k++] = files[j++];
-			free(files);
 		}
 		else
-			new_argv[k++] = ft_strdup(old_argv[i]);
+			new_argv[k++] = ft_strdup(old_argv[i], CMD);
 		i++;
 	}
 	new_argv[k] = NULL;
@@ -145,10 +145,10 @@ void	expand_wildcard(char ***argv, bool *wildcards)
 
 	old_argv = *argv;
 	count = count_wildcard(old_argv, wildcards);
-	new_argv = malloc((count + 1) * sizeof(char *));
+	// new_argv = malloc((count + 1) * sizeof(char *));
+	new_argv = maroc((count + 1) * sizeof(char *), ALLOC, CMD);
 	if (!new_argv)
 		return ;
 	fill_new_argv(new_argv, old_argv, wildcards);
-	free(old_argv);
 	*argv = new_argv;
 }

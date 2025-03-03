@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 21:12:37 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/01 01:19:40 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/03 00:28:28 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@ char	*extract_key(char *str)
 	if (!str || !str[0])
 		return (NULL);
 	if (str[0] == '?')
-		return (ft_strdup("?"));
+		return (ft_strdup("?", CMD));
 	i = 0;
 	while (str[i] && (ft_is_alnum(str[i]) || str[i] == '_'))
 		i++;
-	key = ft_substr(str, 0, i);
+	key = ft_substr(str, 0, i, CMD);
 	return (key);
 }
 
@@ -32,36 +32,32 @@ void expand_string(char **string, t_env *env, int exit_status)
 {
 	int		i = 0;
 	int		start = 0;
-	char	*expanded = ft_strdup("");
+	char	*expanded;
 	char	*prefix;
 	char	*key;
 	char	*value;
 	char	*temp;
 
 	prefix = NULL;
+	expanded = ft_strdup("", CMD);
 	while ((*string)[i])
 	{
 		if ((*string)[i] == '$' && (*string)[i + 1] != '\0')
 		{
-			prefix = ft_substr(*string, start, i - start);
-			temp = ft_strjoin(expanded, prefix);
-			free(prefix);
+			prefix = ft_substr(*string, start, i - start, CMD);
+			temp = ft_strjoin(expanded, prefix, CMD);
 			expanded = temp;
-
 			key = extract_key(&(*string)[i + 1]);
 			if (key[0] == '\0')
-				temp = ft_strjoin(expanded, "$");
+				temp = ft_strjoin(expanded, "$", CMD);
 			else
 			{
 				value = get_env_var(env, key, exit_status);
-				temp = ft_strjoin(expanded, value ? value : "");
+				temp = ft_strjoin(expanded, value ? value : "", CMD);
 			}
-			free(expanded);
 			expanded = temp;
-
 			i += ft_strlen(key) + 1;
 			start = i;
-			free(key);
 		}
 		else
 			i++;
@@ -69,7 +65,7 @@ void expand_string(char **string, t_env *env, int exit_status)
 
 	if ((*string)[start])
 	{
-		temp = ft_strjoin(expanded, ft_strdup(&(*string)[start]));
+		temp = ft_strjoin(expanded, ft_strdup(&(*string)[start], CMD), CMD);
 		expanded = temp;
 	}
 	*string = expanded;
@@ -84,10 +80,10 @@ void	expand_one_arg(char **argument, t_expand *curr, t_env *env, int exit_status
 	new_arg = NULL;
 	while (curr != NULL)
 	{
-		char *sub = ft_substr(*argument, curr->start, curr->end - curr->start);
+		char *sub = ft_substr(*argument, curr->start, curr->end - curr->start, CMD);
 		if (curr->expanded && ft_strchr(*argument, '$'))
 		expand_string(&sub, env, exit_status);
-		new_arg = ft_strjoin(sub, new_arg);
+		new_arg = ft_strjoin(sub, new_arg, CMD);
 		curr = curr->prev;
 	}
 	*argument = new_arg;

@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 18:04:04 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/02/22 21:28:36 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/03 00:15:09 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	ft_exit(char **argv)
 	int	exit_code;
 
 	exit_code = 0;
-	ft_printf("exit\n");
+	printf("exit\n");
 	if (argv[1])
 	{
 		if (!is_numeric(argv[1]))

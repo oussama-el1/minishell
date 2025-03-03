@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 21:52:48 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/02/22 21:55:45 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/03 00:36:33 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,20 +30,6 @@ t_env	*init_env(char **environ)
 	return (env);
 }
 
-void	free_env(t_env *env)
-{
-	t_env	*tmp;
-
-	while (env)
-	{
-		tmp = env;
-		env = env->next;
-		free(tmp->key);
-		free(tmp->value);
-		free(tmp);
-	}
-}
-
 int	env_size(t_env *env)
 {
 	int	size;
@@ -65,14 +51,15 @@ char	**get_env_array(t_env *env)
 	int		size;
 
 	size = env_size(env);
-	env_array = (char **)malloc(sizeof(char *) * (size + 1));
+	// env_array = (char **)malloc(sizeof(char *) * (size + 1));
+	env_array = maroc(sizeof(char *) * (size + 1), ALLOC, CMD);
 	if (!env_array)
 		return (NULL);
 	i = 0;
 	while (i < size)
 	{
-		temp = ft_strjoin_free(ft_strdup(env->key), "=");
-		env_array[i] = ft_strjoin_free(temp, env->value);
+		temp = ft_strjoin(ft_strdup(env->key, CMD), "=", CMD);
+		env_array[i] = ft_strjoin(temp, env->value, CMD);
 		env = env->next;
 		i++;
 	}
@@ -89,8 +76,8 @@ t_env	*dup_env(t_env *original)
 	current = original;
 	while (current)
 	{
-		add_env_var(&new_env, ft_strdup(current->key),
-			ft_strdup(current->value), current->exported);
+		add_env_var(&new_env, ft_strdup(current->key, CMD),
+			ft_strdup(current->value, CMD), current->exported);
 		current = current->next;
 	}
 	return (new_env);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
+/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/02 00:36:12 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/02 22:15:01 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/03 00:15:14 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,10 +108,9 @@ static int	handle_end_of_line(char **line, t_token **token, t_tree **tree)
 	}
 	new_line = readline("> ");
 	if (!new_line)
-		return (ft_printf("Error\nReadline Error!\n"), 1);
+		return (printf("Error\nReadline Error!\n"), 1);
 	*line = ft_strjoin(*line, " ");
 	*line = ft_strjoin(*line, new_line);
-	free(new_line);
 	return (process_input(*line, token, tree, 0));
 }
 

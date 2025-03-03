@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:04:38 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/02 00:06:16 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/02 23:24:29 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,6 @@ void	run_binary(char **argv, t_env *env, int exit_status)
 		error_handler(argv[0]);
 	execve(cmd_path, argv, get_env_array(env));
 	perror(argv[0]);
-	free(cmd_path);
 	exit(1);
 }
 
