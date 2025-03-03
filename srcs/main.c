@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:08:50 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/02 23:29:35 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/03 00:56:11 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,12 @@ static void	bash_loop(t_env *env)
 			free(line);
 			continue ;
 		}
-		tmp = ft_strdup(line);
+		tmp = ft_strdup(line, CMD);
 		free(line);
 		if (!process_input(tmp, &token, &ast, 1))
 			continue ;
 		execute_ast(ast, env, &exit_status);
+		maroc(0, FREE, CMD);
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 13:05:43 by yslami            #+#    #+#             */
-/*   Updated: 2025/02/15 11:08:30 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/02 23:58:27 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,13 @@ void	parse_char(t_token **token, t_vars **vars, int *ret)
 	if ((*vars)->flag == 1)
 	{
 		(*token)->value = ft_substr((*vars)->cmd, (*vars)->tmp, \
-			(*vars)->i - (*vars)->tmp);
+			(*vars)->i - (*vars)->tmp, CMD);
 		(*token)->bef_space = bef_space;
 		(*vars)->flag = 0;
 	}
 	else
 		ft_newnode(token, ft_substr((*vars)->cmd, (*vars)->tmp, \
-			(*vars)->i - (*vars)->tmp), bef_space);
+			(*vars)->i - (*vars)->tmp, CMD), bef_space);
 	*ret = 0;
 }
 
@@ -55,13 +55,13 @@ int	parse_quote(t_token **token, t_vars **vars, int *ret)
 		if ((*vars)->flag == 1)
 		{
 			(*token)->value = ft_substr((*vars)->cmd, (*vars)->tmp, \
-				(*vars)->i - (*vars)->tmp);
+				(*vars)->i - (*vars)->tmp, CMD);
 			(*token)->bef_space = bef_space;
 			(*vars)->flag = 0;
 		}
 		else
 			ft_newnode(token, ft_substr((*vars)->cmd, (*vars)->tmp, \
-				(*vars)->i - (*vars)->tmp), bef_space);
+				(*vars)->i - (*vars)->tmp, CMD), bef_space);
 	}
 	else
 		return (*ret = 1, printf("minishell: open quotes!\n"), 1);
@@ -83,13 +83,13 @@ void	parse_dollar(t_token **token, t_vars **vars, int *ret)
 	if ((*vars)->flag == 1)
 	{
 		(*token)->value = ft_substr((*vars)->cmd, (*vars)->tmp, \
-			(*vars)->i - (*vars)->tmp);
+			(*vars)->i - (*vars)->tmp, CMD);
 		(*token)->bef_space = bef_space;
 		(*vars)->flag = 0;
 	}
 	else
 		ft_newnode(token, ft_substr((*vars)->cmd, (*vars)->tmp, \
-			(*vars)->i - (*vars)->tmp), bef_space);
+			(*vars)->i - (*vars)->tmp, CMD), bef_space);
 	*ret = 0;
 }
 
@@ -112,13 +112,13 @@ void	parse_separator(t_token **token, t_vars **vars, int *ret)
 	if ((*vars)->flag == 1)
 	{
 		(*token)->value = ft_substr((*vars)->cmd, (*vars)->tmp, \
-			(*vars)->i - (*vars)->tmp);
+			(*vars)->i - (*vars)->tmp, CMD);
 		(*token)->bef_space = bef_space;
 		(*vars)->flag = 0;
 	}
 	else
 		ft_newnode(token, ft_substr((*vars)->cmd, (*vars)->tmp, \
-			(*vars)->i - (*vars)->tmp), bef_space);
+			(*vars)->i - (*vars)->tmp, CMD), bef_space);
 	*ret = 0;
 }
 
@@ -131,12 +131,12 @@ void	parse_parenthesis(t_token **token, t_vars **vars, int *ret)
 	if ((*vars)->flag == 1)
 	{
 		(*token)->value = ft_substr((*vars)->cmd, (*vars)->tmp, \
-			(*vars)->i - (*vars)->tmp);
+			(*vars)->i - (*vars)->tmp, CMD);
 		(*token)->bef_space = bef_space;
 		(*vars)->flag = 0;
 	}
 	else
 		ft_newnode(token, ft_substr((*vars)->cmd, (*vars)->tmp, \
-			(*vars)->i - (*vars)->tmp), bef_space);
+			(*vars)->i - (*vars)->tmp, CMD), bef_space);
 	*ret = 0;
 }

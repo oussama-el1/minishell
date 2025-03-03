@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 13:58:51 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/02 17:46:28 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/03 00:45:56 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_token	*sublist(t_token *start, t_token *end)
 	while(start)
 	{
 		init_token(&new, 1);
-		new->value = ft_strdup(start->value);
+		new->value = ft_strdup(start->value, CMD);
 		new->type = start->type;
 		new->bef_space = start->bef_space;
 		new->visited = start->visited;
@@ -60,9 +60,9 @@ char	*quoted_process(t_token **curr, t_expand **expansion_list, bool *wildcard)
 			tmp = (*curr)->value;
 		expansion_func(&head, *curr, &tmp, &start);
 		if (arg && !(*curr)->bef_space)
-			arg = ft_strjoin(arg, tmp);
+			arg = ft_strjoin(arg, tmp, CMD);
 		else
-			arg = ft_strdup(tmp);
+			arg = ft_strdup(tmp, CMD);
 		start += ft_strlen(tmp);
 		*curr = (*curr)->next;
 		if (!*curr || (*curr)->visited == 1 || (*curr)->bef_space == 1)
@@ -85,9 +85,9 @@ char *remove_quote(t_token *curr, char *str)
 	char	*res;
 
 	if (curr && curr->type == D_Q)
-		res = ft_strtrim(str, "\"");
+		res = ft_strtrim(str, "\"", CMD);
 	else
-		res = ft_strtrim(str, "'");
+		res = ft_strtrim(str, "'", CMD);
 	return (res);
 }
 
@@ -102,7 +102,7 @@ void	expansion_func(t_expand	**head, t_token *curr, char **str, size_t *start)
 	if (is_quote(curr->type))
 		*str = remove_quote(curr, *str);
 	end = *start + ft_strlen(*str) * (**str != 0);
-	new = (t_expand *)malloc(sizeof(t_expand));
+	new = (t_expand *)maroc(sizeof(t_expand), ALLOC, CMD);
 	new->expanded = (curr->type == D_Q || curr->type == DOLLAR);
 	new->start = *start;
 	new->end = end;

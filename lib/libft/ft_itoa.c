@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 21:03:06 by yslami            #+#    #+#             */
-/*   Updated: 2025/02/02 16:30:59 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/03 00:19:45 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,16 +55,14 @@ static void	ft_fill_str(char *str, int n, int len, int offset)
 	}
 }
 
-char	*ft_itoa(int n)
+char	*ft_itoa(int n, int type)
 {
 	char	*str;
 	int		len;
 	int		offset;
 
 	len = ft_get_len(n);
-	str = (char *)malloc((len + 1) * sizeof(char));
-	if (!str)
-		return (NULL);
+	str = (char *)maroc((len + 1) * sizeof(char), ALLOC, type);
 	offset = 0;
 	if (n == -2147483648)
 	{

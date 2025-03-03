@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/02 23:34:01 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/03 00:56:37 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,9 @@
 
 # include "../lib/libft/libft.h"
 # include <readline/readline.h>
-# include <stdbool.h>
 # include <stdio.h>
-
-# include "../lib/libft/libft.h"
 # include <limits.h>
+# include <stdlib.h>
 # include <unistd.h>
 # include <fcntl.h>
 # include <sys/wait.h>
@@ -183,7 +181,6 @@ int 	is_regular(enum e_token_type type);
 char	*remove_quotes(char *str);
 int		get_type(const char *str);
 int		ft_strcmp(const char *s1, const char *s2);
-// char 	*ft_substr(char *str, int start, int len);
 t_token	*last_token(t_token *token);
 t_token	*lst_dup(t_token *token);
 t_token	*sublist(t_token *start, t_token *end);
@@ -214,7 +211,6 @@ void	parse_dollar(t_token **token, t_vars **vars, int *ret);
 void	parse_separator(t_token **token, t_vars **vars, int *ret);
 void	parse_parenthesis(t_token **token, t_vars **vars, int *ret);
 int		check_syntax(t_token *token, int inside_brackets);
-// char	*ft_substr(const char *str, unsigned int start, size_t len);
 
 t_token	*join_heredocargs(t_token *token);
 

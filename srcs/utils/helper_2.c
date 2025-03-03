@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 01:22:46 by yslami            #+#    #+#             */
-/*   Updated: 2025/02/15 12:43:00 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/02 23:59:01 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ char	*remove_quotes(char *str)
 			break ;
 		i++;
 	}
-	return (ft_substr(str, 1, i - 1));
+	return (ft_substr(str, 1, i - 1, CMD));
 }
 
 int	get_type(const char *str)

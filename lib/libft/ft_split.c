@@ -6,13 +6,13 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 17:13:22 by yslami            #+#    #+#             */
-/*   Updated: 2025/02/02 20:00:22 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/02 23:55:21 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	ft_allocate(char **strings, char const *s, char sep)
+static int	ft_allocate(char **strings, char const *s, char sep, int type)
 {
 	char		**strings1;
 	char const	*temp;
@@ -28,9 +28,7 @@ static int	ft_allocate(char **strings, char const *s, char sep)
 			++temp;
 		if (*temp == sep || temp > s)
 		{
-			*strings1 = ft_substr(s, 0, temp - s);
-			if (!*strings1)
-				return (0);
+			*strings1 = ft_substr(s, 0, temp - s, type);
 			s = temp;
 			++strings1;
 		}
@@ -62,7 +60,7 @@ static int	ft_count_words(char const *s, char c)
 	return (count);
 }
 
-char	**ft_split(char const *s, char c)
+char	**ft_split(char const *s, char c, int type)
 {
 	char	**strings;
 	int		count;
@@ -70,20 +68,8 @@ char	**ft_split(char const *s, char c)
 	if (!s || !*s)
 		return (NULL);
 	count = ft_count_words(s, c);
-	strings = (char **)malloc((count + 1) * sizeof(char *));
-	if (!strings)
-		return (NULL);
-	if (!ft_allocate(strings, s, c))
-	{
-		count = 0;
-		while (strings[count])
-		{
-			if (strings[count])
-				free(strings[count]);
-			count++;
-		}
-		free(strings);
-		return (NULL);
-	}
+	strings = (char **)maroc((count + 1) * sizeof(char *), \
+		ALLOC, type);
+	ft_allocate(strings, s, c, type);
 	return (strings);
 }
