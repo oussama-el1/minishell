@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 23:40:57 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/03 00:50:33 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/03 01:01:44 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ void		*ft_memset(void *s, int c, size_t n);
 void		ft_bzero(void *s, size_t n);
 char		*ft_strchr(const char *s, int c);
 char		*ft_strrchr(const char *s, int c);
+char		*ft_strtrim(char const *s1, char const *set, int type);
 int			ft_atoi(const char *str);
 void		*ft_calloc(size_t nmemb, size_t size, int type);
 char		*ft_strdup(const char *s, int type);

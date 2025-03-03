@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 18:04:04 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/03 00:57:18 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/03 01:06:47 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,25 +35,22 @@ int	ft_exit(char **argv)
 	exit_code = 0;
 	printf("exit\n");
 	if (!argv)
-		maroc(1, FULLFREE, 0);
-	else
+		maroc(0, FULLFREE, 0);
+	else if (argv[1])
 	{
-		if (argv[1])
+		if (!is_numeric(argv[1]))
 		{
-			if (!is_numeric(argv[1]))
-			{
-				ft_putstr_fd("minishell: exit: ", 2);
-				ft_putstr_fd(argv[1], 2);
-				ft_putstr_fd(": numeric argument required\n", 2);
-				exit(255);
-			}
-			if (argv[2])
-			{
-				ft_putstr_fd("minishell: exit: too many arguments\n", 2);
-				return (1);
-			}
-			exit_code = ft_atoi(argv[1]);
+			ft_putstr_fd("minishell: exit: ", 2);
+			ft_putstr_fd(argv[1], 2);
+			ft_putstr_fd(": numeric argument required\n", 2);
+			exit(255);
 		}
+		if (argv[2])
+		{
+			ft_putstr_fd("minishell: exit: too many arguments\n", 2);
+			return (1);
+		}
+		exit_code = ft_atoi(argv[1]);
 	}
 	exit(exit_code);
 }

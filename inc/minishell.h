@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/03 00:56:37 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/03 01:03:49 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,7 @@
 # include "../lib/libft/libft.h"
 # include <readline/readline.h>
 # include <stdio.h>
-# include <limits.h>
-# include <stdlib.h>
-# include <unistd.h>
 # include <fcntl.h>
-# include <sys/wait.h>
 # include <signal.h>
 # include <termios.h>
 # include <stdbool.h>
