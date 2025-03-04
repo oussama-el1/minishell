@@ -67,7 +67,7 @@ void expand_string(char **string, t_env *env, int exit_status, int fromherdoc)
 			i++;
 	}
 	if ((*string)[0] == '$' && (*string)[1] == '\0' && !fromherdoc)
-		expanded = NULL;
+		expanded = *string;
 	else if ((*string)[start])
 	{
 		temp = ft_strjoin(expanded, ft_strdup(&(*string)[start], CMD), CMD);

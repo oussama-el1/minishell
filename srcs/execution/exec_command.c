@@ -68,13 +68,13 @@ static void	error_handler(char *cmd)
 			exit(126);
 		}
 		// Check if it's not executable
-		else if (access(cmd, X_OK) != 0)
-		{
-			ft_putstr_fd("minishell: ", 2);
-			ft_putstr_fd(cmd, 2);
-			ft_putendl_fd(": Permission denied", 2);
-			exit(126);
-		}
+		// else if (access(cmd, X_OK) != 0)
+		// {
+		// 	ft_putstr_fd("minishell: ", 2);
+		// 	ft_putstr_fd(cmd, 2);
+		// 	ft_putendl_fd(": Permission denied", 2);
+		// 	exit(126);
+		// }
 	}
 	else
 	{
