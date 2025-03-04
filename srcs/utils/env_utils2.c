@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 21:52:48 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/03 00:36:33 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/04 17:28:15 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ char	**get_env_array(t_env *env)
 	int		size;
 
 	size = env_size(env);
-	// env_array = (char **)malloc(sizeof(char *) * (size + 1));
 	env_array = maroc(sizeof(char *) * (size + 1), ALLOC, CMD);
 	if (!env_array)
 		return (NULL);

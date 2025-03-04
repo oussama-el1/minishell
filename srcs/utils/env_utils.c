@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 23:46:35 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/03 00:33:41 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/04 17:28:19 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ void	add_env_var(t_env **env, char *key,
 	t_env	*new;
 	t_env	*tmp;
 
-	// new = malloc(sizeof(t_env));
 	new = maroc(sizeof(t_env), ALLOC, ENV);
 	if (!new)
 		return ;

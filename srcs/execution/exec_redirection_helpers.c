@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 22:24:50 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/03 17:49:02 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/04 16:55:34 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	herdoc_loop(const char *delimiter, t_env *env, int fd, int exit_status)
 		tmp = line;
 		if (!line)
 			break ;
-		expand_string(&line, env, exit_status);
+		expand_string(&line, env, exit_status, 1);
 		if (ft_strcmp(line, delimiter) == 0)
 			return (free(tmp), (void)0);
 		write(fd, line, ft_strlen(line));
@@ -84,9 +84,12 @@ int	get_last_heredoc(t_redir *redirection, t_redir **last_heredoc,
 	return (last_heredoc_index);
 }
 
-void	file_error_handler(t_redir *redirection, int *error_found)
+void	file_error_handler(t_redir *redirection, int *error_found, int ambiguous)
 {
-	ft_putstr_fd("minishell: ", 2);
-	perror(redirection->filename);
+	if (!ambiguous)
+	{
+		ft_putstr_fd("minishell: ", 2);
+		perror(redirection->filename);
+	}
 	*error_found = 1;
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
+/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 18:04:04 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/03 01:06:47 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/03 23:27:17 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,9 @@ int	is_numeric(char *str)
 
 int	ft_exit(char **argv)
 {
-	int	exit_code;
+	int		exit_code;
 
 	exit_code = 0;
-	printf("exit\n");
 	if (!argv)
 		maroc(0, FULLFREE, 0);
 	else if (argv[1])

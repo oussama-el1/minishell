@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 18:06:55 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/02 23:34:39 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/04 01:37:20 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,22 @@ static void	subshell_handler(t_tree *node, t_env *env, int *exit_status, pid_t p
 	int		saved_in;
 	int		saved_out;
 	int		exit_code;
+	int		red_res;
 
 	saved_in = dup(STDIN_FILENO);
 	saved_out = dup(STDOUT_FILENO);
+	red_res = 0;
 	if (pid == 0)
 	{
 		env_cpy = dup_env(env);
 		if (node->left)
 		{
 			if (node->args && node->args->redir)
-				redirect_and_exec(node, env_cpy, *exit_status);
-			exit_code = execute_ast(node->left, env_cpy, exit_status);
+				red_res = redirect_and_exec(node, env_cpy, *exit_status);
+			if (!red_res)
+				exit_code = execute_ast(node->left, env_cpy, exit_status);
+			else
+				exit_code = 1;
 			clean_resources(saved_in, saved_out);
 			exit(exit_code);
 		}
@@ -55,7 +60,7 @@ int	 execute_ast(t_tree *node, t_env *env, int *exit_status)
 	setup_signals();
 	if (node->args && node->args->argv && node->args->expand_list)
 	{
-		argv_expander(node->args->argv, node->args->expand_list, env, *exit_status);
+		argv_expander(&node->args->argv, node->args->expand_list, env, *exit_status);
 		if (contain_wildcard(node->args->argv, node->args->wildcards))
 			expand_wildcard(&node->args->argv, node->args->wildcards);
 	}

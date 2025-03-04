@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
+/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 01:01:04 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/03 20:20:48 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/04 17:28:04 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	process_input(char *line, t_token **token, t_tree **tree, int base)
 		give_type(token);
 		if (!check_syntax(*token, 0))
 			return (add_history(line), 0);
-		if (!handle_end_of_line(&line, token, tree)) // 0
+		if (!handle_end_of_line(&line, token, tree))
 			return (0);
 		if (!base)
 			return (1);

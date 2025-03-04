@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/03 17:33:14 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/04 17:00:54 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -244,7 +244,7 @@ int	ft_pwd(t_env *env, int exit_status);
 int	ft_export(char **argv, t_env *env, int exit_status);
 int	ft_unset(char **argv, t_env *env);
 int	ft_env(char **argv, t_env *env);
-int	ft_exit(char **argv);
+int	ft_exit(char **argv1);
 int	not_valid_idenrifier(char *env);
 
 // env_utils
@@ -274,11 +274,11 @@ char	*expand_env_herdoc(t_env *env, char *line, int fd, int exit_status, const c
 void	herdoc_loop(const char *delimiter, t_env *env, int fd, int exit_status);
 void	handle_heredoc(const char *delimiter, t_env *env, int exit_status);
 int		get_last_heredoc(t_redir *redirection, t_redir **last_heredoc, int exit_status, t_env *env);
-void	file_error_handler(t_redir *redirection, int *error_found);
+void	file_error_handler(t_redir *redirection, int *error_found, int ambigous);
 void	clean_resources(int saved_in, int saved_out);
-void	expand_one_arg(char **argument, t_expand *curr, t_env *env, int exit_status);
-void	expand_string(char **string, t_env *env, int exit_status);
-void	argv_expander(char **argv, t_expand **expandArr, t_env *env, int exit_status);
+char	**expand_one_arg(char *argument, t_expand *curr, t_env *env, int exit_status);
+void	expand_string(char **string, t_env *env, int exit_status, int fromherdoc);
+void	argv_expander(char ***argv, t_expand **expandArr, t_env *env, int exit_status);
 void	print_ast(t_tree *node, int depth, const char *relation);
 
 /*  Garbage Collector */

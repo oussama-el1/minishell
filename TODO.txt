@@ -1,0 +1,6 @@
+ - number after $ : SOLVED
+ - expand node contain only $ : SOLVED
+ - solve exit in pipe : IGNORED
+ - stop when a file permession denied : SOLVED
+ - solve expand of the command : SOLVED
+ - wildcard pattern

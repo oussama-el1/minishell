@@ -6,13 +6,18 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 14:43:35 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/01 23:15:21 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/04 17:18:49 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-int	get_last_in(t_redir *redirection, t_redir **last_in, int *error_found)
+typedef struct {
+	char	*filename;
+	int		index;
+} t_ambiguous_err;
+
+int	get_last_in(t_redir *redirection, t_redir **last_in, int *error_found, t_ambiguous_err	*err)
 {
 	int	i;
 	int	last_in_index;
@@ -24,9 +29,12 @@ int	get_last_in(t_redir *redirection, t_redir **last_in, int *error_found)
 	{
 		if (redirection->type == R_REDIR_IN)
 		{
-			if (access(redirection->filename, F_OK) == -1)
+			if (access(redirection->filename, F_OK | R_OK) == -1)
 			{
-				file_error_handler(redirection, error_found);
+				if (err)
+					file_error_handler(redirection, error_found, err->index < i);
+				else
+					file_error_handler(redirection, error_found, 1);
 				return (i);
 			}
 			*last_in = redirection;
@@ -36,6 +44,13 @@ int	get_last_in(t_redir *redirection, t_redir **last_in, int *error_found)
 		i++;
 	}
 	return (last_in_index);
+}
+
+void	ambiguous_redirect(char *tmp)
+{
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(tmp, 2);
+	ft_putstr_fd(": ambiguous redirect\n", 2);
 }
 
 void	iterate_output_redirection(t_redir *redirection,
@@ -57,7 +72,7 @@ void	iterate_output_redirection(t_redir *redirection,
 						O_WRONLY | O_CREAT | O_APPEND, 0644);
 			if (fd < 0)
 			{
-				file_error_handler(redirection, error_found);
+				file_error_handler(redirection, error_found, 1);
 				break ;
 			}
 			else
@@ -122,24 +137,58 @@ void	redir_output(t_redir	*last_out, int *error_found)
 	}
 }
 
-void expand_filnames(t_redir *redirection, t_env *env, int exit_status)
+int	is_ambiguous(char **expanded)
 {
+	int	size;
+
+	size = 0;
+	while (expanded[size])
+		size++;
+	if (size > 1)
+		return (1);
+	return (0);
+}
+
+t_ambiguous_err	*expand_filnames(t_redir *redirection, t_env *env, int exit_status)
+{
+	t_ambiguous_err	*err;
+	int				i;
+	char			**expanded;
+
+	i = 0;
+	err = maroc(sizeof(t_ambiguous_err), ALLOC, CMD);
 	while (redirection)
 	{
 		if (redirection->type == R_HEREDOC)
-			expand_one_arg(&redirection->heredoc_delim, redirection->expand_list, env, exit_status);
+		{
+			expanded = expand_one_arg(redirection->heredoc_delim, redirection->expand_list, env, exit_status);
+			redirection->heredoc_delim = expanded[0];
+		}
 		else
-			expand_one_arg(&redirection->filename, redirection->expand_list, env, exit_status);
+		{
+			expanded = expand_one_arg(redirection->filename, redirection->expand_list, env, exit_status);
+			if (!is_ambiguous(expanded))
+				redirection->filename = expanded[0];
+			else
+			{
+				err->filename = redirection->filename;
+				err->index = i;
+				return (err);
+			}		
+		}
+		i++;
 		redirection = redirection->next;
 	}
+	return (NULL);
 }
-void open_output_error(t_redir *redirection, int last_in_index, int *error_found)
+
+void open_output_error(t_redir *redirection, int error_index, int *error_found)
 {
 	int	fd;
 	int	i;
 
 	i = 0;
-	while (redirection && i < last_in_index)
+	while (redirection && i < error_index)
 	{
 		if ((redirection->type == R_REDIR_OUT
 				|| redirection->type == R_REDIR_APPEND))
@@ -152,7 +201,7 @@ void open_output_error(t_redir *redirection, int last_in_index, int *error_found
 						O_WRONLY | O_CREAT | O_APPEND, 0644);
 			if (fd < 0)
 			{
-				file_error_handler(redirection, error_found);
+				file_error_handler(redirection, error_found, 1);
 				break ;
 			}
 			else
@@ -165,28 +214,41 @@ void open_output_error(t_redir *redirection, int last_in_index, int *error_found
 
 int	redirect_and_exec(t_tree *node, t_env *env, int exit_status)
 {
-	int		saved_in;
-	int		saved_out;
-	int		error_found;
-	int		last_heredoc_index;
-	int		last_in_index;
-	int		res;
-	t_redir	*last_in;
-	t_redir	*last_out = NULL;
-	t_redir	*last_heredoc;
+	int				saved_in;
+	int				saved_out;
+	int				error_found;
+	int				last_heredoc_index;
+	int				last_in_index;
+	int				error_index;
+	int				res;
+	t_redir			*last_in;
+	t_redir			*last_out = NULL;
+	t_redir			*last_heredoc;
+	t_ambiguous_err	*err;
 
+	err = NULL;
 	error_found = 0;
 	res = 0;
 	saved_in = dup(STDIN_FILENO);
 	saved_out = dup(STDOUT_FILENO);
 	if (node->args->redir)
-		expand_filnames(node->args->redir, env, exit_status);
+		err = expand_filnames(node->args->redir, env, exit_status); 
 	last_heredoc_index = get_last_heredoc(node->args->redir,
 			&last_heredoc, exit_status, env);
-	last_in_index = get_last_in(node->args->redir, &last_in, &error_found);
+	last_in_index = get_last_in(node->args->redir, &last_in, &error_found, err);
 
+	error_index = last_in_index;
+	if (err)
+	{
+		error_found = 1;
+		if (err->index < last_in_index || last_in_index == -1)
+		{
+			error_index = err->index;
+			ambiguous_redirect(err->filename);
+		}
+	}
 	if (error_found)
-		open_output_error(node->args->redir, last_in_index, &error_found);
+		open_output_error(node->args->redir, error_index, &error_found);
 	else
 		iterate_output_redirection(node->args->redir, &last_out, &error_found);
 	if (!error_found && (last_in || last_heredoc))

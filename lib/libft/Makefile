@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: yslami <yslami@student.42.fr>              +#+  +:+       +#+         #
+#    By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/23 15:42:47 by yslami            #+#    #+#              #
-#    Updated: 2025/03/03 00:36:16 by yslami           ###   ########.fr        #
+#    Updated: 2025/03/03 21:28:10 by oel-hadr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,6 +22,7 @@ AR			=	ar rcs
 SRCS 		= 	ft_isalpha.c \
 				ft_isdigit.c \
 				ft_isalnum.c \
+				ft_isnum.c \
 				ft_isprint.c \
 				ft_strlen.c \
 				ft_memset.c \

@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 15:25:02 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/03 00:22:15 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/04 17:27:57 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,6 @@ static char	*getname(char *env, char *equal_ptr, int concat_flag)
 	name = NULL;
 	if (equal_ptr)
 	{
-		// name = malloc(sizeof(char) * (ft_strlen(env)
-		// 			- ft_strlen(equal_ptr)) + 1);
 		name = maroc(ft_strlen(env) - ft_strlen(equal_ptr) + 1, ALLOC, ENV);
 		if (!name)
 			return (NULL);
@@ -78,6 +76,7 @@ static int	process_env(char *env, t_env *env_ls, int exit_status)
 	concat_flag = set_name_and_value(env, &name, &value);
 	if (!validate_var_name(name))
 		return (not_valid_idenrifier(env));
+	value = ft_strtrim(value, " ", ENV);
 	if (value)
 	{
 		env_value = get_env_var(env_ls, name, exit_status);
