@@ -6,11 +6,11 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 00:10:10 by yslami            #+#    #+#             */
-/*   Updated: 2025/02/13 09:51:18 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/04 20:57:39 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/minishell.h"
+#include "minishell.h"
 
 int	is_alnum(char c)
 {

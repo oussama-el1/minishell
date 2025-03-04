@@ -6,11 +6,11 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 13:58:51 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/03 00:45:56 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/04 20:57:39 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/minishell.h"
+#include "minishell.h"
 
 t_token	*sublist(t_token *start, t_token *end)
 {
@@ -104,6 +104,7 @@ void	expansion_func(t_expand	**head, t_token *curr, char **str, size_t *start)
 	end = *start + ft_strlen(*str) * (**str != 0);
 	new = (t_expand *)maroc(sizeof(t_expand), ALLOC, CMD);
 	new->expanded = (curr->type == D_Q || curr->type == DOLLAR);
+	new->type = curr->type;
 	new->start = *start;
 	new->end = end;
 	new->next = NULL;

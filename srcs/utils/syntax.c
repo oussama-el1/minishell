@@ -6,11 +6,11 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 13:18:10 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/01 21:59:08 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/04 20:57:39 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/minishell.h"
+#include "minishell.h"
 
 static int	handle_bracket_content(t_token **curr, t_syntax *syntax);
 static int	handle_special_tokens(t_token *curr);

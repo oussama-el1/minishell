@@ -6,11 +6,11 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 13:05:43 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/02 23:58:27 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/04 20:58:47 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/minishell.h"
+#include "minishell.h"
 
 void	parse_char(t_token **token, t_vars **vars, int *ret)
 {
@@ -126,7 +126,7 @@ void	parse_parenthesis(t_token **token, t_vars **vars, int *ret)
 {
 	int		bef_space;
 
-    (*vars)->tmp = (*vars)->i++;
+	(*vars)->tmp = (*vars)->i++;
 	bef_space = before_space((*vars)->cmd, (*vars)->tmp - 1);
 	if ((*vars)->flag == 1)
 	{

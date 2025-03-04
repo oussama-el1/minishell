@@ -6,11 +6,11 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 18:28:01 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/01 17:50:38 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/04 22:43:51 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/minishell.h"
+#include "minishell.h"
 
 int	check_operators(t_token *token)
 {
@@ -35,8 +35,7 @@ int	check_redirections(t_token *token)
 			return (print_syntax_error("newline"));
 	}
 	token = token->next;
-	if (token->type == REDIR_IN || token->type == REDIR_OUT || \
-		token->type == REDIR_APPEND || token->type == HEREDOC)
+	if (isredirect(token->type))
 		return (print_syntax_error(token->value));
 	return (1);
 }

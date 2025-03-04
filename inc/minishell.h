@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/04 17:00:54 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/04 21:46:24 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ typedef struct s_token
 typedef struct s_expand
 {
 	bool			expanded;
+	int				type;
 	size_t			start;
 	size_t			end;
 	struct s_expand	*next;
@@ -227,12 +228,7 @@ char		*quoted_process(t_token **curr, t_expand **expansion_list, bool *wildcard)
 t_token		*left_back(t_token *token);
 int			args_count(t_token *token);
 void		expansion_func(t_expand	**head, t_token *curr, char **str, size_t *start);
-
-// redirections
-t_redir			*create_redir_node(int type, char *filename, t_expand *expand);
-void			append_redir_node(t_redir **redir_list, t_redir *new_redir);
 void			handle_redirection(t_redir **redir_list, t_token **curr);
-t_redir_type	get_redir_type(int type);
 void 			extract_subshell_args(t_args **args, t_token *token);
 
 

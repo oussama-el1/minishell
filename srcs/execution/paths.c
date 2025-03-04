@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   paths.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 20:12:48 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/03 00:17:55 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/04 20:57:39 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/minishell.h"
+#include "minishell.h"
 
 #include <sys/stat.h>
 #include <unistd.h>
@@ -22,7 +22,7 @@ static int	is_executable(char *path)
 	if (!path)
 		return (0);
 	if (stat(path, &buf) != 0)
-		return (0); 
+		return (0);
 	if (S_ISDIR(buf.st_mode))
 		return (0);
 	return (access(path, X_OK) == 0);

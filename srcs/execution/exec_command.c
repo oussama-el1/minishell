@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   exec_command.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:04:38 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/04 00:21:28 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/04 20:57:39 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/minishell.h"
+#include "minishell.h"
 
 int	is_builtin(char *cmd)
 {
@@ -82,7 +82,7 @@ static void	error_handler(char *cmd)
 		if (errno == ENOENT)
 		{
 			// If the command starts with '/', './', or '../', it's expected to be a path
-			if (cmd[0] == '/' || (cmd[0] == '.' && cmd[1] == '/') || 
+			if (cmd[0] == '/' || (cmd[0] == '.' && cmd[1] == '/') ||
 				(cmd[0] == '.' && cmd[1] == '.' && cmd[2] == '/'))
 			{
 				ft_putstr_fd("minishell: ", 2);

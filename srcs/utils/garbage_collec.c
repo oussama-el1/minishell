@@ -6,11 +6,11 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/02 00:40:05 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/02 23:08:49 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/04 20:57:39 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/minishell.h"
+#include "minishell.h"
 
 static void	maroc_free(t_gc_manager **manager, int flag, int type);
 static void	full_freemaroc(t_gc_manager **manager);

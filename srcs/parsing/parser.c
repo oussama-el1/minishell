@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 01:01:04 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/04 17:28:04 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/04 22:48:19 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/minishell.h"
+#include "minishell.h"
 
 static int	tokenizer(t_token **token, t_vars *vars);
 static int	end_with_operator(char *line);
@@ -78,7 +78,7 @@ static void	give_type(t_token **token)
 	}
 }
 
-static int end_with_operator(char *line)
+static int	end_with_operator(char *line)
 {
 	size_t	len;
 
@@ -98,7 +98,7 @@ static int end_with_operator(char *line)
 
 static int	handle_end_of_line(char **line, t_token **token, t_tree **tree)
 {
-	char *new_line;
+	char	*new_line;
 
 	if (!end_with_operator(*line))
 	{
@@ -163,8 +163,8 @@ static void print_expand_list(t_expand *expand)
 {
     while (expand)
     {
-        printf("  -> Expand: Start = %zu, End = %zu, Expanded = %s\n",
-               expand->start, expand->end, expand->expanded ? "true" : "false");
+        printf("   type = %s  -> Expand: Start = %zu, End = %zu, Expanded = %s\n",
+               token_type_names[expand->type], expand->start, expand->end, expand->expanded ? "true" : "false");
         expand = expand->next;
     }
 }

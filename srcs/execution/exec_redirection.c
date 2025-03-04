@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redirection.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 14:43:35 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/04 17:18:49 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/04 20:57:39 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/minishell.h"
+#include "minishell.h"
 
 typedef struct {
 	char	*filename;
@@ -174,7 +174,7 @@ t_ambiguous_err	*expand_filnames(t_redir *redirection, t_env *env, int exit_stat
 				err->filename = redirection->filename;
 				err->index = i;
 				return (err);
-			}		
+			}
 		}
 		i++;
 		redirection = redirection->next;
@@ -232,7 +232,7 @@ int	redirect_and_exec(t_tree *node, t_env *env, int exit_status)
 	saved_in = dup(STDIN_FILENO);
 	saved_out = dup(STDOUT_FILENO);
 	if (node->args->redir)
-		err = expand_filnames(node->args->redir, env, exit_status); 
+		err = expand_filnames(node->args->redir, env, exit_status);
 	last_heredoc_index = get_last_heredoc(node->args->redir,
 			&last_heredoc, exit_status, env);
 	last_in_index = get_last_in(node->args->redir, &last_in, &error_found, err);
