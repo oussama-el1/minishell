@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 21:52:48 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/04 17:28:15 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/04 21:24:58 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,18 @@ t_env	*init_env(char **environ)
 	int		i;
 	char	*key;
 	char	*value;
+	char	*pwd;
 
 	env = NULL;
 	i = 0;
+	if (!environ || !*environ)
+	{
+		pwd = getcwd(NULL, 0);
+		add_env_var(&env, ft_strdup("PATH", ENV), ft_strdup("/usr/local/bin:/usr/bin:/bin", ENV), 1);
+		add_env_var(&env, ft_strdup("PWD", ENV), ft_strdup(pwd, ENV), 1);
+		add_env_var(&env, ft_strdup("_", ENV), ft_strdup("/usr/bin/env", ENV), 1);		
+		return (free(pwd), env);
+	}
 	while (environ[i])
 	{
 		set_name_and_value(environ[i], &key, &value);
@@ -29,6 +38,7 @@ t_env	*init_env(char **environ)
 	}
 	return (env);
 }
+
 
 int	env_size(t_env *env)
 {
