@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:04:38 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/04 00:21:28 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/04 21:52:56 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,13 +68,13 @@ static void	error_handler(char *cmd)
 			exit(126);
 		}
 		// Check if it's not executable
-		else if (access(cmd, X_OK) != 0)
-		{
-			ft_putstr_fd("minishell: ", 2);
-			ft_putstr_fd(cmd, 2);
-			ft_putendl_fd(": Permission denied", 2);
-			exit(126);
-		}
+		// else if (access(cmd, X_OK) != 0)
+		// {
+		// 	ft_putstr_fd("minishell: ", 2);
+		// 	ft_putstr_fd(cmd, 2);
+		// 	ft_putendl_fd(": Permission denied", 2);
+		// 	exit(126);
+		// }
 	}
 	else
 	{

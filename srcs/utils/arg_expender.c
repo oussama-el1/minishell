@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 21:12:37 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/04 17:27:28 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/04 23:35:43 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void expand_string(char **string, t_env *env, int exit_status, int fromherdoc)
 			i++;
 	}
 	if ((*string)[0] == '$' && (*string)[1] == '\0' && !fromherdoc)
-		expanded = NULL;
+		expanded = *string;
 	else if ((*string)[start])
 	{
 		temp = ft_strjoin(expanded, ft_strdup(&(*string)[start], CMD), CMD);
@@ -84,7 +84,7 @@ char	**expand_one_arg(char *argument, t_expand *curr, t_env *env, int exit_statu
 	while (curr->next)
 		curr = curr->next;
 	new_arg = NULL;
-
+	
 	while (curr)
 	{
 		char *sub = ft_substr(argument, curr->start, curr->end - curr->start, CMD);
@@ -96,7 +96,7 @@ char	**expand_one_arg(char *argument, t_expand *curr, t_env *env, int exit_statu
 
 	if (ft_strchr(new_arg, ' ') && !ft_strchr(new_arg, '='))
 		return (ft_split(new_arg, ' ', CMD));
-
+		
 	splitted = maroc(sizeof(char *) * 2, ALLOC, CMD);
 	splitted[0] = new_arg;
 	splitted[1] = NULL;
