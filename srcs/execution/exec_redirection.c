@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 14:43:35 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/05 22:35:09 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/05 23:16:15 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	get_last_in(t_redir *redirection, t_redir **last_in, int *error_found, t_amb
 				if (err)
 					file_error_handler(redirection, error_found, err->index < i);
 				else
-					file_error_handler(redirection, error_found, 1);
+					file_error_handler(redirection, error_found, 0);
 				return (i);
 			}
 			*last_in = redirection;
@@ -72,7 +72,7 @@ void	iterate_output_redirection(t_redir *redirection,
 						O_WRONLY | O_CREAT | O_APPEND, 0644);
 			if (fd < 0)
 			{
-				file_error_handler(redirection, error_found, 1);
+				file_error_handler(redirection, error_found, 0);
 				break ;
 			}
 			else
@@ -201,7 +201,7 @@ void open_output_error(t_redir *redirection, int error_index, int *error_found)
 						O_WRONLY | O_CREAT | O_APPEND, 0644);
 			if (fd < 0)
 			{
-				file_error_handler(redirection, error_found, 1);
+				file_error_handler(redirection, error_found, 0);
 				break ;
 			}
 			else
