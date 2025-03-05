@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 18:03:00 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/01 20:52:36 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/05 20:03:09 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,7 @@ int	ft_unset(char **argv, t_env *env)
 	i = 1;
 	while (argv[i])
 	{
-		if (!validate_var_name(argv[i]) || !unset_env_var(&env, argv[i]))
-		{
-			ft_putstr_fd("minishell: unset: `", 2);
-			ft_putstr_fd(argv[i], 2);
-			ft_putstr_fd("': not a valid identifier\n", 2);
-			return (1);
-		}
+		unset_env_var(&env, argv[i]);
 		i++;
 	}
 	return (0);
