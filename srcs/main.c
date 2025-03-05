@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
+/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:08:50 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/04 22:44:41 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/05 22:36:37 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	bash_loop(t_env *env)
+static void	bash_loop(t_env **env)
 {
 	t_token		*token;
 	t_tree		*ast;
@@ -48,6 +48,6 @@ int	main(int ac, char **av, char **envp)
 	(void)ac;
 	(void)av;
 	env = init_env(envp);
-	bash_loop(env);
+	bash_loop(&env);
 	return (0);
 }

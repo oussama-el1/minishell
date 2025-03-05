@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:04:38 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/05 02:44:58 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/05 22:34:29 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,20 +33,20 @@ int	is_builtin(char *cmd)
 	return (0);
 }
 
-int	exec_builtin(char **argv, char **arg_cpy, t_env *env, int exit_status)
+int	exec_builtin(char **argv, char **arg_cpy, t_env **env, int exit_status)
 {
 	if (ft_strcmp(argv[0], "echo") == 0)
 		return (ft_echo(argv, arg_cpy));
 	if (ft_strcmp(argv[0], "cd") == 0)
-		return (ft_cd(argv, env, exit_status));
+		return (ft_cd(argv, *env, exit_status));
 	if (ft_strcmp(argv[0], "pwd") == 0)
-		return (ft_pwd(env, exit_status));
+		return (ft_pwd(*env, exit_status));
 	if (ft_strcmp(argv[0], "export") == 0)
-		return (ft_export(argv, env, exit_status));
+		return (ft_export(argv, *env, exit_status));
 	if (ft_strcmp(argv[0], "unset") == 0)
 		return (ft_unset(argv, env));
 	if (ft_strcmp(argv[0], "env") == 0)
-		return (ft_env(argv, env));
+		return (ft_env(argv, *env));
 	if (ft_strcmp(argv[0], "exit") == 0)
 		return (ft_exit(argv));
 	return (0);
@@ -131,7 +131,7 @@ int	exec_binary(char **argv, t_env *env, int exit_status)
 	return (1);
 }
 
-int	exec_command(t_tree *cmd, t_env *env, int exit_status)
+int	exec_command(t_tree *cmd, t_env **env, int exit_status)
 {
 	char		**argv;
 	t_expand	**expand;
@@ -156,5 +156,5 @@ int	exec_command(t_tree *cmd, t_env *env, int exit_status)
 		return (0);
 	if (is_builtin(argv[0]))
 		return (exec_builtin(argv, cmd->args->argv_cpy, env, exit_status));
-	return (exec_binary(argv, env, exit_status));
+	return (exec_binary(argv, *env, exit_status));
 }

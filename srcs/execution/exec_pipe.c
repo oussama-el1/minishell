@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipe.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
+/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 21:40:37 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/04 20:57:39 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/05 22:36:55 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static void	exec_pipe_side(int *fd, int left)
 	}
 }
 
-int	exec_pipe(t_tree *node, t_env *env, int *exit_status)
+int	exec_pipe(t_tree *node, t_env **env, int *exit_status)
 {
 	int		fd[2];
 	pid_t	left_cmd;

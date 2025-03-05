@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 14:43:35 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/05 01:11:44 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/05 22:35:09 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,7 +212,7 @@ void open_output_error(t_redir *redirection, int error_index, int *error_found)
 	}
 }
 
-int	redirect_and_exec(t_tree *node, t_env *env, int exit_status)
+int	redirect_and_exec(t_tree *node, t_env **env, int exit_status)
 {
 	int				saved_in;
 	int				saved_out;
@@ -232,9 +232,9 @@ int	redirect_and_exec(t_tree *node, t_env *env, int exit_status)
 	saved_in = dup(STDIN_FILENO);
 	saved_out = dup(STDOUT_FILENO);
 	if (node->args->redir)
-		err = expand_filnames(node->args->redir, env, exit_status);
+		err = expand_filnames(node->args->redir, *env, exit_status);
 	last_heredoc_index = get_last_heredoc(node->args->redir,
-			&last_heredoc, exit_status, env);
+			&last_heredoc, exit_status, *env);
 	last_in_index = get_last_in(node->args->redir, &last_in, &error_found, err);
 
 	error_index = last_in_index;

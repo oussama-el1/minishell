@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/05 02:45:53 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/05 22:39:21 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -240,10 +240,10 @@ void 			extract_subshell_args(t_args **args, t_token *token);
 // builtins
 int	ft_cd(char **argv, t_env *env, int exit_status);
 int	ft_echo(char **argv, char **arg_cpy);
-int	exec_command(t_tree *cmd, t_env *env, int exit_status);
+int	exec_command(t_tree *cmd, t_env **env, int exit_status);
 int	ft_pwd(t_env *env, int exit_status);
 int	ft_export(char **argv, t_env *env, int exit_status);
-int	ft_unset(char **argv, t_env *env);
+int	ft_unset(char **argv, t_env **env);
 int	ft_env(char **argv, t_env *env);
 int	ft_exit(char **argv1);
 int	not_valid_idenrifier(char *env);
@@ -266,10 +266,10 @@ int	set_name_and_value(char *env, char **name, char **value);
 // exec
 void	setup_signals(void);
 char	*get_executable_path(char *cmd, t_env *env, int exit_status);
-int		execute_ast(t_tree *node, t_env *env, int *exit_status);
+int		execute_ast(t_tree *node, t_env **env, int *exit_status);
 int		exec_binary(char **argv, t_env *env, int exit_status);
-int		redirect_and_exec(t_tree *node, t_env *env, int exit_status);
-int		exec_pipe(t_tree *node, t_env *env, int *exit_status);
+int		redirect_and_exec(t_tree *node, t_env **env, int exit_status);
+int		exec_pipe(t_tree *node, t_env **env, int *exit_status);
 void	rl_replace_line(const char *text, int clear_undo);
 char	*expand_env_herdoc(t_env *env, char *line, int fd, int exit_status, const char *delimiter);
 void	herdoc_loop(const char *delimiter, t_env *env, int fd, int exit_status);
