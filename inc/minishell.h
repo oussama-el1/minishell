@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
+/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/04 21:46:24 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/05 02:45:53 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ typedef struct s_redir
 typedef struct s_args
 {
 	char		**argv;
+	char		**argv_cpy;
 	t_expand	**expand_list;
 	bool		*wildcards;
 	t_redir		*redir;
@@ -234,7 +235,7 @@ void 			extract_subshell_args(t_args **args, t_token *token);
 
 // builtins
 int	ft_cd(char **argv, t_env *env, int exit_status);
-int	ft_echo(char **argv);
+int	ft_echo(char **argv, char **arg_cpy);
 int	exec_command(t_tree *cmd, t_env *env, int exit_status);
 int	ft_pwd(t_env *env, int exit_status);
 int	ft_export(char **argv, t_env *env, int exit_status);

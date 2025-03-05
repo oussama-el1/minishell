@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_tree.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
+/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 18:06:55 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/04 20:57:39 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/05 02:43:00 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ int	 execute_ast(t_tree *node, t_env *env, int *exit_status)
 	setup_signals();
 	if (node->args && node->args->argv && node->args->expand_list)
 	{
+		node->args->argv_cpy = node->args->argv; 
 		argv_expander(&node->args->argv, node->args->expand_list, env, *exit_status);
 		if (contain_wildcard(node->args->argv, node->args->wildcards))
 			expand_wildcard(&node->args->argv, node->args->wildcards);

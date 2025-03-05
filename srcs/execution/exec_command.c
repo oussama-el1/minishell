@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_command.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
+/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:04:38 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/04 20:57:39 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/05 02:44:58 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,10 @@ int	is_builtin(char *cmd)
 	return (0);
 }
 
-int	exec_builtin(char **argv, t_env *env, int exit_status)
+int	exec_builtin(char **argv, char **arg_cpy, t_env *env, int exit_status)
 {
 	if (ft_strcmp(argv[0], "echo") == 0)
-		return (ft_echo(argv));
+		return (ft_echo(argv, arg_cpy));
 	if (ft_strcmp(argv[0], "cd") == 0)
 		return (ft_cd(argv, env, exit_status));
 	if (ft_strcmp(argv[0], "pwd") == 0)
@@ -148,6 +148,6 @@ int	exec_command(t_tree *cmd, t_env *env, int exit_status)
 	if (!argv[0])
 		return (0);
 	if (is_builtin(argv[0]))
-		return (exec_builtin(argv, env, exit_status));
+		return (exec_builtin(argv, cmd->args->argv_cpy, env, exit_status));
 	return (exec_binary(argv, env, exit_status));
 }

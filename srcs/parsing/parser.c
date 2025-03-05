@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 01:01:04 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/05 00:01:02 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/05 02:31:46 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ int	process_input(char *line, t_token **token, t_tree **tree, int base)
 		if (!base)
 			return (1);
 		*tree = build_ast(*token);
-		// printf("\n===== AST Structure =====\n");
-		// print_ast(*tree, 0, "Root");
-		// printf("=========================\n\n");
+		printf("\n===== AST Structure =====\n");
+		print_ast(*tree, 0, "Root");
+		printf("=========================\n\n");
 	}
 	else
 		return (add_history(line), 0);
@@ -114,7 +114,6 @@ static int	handle_end_of_line(char **line, t_token **token, t_tree **tree)
 	return (process_input(*line, token, tree, 0));
 }
 
-/*
 const char *type_names[] = {
    "T_AND",
 	"T_OR",
@@ -233,4 +232,3 @@ void print_ast(t_tree *node, int depth, const char *relation)
     if (node->right)
         print_ast(node->right, depth + 1, "Right");
 }
-*/

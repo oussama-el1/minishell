@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:26:30 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/05 00:56:17 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/05 02:51:49 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int valid_option(char *option)
 	return (1);
 }
 
-int	ft_echo(char **argv)
+int	ft_echo(char **argv, char **arg_cpy)
 {
 	int	i;
 	int	newline;
@@ -47,7 +47,7 @@ int	ft_echo(char **argv)
 	while (argv[i])
 	{
 		ft_putstr_fd(argv[i], 1);
-		if (*argv[i] && argv[i + 1] && *argv[i + 1])
+		if ((!*arg_cpy[i] || *argv[i]) && argv[i + 1] && *argv[i + 1])
 			ft_putstr_fd(" ", 1);
 		i++;
 	}
