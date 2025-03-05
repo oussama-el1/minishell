@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redirection.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
+/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 14:43:35 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/04 20:57:39 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/05 01:11:44 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -257,7 +257,7 @@ int	redirect_and_exec(t_tree *node, t_env *env, int exit_status)
 		redir_output(last_out, &error_found);
 	if (error_found)
 		res = 1;
-	else if (node->type == T_CMD)
+	else if (node->type == T_CMD && node->args->argv[0])
 		res = exec_command(node, env, exit_status);
 	if (node->type != T_SUBSHELL)
 		clean_resources(saved_in, saved_out);

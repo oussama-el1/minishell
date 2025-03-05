@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   arg_expender.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
+/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 21:12:37 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/04 20:57:39 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/05 01:10:04 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,27 +76,39 @@ void expand_string(char **string, t_env *env, int exit_status, int fromherdoc)
 	*string = expanded;
 }
 
+int is_splited(t_expand *expand)
+{
+	while (expand)
+	{
+		if (expand->type != DOLLAR)
+			return (0);
+		expand = expand->next;
+	}
+	return (1);
+}
+
 char	**expand_one_arg(char *argument, t_expand *curr, t_env *env, int exit_status)
 {
-	char	*new_arg;
-	char	**splitted;
+	char		*new_arg;
+	char		**splitted;
+	t_expand	*cp;
 
+	cp = curr;
 	while (curr->next)
 		curr = curr->next;
 	new_arg = NULL;
-
 	while (curr)
 	{
 		char *sub = ft_substr(argument, curr->start, curr->end - curr->start, CMD);
 		if (curr->expanded && ft_strchr(argument, '$'))
 			expand_string(&sub, env, exit_status, 0);
+		if (!ft_strcmp(sub, "$") && curr->next)
+			sub = NULL;
 		new_arg = ft_strjoin(sub, new_arg, CMD);
 		curr = curr->prev;
 	}
-
-	if (ft_strchr(new_arg, ' ') && !ft_strchr(new_arg, '='))
+	if (ft_strchr(new_arg, ' ') && !ft_strchr(new_arg, '=') && is_splited(cp))
 		return (ft_split(new_arg, ' ', CMD));
-
 	splitted = maroc(sizeof(char *) * 2, ALLOC, CMD);
 	splitted[0] = new_arg;
 	splitted[1] = NULL;
