@@ -12,6 +12,8 @@
 
 #include "minishell.h"
 
+int g_received_signal = 0;
+
 void	handle_sigint(int sig)
 {
 	g_received_signal = sig;

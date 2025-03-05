@@ -143,7 +143,7 @@ static void print_redir_list(t_redir *redir)
 {
     while (redir)
     {
-		if (redir->type != HEREDOC)
+		if (redir->type != R_HEREDOC)
         	printf("  -> Redir: Type = %s, Filename = \"%s\"\n",
                		token_type_names[redir->type], redir->filename);
 		else

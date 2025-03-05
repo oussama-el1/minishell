@@ -13,18 +13,22 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "../lib/libft/libft.h"
-# include <readline/readline.h>
 # include <stdio.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <stdlib.h>
+# include <stdio.h>
+# include <unistd.h>
 # include <fcntl.h>
 # include <signal.h>
 # include <termios.h>
 # include <stdbool.h>
 # include <sys/stat.h>
+# include <sys/wait.h>
 # include <errno.h>
 # include <dirent.h>
 
-int g_received_signal;
+extern int g_received_signal;
 
 enum e_token_type
 {
@@ -283,5 +287,37 @@ void	*maroc(size_t size, int flag, int type);
 
 void	expand_wildcard(char ***argv, bool *wildcards);
 int		contain_wildcard(char **argv, bool *wildcards);
+
+// libft
+int			ft_isalpha(int c);
+int			ft_isdigit(int c);
+int			ft_is_alnum(int c);
+int			ft_isascii(int c);
+int			ft_isprint(int c);
+int			ft_isnum(char c);
+size_t		ft_strlen(const char *str);
+size_t		ft_strlcat(char *dst, const char *src, size_t size);
+size_t		ft_strlcpy(char *dst, const char *src, size_t size);
+char		*ft_strnstr(const char *big, const char *little, size_t len);
+int			ft_strncmp(const char *s1, const char *s2, size_t n);
+void		*ft_memset(void *s, int c, size_t n);
+void		ft_bzero(void *s, size_t n);
+char		*ft_strchr(const char *s, int c);
+char		*ft_strrchr(const char *s, int c);
+char		*ft_strtrim(char const *s1, char const *set, int type);
+int			ft_atoi(const char *str);
+void		*ft_calloc(size_t nmemb, size_t size, int type);
+char		*ft_strdup(const char *s, int type);
+char		*ft_strjoin(char const *s1, char const *s2, int type);
+char		**ft_split(char const *s, char c, int type);
+char		*ft_itoa(int n, int type);
+int			ft_putchar_fd(char c, int fd);
+void		ft_putstr_fd(char *s, int fd);
+void		ft_putendl_fd(char *s, int fd);
+void		ft_putnbr_fd(int n, int fd);
+int			ft_putstrn_fd(char *s, int fd, int n);
+int			ft_putnchar_fd(char c, int fd, int n);
+char		*ft_substr(char const *s, unsigned int start, size_t len, \
+	int type);
 
 # endif
