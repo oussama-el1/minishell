@@ -133,15 +133,22 @@ int	exec_binary(char **argv, t_env *env, int exit_status)
 
 int	exec_command(t_tree *cmd, t_env *env, int exit_status)
 {
-	char **argv;
+	char		**argv;
+	t_expand	*expand;
 	int	i;
 
 	argv = cmd->args->argv;
+	expand = *(cmd->args->expand_list);
 	if (!*argv[0])
 	{
 		i = 0;
 		while (argv[i] && !*argv[i])
 			i++;
+		if (!argv[i] && expand && expand->type == D_Q)
+		{
+			ft_putstr_fd("minishell: : command not found\n", 2);
+			return (127);
+		}
 		argv = &argv[i];
 		cmd->args->argv = argv;
 	}
