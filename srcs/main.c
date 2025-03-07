@@ -26,7 +26,10 @@ static void	bash_loop(t_env **env)
 		init_token(&token, 1);
 		line = readline("minishell$> ");
 		if (!line)
+		{
+			ft_putstr_fd("exit\n", 2);
 			ft_exit(NULL);
+		}
 		if (empty(line))
 		{
 			free(line);

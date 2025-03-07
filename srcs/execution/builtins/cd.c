@@ -12,11 +12,11 @@
 
 #include "../../../inc/minishell.h"
 
-static int	change_home_dir(char **argv, t_env *env, int exit_status)
+static int	change_home_dir(char **argv, t_env *env, int exit_status, int force)
 {
 	char	*home;
 
-	if (argv[1] == NULL || (!ft_strcmp(argv[1], "~") && !argv[2]))
+	if (argv[1] == NULL || (!ft_strcmp(argv[1], "~") && !argv[2]) || force)
 	{
 		home = get_env_var(env, "HOME", exit_status);
 		if (!home)
@@ -45,7 +45,7 @@ static int	update_env(char **argv, char *old_pwd, t_env *env)
 	{
 		ft_putstr_fd("chdir: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory\n", 2);
 		set_env_var(&env, ft_strdup("OLDPWD", ENV), ft_strdup(old_pwd, ENV), 1);
-		change_home_dir(argv, env, 0);
+		change_home_dir(argv, env, 0, 1);
 		set_env_var(&env, ft_strdup("PWD", ENV), ft_strdup(get_env_var(env, "HOME", 0), ENV), 1);
 		return (1);
 	}
@@ -72,36 +72,57 @@ int	handle_oldpwd(char *oldpwd)
 	return (0);
 }
 
+static void	print_cd_error(char *path)
+{
+	ft_putstr_fd("minishell: cd: ", 2);
+	ft_putstr_fd(path, 2);
+	if (errno == ENOENT)
+		ft_putstr_fd(": No such file or directory\n", 2);
+	else if (errno == ENOTDIR)
+		ft_putstr_fd(": Not a directory\n", 2);
+	else if (errno == EACCES)
+		ft_putstr_fd(": Permission denied\n", 2);
+	else
+	{
+		ft_putstr_fd(": ", 2);
+		ft_putstr_fd(strerror(errno), 2);
+		ft_putstr_fd("\n", 2);
+	}
+}
+
 int	ft_cd(char **argv, t_env *env, int exit_status)
 {
 	char		*old_pwd;
 	int			home_res;
-	const char	*oldpwd;
+	char		*oldpwd;
+	struct stat	path_stat;
 
 	old_pwd = get_env_var(env, "PWD", exit_status);
-	home_res = change_home_dir(argv, env, exit_status);
+	home_res = change_home_dir(argv, env, exit_status, 0);
 	if (home_res == 1)
 		return (1);
 	if (home_res == 0)
 		return (update_env(argv, old_pwd, env), 0);
 	if (argv[1] && argv[2])
-	{
-		ft_putstr_fd("minishell: cd: too many arguments\n", 2);
-		return (1);
-	}
+		return (ft_putstr_fd("minishell: cd: too many arguments\n", 2), 1);
 	if (argv[1] && !ft_strcmp(argv[1], "-"))
 	{
 		oldpwd = get_env_var(env, "OLDPWD", exit_status);
-		if (chdir(oldpwd) == -1 && handle_oldpwd((char *)oldpwd))
-			return (1);
+		if (chdir(oldpwd) == -1)
+			return (print_cd_error(oldpwd), 1);
 		printf("%s\n", oldpwd);
 	}
-	else if (argv[1] && chdir(argv[1]) == -1)
+	else if (argv[1])
 	{
-		ft_putstr_fd("cd: ", 2);
-		ft_putstr_fd(argv[1], 2);
-		return (ft_putstr_fd(": No such file or directory\n", 2), 1);
+		if (stat(argv[1], &path_stat) == 0 && !S_ISDIR(path_stat.st_mode))
+		{
+			ft_putstr_fd("minishell: cd: ", 2);
+			ft_putstr_fd(argv[1], 2);
+			ft_putstr_fd(": Not a directory\n", 2);
+			return (1);
+		}
+		if (chdir(argv[1]) == -1)
+			return (print_cd_error(argv[1]), 1);
 	}
-
 	return (update_env(argv, old_pwd, env));
 }

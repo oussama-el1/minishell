@@ -56,10 +56,8 @@ static void	error_handler(char *cmd)
 {
 	struct stat	buf;
 
-	// Check if the file exists
 	if (stat(cmd, &buf) == 0)
 	{
-		// Check if it's a directory
 		if (S_ISDIR(buf.st_mode))
 		{
 			ft_putstr_fd("minishell: ", 2);
@@ -67,21 +65,11 @@ static void	error_handler(char *cmd)
 			ft_putendl_fd(": is a directory", 2);
 			exit(126);
 		}
-		// Check if it's not executable
-		// else if (access(cmd, X_OK) != 0)
-		// {
-		// 	ft_putstr_fd("minishell: ", 2);
-		// 	ft_putstr_fd(cmd, 2);
-		// 	ft_putendl_fd(": Permission denied", 2);
-		// 	exit(126);
-		// }
 	}
 	else
 	{
-		// Ensure stat() failure is due to file not existing
 		if (errno == ENOENT)
 		{
-			// If the command starts with '/', './', or '../', it's expected to be a path
 			if (cmd[0] == '/' || (cmd[0] == '.' && cmd[1] == '/') ||
 				(cmd[0] == '.' && cmd[1] == '.' && cmd[2] == '/'))
 			{
@@ -92,8 +80,6 @@ static void	error_handler(char *cmd)
 			}
 		}
 	}
-
-	// If none of the above conditions matched, it's an unknown command
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(cmd, 2);
 	ft_putendl_fd(": command not found", 2);
