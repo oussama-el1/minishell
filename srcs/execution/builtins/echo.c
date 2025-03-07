@@ -32,13 +32,32 @@ int valid_option(char *option)
 	return (1);
 }
 
+
+static int	ft_strcmp_arg(char **expanded, char **argv)
+{
+	int	size1;
+	int	size2;
+
+	if (!expanded || !argv)
+		return (0);
+	size1 = 0;
+	while (expanded[size1])
+		size1++;
+	size2 = 0;
+	while (argv[size2])
+		size2++;
+	return (size1 != size2);
+}
+
 int	ft_echo(char **argv, char **arg_cpy)
 {
 	int	i;
 	int	newline;
+	int	changed;
 
 	i = 1;
 	newline = 0;
+	changed = ft_strcmp_arg(argv, arg_cpy);
 	while (argv[i] && valid_option(argv[i]))
 	{
 		newline = 1;
@@ -47,7 +66,7 @@ int	ft_echo(char **argv, char **arg_cpy)
 	while (argv[i])
 	{
 		ft_putstr_fd(argv[i], 1);
-		if ((!*arg_cpy[i] || *argv[i]) && argv[i + 1] && *argv[i + 1])
+		if (((!changed && !*arg_cpy[i]) || *argv[i]) && argv[i + 1] && *argv[i + 1])
 			ft_putstr_fd(" ", 1);
 		i++;
 	}

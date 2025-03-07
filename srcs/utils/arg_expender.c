@@ -120,6 +120,7 @@ int	count_final_argument(char **argv, t_expand **expandArr, t_env *env, int exit
 	int		i;
 	int		count;
 	char	**expanded_args;
+	int		k;
 
 	i = 0;
 	count = 0;
@@ -128,8 +129,12 @@ int	count_final_argument(char **argv, t_expand **expandArr, t_env *env, int exit
 		if (ft_strchr(argv[i], '$'))
 		{
 			expanded_args = expand_one_arg(argv[i], expandArr[i], env, exit_status);
-			while (expanded_args[count])
+			k = 0;
+			while (expanded_args[k])
+			{
 				count++;
+				k++;
+			}
 		}
 		else
 			count++;
@@ -164,6 +169,3 @@ void	argv_expander(char ***argv, t_expand **expandArr, t_env *env, int exit_stat
 	new_argv[j] = NULL;
 	*argv = new_argv;
 }
-
-
-
