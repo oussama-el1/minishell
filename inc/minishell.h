@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/05 22:39:21 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/06 21:13:41 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,6 +149,12 @@ typedef struct s_env
 	struct s_env	*next;
 }	t_env;
 
+typedef struct s_herdoc
+{
+	t_redir	*last_herdoc;
+	int		index;
+} t_herdoc;
+
 
 // Garbage Collector
 typedef struct s_gc
@@ -266,9 +272,9 @@ int	set_name_and_value(char *env, char **name, char **value);
 // exec
 void	setup_signals(void);
 char	*get_executable_path(char *cmd, t_env *env, int exit_status);
-int		execute_ast(t_tree *node, t_env **env, int *exit_status);
+int		execute_ast(t_tree *node, t_herdoc *herdoc, t_env **env, int *exit_status);
 int		exec_binary(char **argv, t_env *env, int exit_status);
-int		redirect_and_exec(t_tree *node, t_env **env, int exit_status);
+int		redirect_and_exec(t_tree *node, t_herdoc *herdoc, t_env **env, int exit_status);
 int		exec_pipe(t_tree *node, t_env **env, int *exit_status);
 void	rl_replace_line(const char *text, int clear_undo);
 char	*expand_env_herdoc(t_env *env, char *line, int fd, int exit_status, const char *delimiter);

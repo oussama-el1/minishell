@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 18:06:55 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/05 22:39:33 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/06 21:20:25 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ static void	subshell_handler(t_tree *node, t_env *env, int *exit_status, pid_t p
 		if (node->left)
 		{
 			if (node->args && node->args->redir)
-				red_res = redirect_and_exec(node, &env_cpy, *exit_status);
+				red_res = redirect_and_exec(node, NULL, &env_cpy, *exit_status);
 			if (!red_res)
-				exit_code = execute_ast(node->left, &env_cpy, exit_status);
+				exit_code = execute_ast(node->left, NULL, &env_cpy, exit_status);
 			else
 				exit_code = 1;
 			clean_resources(saved_in, saved_out);
@@ -47,7 +47,7 @@ static void	subshell_handler(t_tree *node, t_env *env, int *exit_status, pid_t p
 	}
 }
 
-int	 execute_ast(t_tree *node, t_env **env, int *exit_status)
+int	 execute_ast(t_tree *node, t_herdoc *herdoc, t_env **env, int *exit_status)
 {
 	int		left_status;
 	pid_t	pid;
@@ -66,22 +66,22 @@ int	 execute_ast(t_tree *node, t_env **env, int *exit_status)
 			expand_wildcard(&node->args->argv, node->args->wildcards);
 	}
 	if (node->type == T_CMD)
-		*exit_status = redirect_and_exec(node, env, *exit_status);
+		*exit_status = redirect_and_exec(node, herdoc, env, *exit_status);
 	if (node->type == T_PIPE)
 		*exit_status =  exec_pipe(node, env, exit_status);
 	if (node->type == T_AND)
 	{
-		left_status = execute_ast(node->left, env, exit_status);
+		left_status = execute_ast(node->left, NULL, env, exit_status);
 		if (left_status == 0)
-			*exit_status =  execute_ast(node->right, env, exit_status);
+			*exit_status =  execute_ast(node->right, NULL, env, exit_status);
 		else
 			*exit_status =  left_status;
 	}
 	if (node->type == T_OR)
 	{
-		left_status = execute_ast(node->left, env, exit_status);
+		left_status = execute_ast(node->left, NULL, env, exit_status);
 		if (left_status != 0)
-			*exit_status =  execute_ast(node->right, env, exit_status);
+			*exit_status =  execute_ast(node->right, NULL, env, exit_status);
 		else
 			*exit_status = left_status;
 	}

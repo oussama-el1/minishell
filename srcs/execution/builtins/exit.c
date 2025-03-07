@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 18:04:04 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/03 23:27:17 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/07 00:47:10 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,5 +51,6 @@ int	ft_exit(char **argv)
 		}
 		exit_code = ft_atoi(argv[1]);
 	}
+	unlink("/tmp/heredoc_tmp");
 	exit(exit_code);
 }

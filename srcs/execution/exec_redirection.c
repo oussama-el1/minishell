@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 14:43:35 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/05 23:16:15 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/07 00:48:42 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void	redir_input(int last_heredoc_index, int last_in_index,
 
 	fd = -1;
 	if (last_heredoc_index > last_in_index)
-		fd = open("/tmp/heredoc_tmp", O_RDONLY);
+		fd = open("/tmp/heredoc_tmp", O_RDONLY);\
 	else if (last_in)
 		fd = open(last_in->filename, O_RDONLY);
 	if (fd == -1)
@@ -212,7 +212,7 @@ void open_output_error(t_redir *redirection, int error_index, int *error_found)
 	}
 }
 
-int	redirect_and_exec(t_tree *node, t_env **env, int exit_status)
+int	redirect_and_exec(t_tree *node, t_herdoc *herdoc, t_env **env, int exit_status)
 {
 	int				saved_in;
 	int				saved_out;
@@ -233,8 +233,13 @@ int	redirect_and_exec(t_tree *node, t_env **env, int exit_status)
 	saved_out = dup(STDOUT_FILENO);
 	if (node->args->redir)
 		err = expand_filnames(node->args->redir, *env, exit_status);
-	last_heredoc_index = get_last_heredoc(node->args->redir,
-			&last_heredoc, exit_status, *env);
+	if (herdoc && herdoc->last_herdoc)
+	{
+		last_heredoc = herdoc->last_herdoc;
+		last_heredoc_index = herdoc->index; 
+	}
+	else
+		last_heredoc_index = get_last_heredoc(node->args->redir, &last_heredoc, exit_status, *env);
 	last_in_index = get_last_in(node->args->redir, &last_in, &error_found, err);
 
 	error_index = last_in_index;

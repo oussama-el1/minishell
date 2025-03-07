@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 22:24:50 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/05 23:14:23 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/06 21:33:29 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,11 @@ void	file_error_handler(t_redir *redirection, int *error_found, int ambiguous)
 	if (!ambiguous)
 	{
 		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(redirection->filename, 2);
-		ft_putstr_fd(":", 2);
+		if (!*redirection->filename)
+		{
+			ft_putstr_fd(redirection->filename, 2);
+			ft_putstr_fd(":", 2);
+		}
 		perror(redirection->filename);
 	}
 	*error_found = 1;
