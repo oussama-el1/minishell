@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/08 17:25:25 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/08 20:10:10 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,7 +210,7 @@ t_token	*lst_dup(t_token *token);
 t_token	*sublist(t_token *start, t_token *end);
 int		contains_unquoted_ampersand(const char *str);
 char 	*remove_quote(t_token *curr, char *str);
-int		is_wildcard(t_token *curr);
+void	is_wildcard(t_token *curr, bool *wildcard);
 int		non_control2(enum e_token_type type);
 /* syntax_helper.c */
 int		print_syntax_error(char *token);

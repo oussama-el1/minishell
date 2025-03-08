@@ -6,13 +6,13 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 21:26:48 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/08 16:08:56 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/08 21:15:48 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	only_wild(char *str);
+static int	contain_wild(char *str);
 
 int	is_quote(enum e_token_type type)
 {
@@ -28,32 +28,29 @@ int is_regular(enum e_token_type type)
 	return (0);
 }
 
-int	is_wildcard(t_token *curr)
+void	is_wildcard(t_token *curr, bool *wild)
 {
-	if (curr && (curr->bef_space || (!curr->bef_space && \
-		!curr->prev)) && only_wild(curr->value))
-		return (1);
-	return (0);
+	if (curr && curr->type == EXPR && contain_wild(curr->value))
+	{
+		if (wild)
+			*wild = true;
+	}
 }
 
-static int	only_wild(char *str)
+static int	contain_wild(char *str)
 {
 	int	i;
-	int	count;
 
 	if (!str)
 		return (0);
-	if (isquote(*str))
-		return (0);
 	i = 0;
-	count = 0;
 	while (str[i])
 	{
 		if (str[i] == '*')
-			count++;
+			return (1);
 		i++;
 	}
-	return (count != 0);
+	return (0);
 }
 
 void	init_setup(t_helper *hp, t_env **env)
