@@ -52,6 +52,21 @@ int	exec_builtin(char **argv, char **arg_cpy, t_env **env, int exit_status)
 	return (0);
 }
 
+void	enoent_handler(char *cmd)
+{
+	if (errno == ENOENT)
+	{
+		if (cmd[0] == '/' || (cmd[0] == '.' && cmd[1] == '/') ||
+		(cmd[0] == '.' && cmd[1] == '.' && cmd[2] == '/'))
+		{
+			ft_putstr_fd("minishell: ", 2);
+			ft_putstr_fd(cmd, 2);
+			ft_putendl_fd(": No such file or directory", 2);
+			exit(127);
+		}
+	}
+}
+
 static void	error_handler(char *cmd)
 {
 	struct stat	buf;
@@ -67,19 +82,7 @@ static void	error_handler(char *cmd)
 		}
 	}
 	else
-	{
-		if (errno == ENOENT)
-		{
-			if (cmd[0] == '/' || (cmd[0] == '.' && cmd[1] == '/') ||
-				(cmd[0] == '.' && cmd[1] == '.' && cmd[2] == '/'))
-			{
-				ft_putstr_fd("minishell: ", 2);
-				ft_putstr_fd(cmd, 2);
-				ft_putendl_fd(": No such file or directory", 2);
-				exit(127);
-			}
-		}
-	}
+		enoent_handler(cmd);
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(cmd, 2);
 	ft_putendl_fd(": command not found", 2);
