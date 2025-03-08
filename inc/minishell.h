@@ -291,8 +291,8 @@ void	print_ast(t_tree *node, int depth, const char *relation);
 /*  Garbage Collector */
 void	*maroc(size_t size, int flag, int type);
 
-void	expand_wildcard(char ***argv, bool *wildcards);
-int		contain_wildcard(char **argv, bool *wildcards);
+void	expand_wildcard(char ***argv);
+int		contain_wildcard(char **argv);
 
 // libft
 int			ft_isalpha(int c);

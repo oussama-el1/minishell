@@ -62,8 +62,8 @@ int	 execute_ast(t_tree *node, t_herdoc *herdoc, t_env **env, int *exit_status)
 	{
 		node->args->argv_cpy = node->args->argv; 
 		argv_expander(&node->args->argv, node->args->expand_list, *env, *exit_status);
-		if (contain_wildcard(node->args->argv, node->args->wildcards))
-			expand_wildcard(&node->args->argv, node->args->wildcards);
+		if (contain_wildcard(node->args->argv))
+			expand_wildcard(&node->args->argv);
 	}
 	if (node->type == T_CMD)
 		*exit_status = redirect_and_exec(node, herdoc, env, *exit_status);
