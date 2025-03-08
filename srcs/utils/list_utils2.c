@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 13:58:51 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/08 20:04:58 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/08 21:15:14 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,8 @@ char	*quoted_process(t_token **curr, t_expand **expansion_list, bool *wildcard)
 	head = NULL;
 	arg = NULL;
 	start = 0;
-	*wildcard = false;
+	if (wildcard)
+		*wildcard = false;
 	while (*curr && (*curr)->visited != 1 && non_control((*curr)->type))
 	{
 		is_wildcard(*curr, wildcard);

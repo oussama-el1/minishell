@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 21:26:48 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/08 20:12:17 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/08 21:15:48 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,10 @@ int is_regular(enum e_token_type type)
 void	is_wildcard(t_token *curr, bool *wild)
 {
 	if (curr && curr->type == EXPR && contain_wild(curr->value))
-		*wild = true;
+	{
+		if (wild)
+			*wild = true;
+	}
 }
 
 static int	contain_wild(char *str)
