@@ -12,27 +12,34 @@
 
 #include "minishell.h"
 
-static void	subshell_handler(t_tree *node, t_env *env, int *exit_status, pid_t pid)
+static void	subshell_handler(t_helper *hp, pid_t pid)
 {
-	t_env	*env_cpy;
-	int		status;
-	int		saved_in;
-	int		saved_out;
-	int		exit_code;
-	int		red_res;
+	t_env		*env_cpy;
+	t_helper	hp_cpy;
+	int			status;
+	int			saved_in;
+	int			saved_out;
+	int			exit_code;
+	int			red_res;
 
+	red_res = 0;
 	saved_in = dup(STDIN_FILENO);
 	saved_out = dup(STDOUT_FILENO);
-	red_res = 0;
+	env_cpy = dup_env(*hp->env);
+	hp_cpy.exit_status = hp->exit_status;
+	hp_cpy.env = &env_cpy;
+	hp_cpy.node = hp->node;
 	if (pid == 0)
 	{
-		env_cpy = dup_env(env);
-		if (node->left)
+		if (hp_cpy.node->left)
 		{
-			if (node->args && node->args->redir)
-				red_res = redirect_and_exec(node, NULL, &env_cpy, *exit_status);
+			if (hp_cpy.node->args && hp_cpy.node->args->redir)
+				red_res = redirect_and_exec(&hp_cpy, NULL);
 			if (!red_res)
-				exit_code = execute_ast(node->left, NULL, &env_cpy, exit_status);
+			{
+				hp_cpy.node = hp_cpy.node->left;
+				exit_code = execute_ast(&hp_cpy, NULL);
+			}
 			else
 				exit_code = 1;
 			clean_resources(saved_in, saved_out);
@@ -43,58 +50,71 @@ static void	subshell_handler(t_tree *node, t_env *env, int *exit_status, pid_t p
 	else
 	{
 		waitpid(pid, &status, 0);
-		*exit_status =  WEXITSTATUS(status);
+		hp->exit_status =  WEXITSTATUS(status);
 	}
 }
 
-int	 execute_ast(t_tree *node, t_herdoc *herdoc, t_env **env, int *exit_status)
+int	execute_ast(t_helper *hp, t_herdoc *herdoc)
 {
 	int		left_status;
 	pid_t	pid;
+	t_tree	*parent;
 
-	if (!node)
+	if (!hp->node)
 	{
-		*exit_status = 1;
-		return (*exit_status);
+		hp->exit_status = 1;
+		return (hp->exit_status);
 	}
 	setup_signals();
-	if (node->args && node->args->argv && node->args->expand_list)
+	if (hp->node->args&& hp->node->args->argv && hp->node->args->expand_list)
 	{
-		node->args->argv_cpy = node->args->argv; 
-		argv_expander(&node->args->argv, node->args->expand_list, *env, *exit_status);
-		if (contain_wildcard(node->args->argv))
-			expand_wildcard(&node->args->argv);
+		hp->node->args->argv_cpy = hp->node->args->argv; 
+		argv_expander(&hp->node->args->argv, hp->node->args->expand_list, *hp->env, hp->exit_status);
+		if (contain_wildcard(hp->node->args->argv))
+			expand_wildcard(&hp->node->args->argv);
 	}
-	if (node->type == T_CMD)
-		*exit_status = redirect_and_exec(node, herdoc, env, *exit_status);
-	if (node->type == T_PIPE)
-		*exit_status =  exec_pipe(node, env, exit_status);
-	if (node->type == T_AND)
+	if (hp->node->type == T_CMD)
+		hp->exit_status = redirect_and_exec(hp, herdoc);
+	if (hp->node->type == T_PIPE)
+		hp->exit_status =  exec_pipe(hp);
+	if (hp->node->type == T_AND)
 	{
-		left_status = execute_ast(node->left, NULL, env, exit_status);
+		parent = hp->node;
+		hp->node = parent->left;
+		left_status = execute_ast(hp, NULL);
 		if (left_status == 0)
-			*exit_status =  execute_ast(node->right, NULL, env, exit_status);
+		{
+			hp->node = parent->right;
+			hp->exit_status = execute_ast(hp, NULL);
+		}
 		else
-			*exit_status =  left_status;
+			hp->exit_status = left_status;
+		hp->node = parent;
 	}
-	if (node->type == T_OR)
+	if (hp->node->type == T_OR)
 	{
-		left_status = execute_ast(node->left, NULL, env, exit_status);
+		parent = hp->node;
+		hp->node = parent->left;
+		left_status = execute_ast(hp, NULL);
 		if (left_status != 0)
-			*exit_status =  execute_ast(node->right, NULL, env, exit_status);
+		{
+			hp->node = parent->right;
+			hp->exit_status =  execute_ast(hp, NULL);
+		}
 		else
-			*exit_status = left_status;
+			hp->exit_status = left_status;
+		hp->node = parent;
 	}
-	if (node->type == T_SUBSHELL)
+	if (hp->node->type == T_SUBSHELL)
 	{
 		pid = fork();
 		if (pid == -1)
 		{
 			perror("fork failed");
-			*exit_status = 1;
+			hp->exit_status = 1;
 		}
 		else
-			subshell_handler(node, *env, exit_status, pid);
+			subshell_handler(hp, pid);
 	}
-	return (*exit_status);
+	return (hp->exit_status);
 }

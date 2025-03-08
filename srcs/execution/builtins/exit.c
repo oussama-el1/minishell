@@ -30,19 +30,6 @@ int	is_numeric(const char *str)
 	return (1);
 }
 
-static int	ft_handle_overflow(unsigned long nbr, int ndigit, int sign)
-{
-	if (sign == 1)
-		if ((nbr >= 922337203685477580 && ndigit > 7)
-			|| nbr > 922337203685477580)
-			return (-1);
-	if (sign == -1)
-		if ((nbr >= 922337203685477580 && ndigit > 8)
-			|| nbr > 922337203685477580)
-			return (0);
-	return (1);
-}
-
 int	ft_atoll(const char *str, int *error)
 {
 	int				i;
@@ -79,11 +66,8 @@ int	ft_exit(char **argv)
 	exit_code = 0;
 	overflow_error = 0;
 	if (!argv)
-	{
-		ft_putstr_fd("exit\n", 2);
 		maroc(0, FULLFREE, 0);
-	}
-	else
+	else if (argv[1])
 	{
 		if (!is_numeric(argv[1]))
 		{
