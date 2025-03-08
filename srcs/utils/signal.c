@@ -6,17 +6,18 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 17:31:02 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/04 20:57:39 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/08 17:26:28 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int g_received_signal = 0;
+t_signal_info g_signal_info = {0, 0};
 
 void	handle_sigint(int sig)
 {
-	g_received_signal = sig;
+	g_signal_info.received_signal = sig;
+	g_signal_info.line_count++;
 	ft_putstr_fd("\n", 1);
 	rl_replace_line("", 0);
 	rl_on_new_line();

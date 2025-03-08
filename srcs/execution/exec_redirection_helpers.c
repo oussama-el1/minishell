@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redirection_helpers.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 22:24:50 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/06 21:33:29 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/08 16:27:27 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	herdoc_loop(const char *delimiter, t_env *env, int fd, int exit_status)
 		line = readline("> ");
 		tmp = line;
 		if (!line)
-			break ;
+			return (herdoc_msg(delimiter));
 		expand_string(&line, env, exit_status, 1);
 		if (ft_strcmp(line, delimiter) == 0)
 			return (free(tmp), (void)0);
@@ -53,10 +53,7 @@ void	handle_heredoc(const char *delimiter, t_env *env, int exit_status)
 	signal(SIGINT, SIG_DFL);
 	fd = open("/tmp/heredoc_tmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0)
-	{
-		perror("open failed");
-		return ;
-	}
+		return (perror("open failed\n"));
 	herdoc_loop(delimiter, env, fd, exit_status);
 	close(fd);
 }

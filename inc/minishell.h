@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/08 01:10:59 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/08 17:25:25 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,13 @@
 # include <errno.h>
 # include <dirent.h>
 
-extern int g_received_signal;
+typedef struct	s_signal_info
+{
+	int received_signal;
+	int line_count;
+}	t_signal_info;
+
+extern t_signal_info g_signal_info;
 
 enum e_token_type
 {
@@ -121,7 +127,7 @@ typedef struct s_tree
 
 typedef	struct	s_helper
 {
-	int				*exit_status;
+	int				exit_status;
 	struct s_env	**env;
 }	t_helper;
 
@@ -185,7 +191,6 @@ int		isquote(char c);
 int		special_d(char c);
 int		isparenth(char c);
 int		is_alnum(char c);
-int		special_d_1(char c);
 int		isredirect(enum e_token_type type);
 int		is_dilim(enum e_token_type type);
 int		non_control(enum e_token_type type);
@@ -208,6 +213,7 @@ int		check_brackets(t_token *token);
 void	while_ft(t_token **token, t_token **last, t_syntax *syntax);
 int		check_operators(t_token *token);
 int		check_redirections(t_token *token, t_redir **heredoc);
+void	herdoc_msg(const char *delimiter);
 
 
 void	init_token(t_token **token, int allocate);
@@ -227,9 +233,7 @@ void	parse_parenthesis(t_token **token, t_vars **vars, int *ret);
 int		check_syntax(t_token *token, int inside_brackets);
 
 void	handle_her(t_redir *herdc);
-t_redir	*check_heredoc(t_token *token, int *nbr);
-void	handle_heredc(t_token *token);
-void	init_setup(t_helper **hp, int *ex_status, t_env **env);
+void	init_setup(t_helper *hp, t_env **env);
 
 /* tree.c */
 t_tree 		*build_ast(t_token *token);

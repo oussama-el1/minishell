@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 21:26:48 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/08 02:47:38 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/08 16:08:56 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,8 @@ static int	only_wild(char *str)
 	return (count != 0);
 }
 
-void	init_setup(t_helper **hp, int *ex_status, t_env **env)
+void	init_setup(t_helper *hp, t_env **env)
 {
-	t_helper	*helper;
-
-	helper = maroc(sizeof(t_helper), ALLOC, ENV);
-	helper->exit_status = ex_status;
-	helper->env = env;
-	*hp = helper;
+	hp->exit_status = 0;
+	hp->env = env;
 }

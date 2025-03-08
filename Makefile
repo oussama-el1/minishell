@@ -28,20 +28,20 @@ all: $(NAME)
 bonus: all
 
 $(NAME): $(OBJS)
-		@echo -e "$(YELLOW)Compiling minishell ...$(DEF_COLOR)"
 		@$(CC) $(CFLAGS) $^ -o $@ -L$(READLINE) -lreadline -lhistory
-		@echo -e "$(GREEN)minishell compilation done!$(DEF_COLOR)"
+		@printf "\n$(GREEN)minishell compilation done!\n$(DEF_COLOR)"
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(HEADERS)
 		@mkdir -p $(dir $@)
+		@printf "$(YELLOW)Generating minishell objects... %-33.33s\r$(DEF_COLOR)" $@
 		@$(CC) $(CFLAGS) -I $(READLINE_HEADER) -I inc -c $< -o $@
 
 clean:
-		@echo -e "$(GRAY)Deleting object files ...$(DEF_COLOR)"
+		@printf "$(GRAY)Deleting object files ...\n$(DEF_COLOR)"
 		@$(RM) $(OBJ_DIR)
 
 fclean: clean
-		@echo -e "$(GRAY)Deleting all ...$(DEF_COLOR)"
+		@printf "$(GRAY)Deleting all ...\n$(DEF_COLOR)"
 		@$(RM) $(NAME)
 
 

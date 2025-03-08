@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 01:01:04 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/08 02:42:14 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/08 13:52:56 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	process_input(char *line, t_token **token, t_helper *helper, \
 		give_type(token);
 		if (!check_syntax(*token, 0))
 		{
-			*helper->exit_status = 2;
+			helper->exit_status = 2;
 			return (add_history(line), 0);
 		}
 		if (!handle_end_of_line(&line, token, helper))
@@ -39,7 +39,7 @@ int	process_input(char *line, t_token **token, t_helper *helper, \
 		if (!base)
 			return (1);
 		tree = build_ast(*token);
-		execute_ast(tree, NULL, helper->env, helper->exit_status);
+		execute_ast(tree, NULL, helper->env, &helper->exit_status);
 	}
 	else
 		return (add_history(line), 0);
