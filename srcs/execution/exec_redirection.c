@@ -12,11 +12,6 @@
 
 #include "minishell.h"
 
-typedef struct {
-	char	*filename;
-	int		index;
-} t_ambiguous_err;
-
 int	get_last_in(t_redir *redirection, t_redir **last_in, int *error_found, t_ambiguous_err	*err)
 {
 	int	i;
@@ -32,9 +27,9 @@ int	get_last_in(t_redir *redirection, t_redir **last_in, int *error_found, t_amb
 			if (access(redirection->filename, F_OK | R_OK) == -1)
 			{
 				if (err)
-					file_error_handler(redirection, error_found, err->index < i);
+					file_error_handler(redirection, error_found, err->index <= i, err);
 				else
-					file_error_handler(redirection, error_found, 0);
+					file_error_handler(redirection, error_found, 0, NULL);
 				return (i);
 			}
 			*last_in = redirection;
@@ -46,10 +41,10 @@ int	get_last_in(t_redir *redirection, t_redir **last_in, int *error_found, t_amb
 	return (last_in_index);
 }
 
-void	ambiguous_redirect(char *tmp)
+void	ambiguous_redirect(char *file)
 {
 	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(tmp, 2);
+	ft_putstr_fd(file, 2);
 	ft_putstr_fd(": ambiguous redirect\n", 2);
 }
 
@@ -72,7 +67,7 @@ void	iterate_output_redirection(t_redir *redirection,
 						O_WRONLY | O_CREAT | O_APPEND, 0644);
 			if (fd < 0)
 			{
-				file_error_handler(redirection, error_found, 0);
+				file_error_handler(redirection, error_found, 0, NULL);
 				break ;
 			}
 			else
@@ -201,7 +196,7 @@ void open_output_error(t_redir *redirection, int error_index, int *error_found)
 						O_WRONLY | O_CREAT | O_APPEND, 0644);
 			if (fd < 0)
 			{
-				file_error_handler(redirection, error_found, 0);
+				file_error_handler(redirection, error_found, 0, NULL);
 				break ;
 			}
 			else

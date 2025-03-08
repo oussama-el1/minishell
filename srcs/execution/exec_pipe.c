@@ -12,12 +12,6 @@
 
 #include "minishell.h"
 
-static int	error_handler(char *message)
-{
-	perror(message);
-	return (1);
-}
-
 static void	wait_and_cleanup(int *fd, pid_t left_cmd, pid_t right_cmd, int *exit_status)
 {
 	int	status;
@@ -45,7 +39,7 @@ static void	exec_pipe_side(int *fd, int left)
 	}
 }
 
-void	process_herdocs(t_tree *node, t_herdoc *herdoc, int left, t_env *env, int exit_status)
+static void	process_herdocs(t_tree *node, t_herdoc *herdoc, int left, t_env *env, int exit_status)
 {
 	herdoc->last_herdoc = NULL;
 	if (node->left->args && left)
@@ -54,58 +48,56 @@ void	process_herdocs(t_tree *node, t_herdoc *herdoc, int left, t_env *env, int e
 		herdoc->index = get_last_heredoc(node->right->args->redir, &herdoc->last_herdoc, exit_status, env);
 }
 
-int	exec_pipe(t_tree *node, t_env **env, int *exit_status)
+static int	exec_pipe_helper(t_tree *node, int *fd, t_herdoc *left_herdoc,
+		t_herdoc *right_herdoc, t_env **env, int *exit_status)
 {
-	int			fd[2];
-	pid_t		left_cmd;
-	pid_t		right_cmd;
-	t_herdoc	*left_herdoc;
-	t_herdoc	*right_herdoc;
-
-	left_herdoc = NULL;
-	right_herdoc = NULL;
-
-	if (!node || !node->left || !node->right)
-		return (1);
-
-	if (pipe(fd) == -1)
-		return (error_handler("pipe failed"));
+	pid_t	left_cmd;
+	pid_t	right_cmd;
 	
-	if (node->left->type == T_CMD)
-	{
-		left_herdoc = maroc(sizeof(t_herdoc), ALLOC, CMD);
-		process_herdocs(node, left_herdoc, 1, *env, *exit_status);
-	}
-
-	if (node->right->type == T_CMD)
-	{
-		right_herdoc = maroc(sizeof(t_herdoc), ALLOC, CMD);
-		process_herdocs(node, right_herdoc, 0, *env, *exit_status);
-	}
-
 	left_cmd = fork();
 	if (left_cmd == -1)
-		return (error_handler("fork failed"));
+		return (perror("fork failed"), 1);
 	if (left_cmd == 0)
 	{
 		exec_pipe_side(fd, 1);
 		if (left_herdoc && left_herdoc->last_herdoc)
 			exit(execute_ast(node->left, left_herdoc, env, exit_status));
-		else
-			exit(execute_ast(node->left, NULL, env, exit_status));
+		exit(execute_ast(node->left, NULL, env, exit_status));
 	}
-
 	right_cmd = fork();
 	if (right_cmd == -1)
-		return (error_handler("fork failed"));
+		return (perror("fork failed"), 1);
 	if (right_cmd == 0)
 	{
 		exec_pipe_side(fd, 0);
 		if (right_herdoc && right_herdoc->last_herdoc)
 			exit(execute_ast(node->right, right_herdoc, env, exit_status));
-		else
-			exit(execute_ast(node->right, NULL, env, exit_status));
+		exit(execute_ast(node->right, NULL, env, exit_status));
 	}
-
 	return (wait_and_cleanup(fd, left_cmd, right_cmd, exit_status), *exit_status);
+}
+
+int	exec_pipe(t_tree *node, t_env **env, int *exit_status)
+{
+	int			fd[2];
+	t_herdoc	*left_herdoc;
+	t_herdoc	*right_herdoc;
+
+	left_herdoc = NULL;
+	right_herdoc = NULL;
+	if (!node || !node->left || !node->right)
+		return (1);
+	if (pipe(fd) == -1)
+		return (perror("pipe failed"), 1);
+	if (node->left->type == T_CMD)
+	{
+		left_herdoc = maroc(sizeof(t_herdoc), ALLOC, CMD);
+		process_herdocs(node, left_herdoc, 1, *env, *exit_status);
+	}
+	if (node->right->type == T_CMD)
+	{
+		right_herdoc = maroc(sizeof(t_herdoc), ALLOC, CMD);
+		process_herdocs(node, right_herdoc, 0, *env, *exit_status);
+	}
+	return (exec_pipe_helper(node, fd, left_herdoc, right_herdoc, env, exit_status));
 }

@@ -81,7 +81,7 @@ int	get_last_heredoc(t_redir *redirection, t_redir **last_heredoc,
 	return (last_heredoc_index);
 }
 
-void	file_error_handler(t_redir *redirection, int *error_found, int ambiguous)
+void	file_error_handler(t_redir *redirection, int *error_found, int ambiguous, t_ambiguous_err *err)
 {
 	if (!ambiguous)
 	{
@@ -93,5 +93,7 @@ void	file_error_handler(t_redir *redirection, int *error_found, int ambiguous)
 		}
 		perror(redirection->filename);
 	}
+	else
+		ambiguous_redirect(err->filename);
 	*error_found = 1;
 }
