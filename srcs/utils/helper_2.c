@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 01:22:46 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/04 20:57:39 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/08 01:10:00 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,22 +38,6 @@ int	before_space(char *str, int i)
 	return (is_space(str[i]));
 }
 
-char	*remove_quotes(char *str)
-{
-	char	save;
-	int		i;
-
-	i = 0;
-	save = str[i++];
-	while (str[i])
-	{
-		if (str[i] == save)
-			break ;
-		i++;
-	}
-	return (ft_substr(str, 1, i - 1, CMD));
-}
-
 int	get_type(const char *str)
 {
 	static t_token_map	token_map[] = {
@@ -80,4 +64,12 @@ int	get_type(const char *str)
 		i++;
 	}
 	return (EXPR);
+}
+
+int	non_control2(enum e_token_type type)
+{
+	if (!is_dilim(type) && !isredirect(type) && \
+		type != OPEN_BRACKET && type != CLOSED_BRACKET)
+		return (1);
+	return (0);
 }
