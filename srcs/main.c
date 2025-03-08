@@ -6,11 +6,14 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:08:50 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/08 02:56:11 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/08 03:25:41 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static int	get_exec_cmd(t_token **token, t_helper*helper);
+static void	bash_loop(t_env **env);
 
 int	main(int ac, char **av, char **envp)
 {
