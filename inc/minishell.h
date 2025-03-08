@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/06 21:13:41 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/08 17:25:25 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,13 @@
 # include <errno.h>
 # include <dirent.h>
 
-extern int g_received_signal;
+typedef struct	s_signal_info
+{
+	int received_signal;
+	int line_count;
+}	t_signal_info;
+
+extern t_signal_info g_signal_info;
 
 enum e_token_type
 {
@@ -119,6 +125,12 @@ typedef struct s_tree
 	struct s_tree	*right;
 } t_tree;
 
+typedef	struct	s_helper
+{
+	int				exit_status;
+	struct s_env	**env;
+}	t_helper;
+
 typedef struct s_vars
 {
 	char			*cmd;
@@ -183,7 +195,6 @@ int		isquote(char c);
 int		special_d(char c);
 int		isparenth(char c);
 int		is_alnum(char c);
-int		special_d_1(char c);
 int		isredirect(enum e_token_type type);
 int		is_dilim(enum e_token_type type);
 int		non_control(enum e_token_type type);
@@ -199,19 +210,20 @@ t_token	*sublist(t_token *start, t_token *end);
 int		contains_unquoted_ampersand(const char *str);
 char 	*remove_quote(t_token *curr, char *str);
 int		is_wildcard(t_token *curr);
-
+int		non_control2(enum e_token_type type);
 /* syntax_helper.c */
 int		print_syntax_error(char *token);
 int		check_brackets(t_token *token);
 void	while_ft(t_token **token, t_token **last, t_syntax *syntax);
 int		check_operators(t_token *token);
-int		check_redirections(t_token *token);
+int		check_redirections(t_token *token, t_redir **heredoc);
+void	herdoc_msg(const char *delimiter);
 
 
 void	init_token(t_token **token, int allocate);
 int		before_space(char *str, int i);
 
-int		process_input(char *line, t_token **token, t_tree **tree, int base);
+int		process_input(char *line, t_token **token, t_helper *helper, int base);
 void	init_vars(t_vars **vars, char *line);
 void	ft_newnode(t_token **token, char *value, int before_space);
 
@@ -224,7 +236,8 @@ void	parse_separator(t_token **token, t_vars **vars, int *ret);
 void	parse_parenthesis(t_token **token, t_vars **vars, int *ret);
 int		check_syntax(t_token *token, int inside_brackets);
 
-t_token	*join_heredocargs(t_token *token);
+void	handle_her(t_redir *herdc);
+void	init_setup(t_helper *hp, t_env **env);
 
 /* tree.c */
 t_tree 		*build_ast(t_token *token);

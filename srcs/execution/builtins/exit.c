@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 18:04:04 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/07 00:47:10 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/08 13:59:03 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,8 +78,11 @@ int	ft_exit(char **argv)
 
 	exit_code = 0;
 	overflow_error = 0;
-	if (!argv[1])
+	if (!argv)
+	{
+		ft_putstr_fd("exit\n", 2);
 		maroc(0, FULLFREE, 0);
+	}
 	else
 	{
 		if (!is_numeric(argv[1]))

@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 21:26:48 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/04 20:57:39 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/08 16:08:56 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,15 +39,25 @@ int	is_wildcard(t_token *curr)
 static int	only_wild(char *str)
 {
 	int	i;
+	int	count;
 
 	if (!str)
 		return (0);
+	if (isquote(*str))
+		return (0);
 	i = 0;
+	count = 0;
 	while (str[i])
 	{
-		if (str[i] != '*')
-			return (0);
+		if (str[i] == '*')
+			count++;
 		i++;
 	}
-	return (1);
+	return (count != 0);
+}
+
+void	init_setup(t_helper *hp, t_env **env)
+{
+	hp->exit_status = 0;
+	hp->env = env;
 }

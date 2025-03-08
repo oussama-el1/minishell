@@ -6,19 +6,11 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 01:22:46 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/04 20:57:39 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/08 16:23:36 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	special_d_1(char c)
-{
-	if (c == '>' || c == '<' || c == '|' || \
-		c == '&')
-		return (1);
-	return (0);
-}
 
 void	ft_space(t_vars **vars, int *ret)
 {
@@ -36,22 +28,6 @@ void	ft_space(t_vars **vars, int *ret)
 int	before_space(char *str, int i)
 {
 	return (is_space(str[i]));
-}
-
-char	*remove_quotes(char *str)
-{
-	char	save;
-	int		i;
-
-	i = 0;
-	save = str[i++];
-	while (str[i])
-	{
-		if (str[i] == save)
-			break ;
-		i++;
-	}
-	return (ft_substr(str, 1, i - 1, CMD));
 }
 
 int	get_type(const char *str)
@@ -80,4 +56,21 @@ int	get_type(const char *str)
 		i++;
 	}
 	return (EXPR);
+}
+
+int	non_control2(enum e_token_type type)
+{
+	if (!is_dilim(type) && !isredirect(type) && \
+		type != OPEN_BRACKET && type != CLOSED_BRACKET)
+		return (1);
+	return (0);
+}
+
+void	herdoc_msg(const char *delimiter)
+{
+	ft_putstr_fd("minishell: warning: here-document at line ", 1);
+	ft_putnbr_fd(g_signal_info.line_count, 1);
+	ft_putstr_fd(" delimited by end-of-file (wanted `", 1);
+	ft_putstr_fd((char *)delimiter, 1);
+	ft_putstr_fd("')\n", 1);
 }

@@ -6,26 +6,34 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 13:18:10 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/04 20:57:39 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/08 02:33:58 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	handle_bracket_content(t_token **curr, t_syntax *syntax);
-static int	handle_special_tokens(t_token *curr);
-static int	check_syntax_1(t_token **token, int inside_brackets);
+static int	handle_bracket_content(t_token **curr, t_syntax *syntax, t_redir **heredoc);
+static int	handle_special_tokens(t_token *curr, t_redir **heredoc);
+static int	check_syntax_1(t_token **token, int inside_brackets, \
+	t_redir **heredoc);
 static int	check_next_closed(t_token *token);
 
 int	check_syntax(t_token *token, int inside_brackets)
 {
-	t_token	*copy;
+	t_token			*copy;
+	static t_redir *heredoc;
 
+	heredoc = NULL;
 	copy = lst_dup(token);
-	return (check_syntax_1(&copy, inside_brackets));
+	if (check_syntax_1(&copy, inside_brackets, &heredoc))
+		return (1);
+	if (heredoc)
+		handle_her(heredoc);
+	return (0);
 }
 
-static int	check_syntax_1(t_token **token, int inside_brackets)
+static int	check_syntax_1(t_token **token, int inside_brackets, \
+	t_redir **herdc)
 {
 	t_token		*curr;
 	t_syntax	syntax;
@@ -40,21 +48,21 @@ static int	check_syntax_1(t_token **token, int inside_brackets)
 	{
 		if (curr->type == OPEN_BRACKET)
 		{
-			if (!handle_bracket_content(&curr, &syntax))
+			if (!handle_bracket_content(&curr, &syntax, herdc))
 				return (0);
 		}
-		else if (!handle_special_tokens(curr))
+		else if (!handle_special_tokens(curr, herdc))
 			return (0);
 		curr = curr->next;
 	}
 	return (1);
 }
 
-static int	handle_special_tokens(t_token *curr)
+static int	handle_special_tokens(t_token *curr, t_redir **herdc)
 {
 	if (curr->type == REDIR_IN || curr->type == REDIR_OUT || \
 		curr->type == REDIR_APPEND || curr->type == HEREDOC)
-		return (check_redirections(curr));
+		return (check_redirections(curr, herdc));
 	else if (curr->type == PIPE || curr->type == AND || curr->type == OR)
 		return (check_operators(curr));
 	if (contains_unquoted_ampersand(curr->value))
@@ -62,7 +70,7 @@ static int	handle_special_tokens(t_token *curr)
 	return (1);
 }
 
-static int	handle_bracket_content(t_token **curr, t_syntax *syntax)
+static int	handle_bracket_content(t_token **curr, t_syntax *syntax, t_redir **heredoc)
 {
 	t_token	*token;
 	t_token	*last;
@@ -81,7 +89,7 @@ static int	handle_bracket_content(t_token **curr, t_syntax *syntax)
 	if (!token || syntax->bracket_level > 0)
 		return (print_syntax_error("("));
 	bracket_list = sublist(syntax->start, token);
-	if (!check_syntax_1(&bracket_list, 1))
+	if (!check_syntax_1(&bracket_list, 1, heredoc))
 		return (0);
 	*curr = token;
 	return (1);
