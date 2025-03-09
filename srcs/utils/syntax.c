@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 13:18:10 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/08 21:11:12 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/09 01:38:08 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,21 @@ static int	check_syntax_1(t_token **token, int inside_brackets, \
 	t_redir **heredoc);
 static int	check_next_closed(t_token *token);
 
-int	check_syntax(t_token *token, int inside_brackets)
+int	check_syntax(t_token *token, t_helper *hp)
 {
-	t_token			*copy;
-	static t_redir *heredoc;
+	t_token	*copy;
+	t_redir *heredoc = NULL;
 
 	heredoc = NULL;
 	copy = lst_dup(token);
-	if (check_syntax_1(&copy, inside_brackets, &heredoc))
+	if (check_syntax_1(&copy, 0, &heredoc))
+	{
+		if (end_with_op(token))
+			handle_her(heredoc, hp);
 		return (1);
-	if (heredoc)
-		handle_her(heredoc);
+	}
+	handle_her(heredoc, hp);
+	hp->exit_status = 2;
 	return (0);
 }
 

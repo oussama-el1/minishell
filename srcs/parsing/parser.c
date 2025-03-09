@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 01:01:04 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/08 21:10:01 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/09 01:38:31 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,8 @@ int	process_input(char *line, t_token **token, t_helper *helper, \
 	if (tokenizer(token, vars) == 0)
 	{
 		give_type(token);
-		if (!check_syntax(*token, 0))
-		{
-			helper->exit_status = 2;
+		if (!check_syntax(*token, helper))
 			return (add_history(line), 0);
-		}
 		if (!handle_end_of_line(&line, token, helper))
 			return (0);
 		if (!base)
@@ -111,9 +108,10 @@ static int	handle_end_of_line(char **line, t_token **token, t_helper *helper)
 			add_history(*line);
 		return (1);
 	}
+	g_signal_info.skip_herdoc = 1;
 	new_line = readline("> ");
 	if (!new_line)
-		return (printf("Error\nReadline Error!\n"), 1);
+		return (printf("minishell: syntax error: unexpected end of file\n"), 0);
 	*line = ft_strjoin(*line, " ", CMD);
 	*line = ft_strjoin(*line, new_line, CMD);
 	return (process_input(*line, token, helper, 0));

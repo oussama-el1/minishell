@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 00:05:01 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/09 01:48:40 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/09 01:59:33 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int	get_last_heredoc(t_redir *redirection, t_redir **last_heredoc, t_helper *hp)
 	*last_heredoc = NULL;
 	while (redirection)
 	{
-		if (redirection->type == R_HEREDOC)
+		if (redirection->type == R_HEREDOC && !g_signal_info.skip_herdoc)
 		{
 			handle_heredoc(redirection->heredoc_delim, hp);
 			*last_heredoc = redirection;

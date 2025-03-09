@@ -6,17 +6,23 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 20:41:55 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/09 01:50:37 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/09 01:57:48 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	handle_her(t_redir *herdc)
+void	handle_her(t_redir *herdc, t_helper *hp)
 {
+	int	i;
+
+	i = 0;
+	while (herdc && i++ < hp->tour)
+		herdc = herdc->next;
 	while (herdc)
 	{
-		herdoc_loop(herdc->heredoc_delim, 0, -1, 0);
+		handle_heredoc(herdc->heredoc_delim, hp);
+		hp->tour++;
 		herdc = herdc->next;
 	}
 }
