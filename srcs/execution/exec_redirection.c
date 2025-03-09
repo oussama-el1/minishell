@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 14:43:35 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/09 01:49:46 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/09 02:22:53 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,9 +93,8 @@ static int	redirect_and_exec_helper(t_helper *hp, t_hredir *hr,
 	else
 		iterate_output_redirection(hp->node->args->redir,
 			&hr->last_out, &error_found);
-	if (!error_found && (hr->last_in || hr->last_heredoc))
-		redir_input(hr->last_her_idx, hr->last_in_idx,
-			&error_found, hr->last_in);
+	if (!error_found && ((hr->last_in || hr->last_heredoc) || g_signal_info.skip_herdoc))
+		redir_input(hr->last_her_idx, hr->last_in_idx, &error_found, hr->last_in);
 	if (hr->last_out && !error_found)
 		redir_output(hr->last_out, &error_found);
 	if (error_found)

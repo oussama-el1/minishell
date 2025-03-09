@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 00:05:01 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/09 01:59:33 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/09 02:27:26 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	redir_input(int last_heredoc_index, int last_in_index,
 	int	fd;
 
 	fd = -1;
-	if (last_heredoc_index > last_in_index)
+	if ((last_heredoc_index > last_in_index) || (g_signal_info.skip_herdoc))
 		fd = open("/tmp/heredoc_tmp", O_RDONLY);
 	else if (last_in)
 		fd = open(last_in->filename, O_RDONLY);
@@ -72,9 +72,9 @@ int	get_last_heredoc(t_redir *redirection, t_redir **last_heredoc, t_helper *hp)
 	i = 0;
 	last_heredoc_index = -1;
 	*last_heredoc = NULL;
-	while (redirection)
+	while (redirection && !g_signal_info.skip_herdoc)
 	{
-		if (redirection->type == R_HEREDOC && !g_signal_info.skip_herdoc)
+		if (redirection->type == R_HEREDOC)
 		{
 			handle_heredoc(redirection->heredoc_delim, hp);
 			*last_heredoc = redirection;
