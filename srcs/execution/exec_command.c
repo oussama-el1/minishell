@@ -12,52 +12,12 @@
 
 #include "minishell.h"
 
-int	is_builtin(char *cmd)
-{
-	if (!cmd)
-		return (0);
-	if (ft_strcmp(cmd, "echo") == 0)
-		return (1);
-	if (ft_strcmp(cmd, "cd") == 0)
-		return (1);
-	if (ft_strcmp(cmd, "pwd") == 0)
-		return (1);
-	if (ft_strcmp(cmd, "export") == 0)
-		return (1);
-	if (ft_strcmp(cmd, "unset") == 0)
-		return (1);
-	if (ft_strcmp(cmd, "env") == 0)
-		return (1);
-	if (ft_strcmp(cmd, "exit") == 0)
-		return (1);
-	return (0);
-}
-
-int	exec_builtin(char **argv, char **arg_cpy, t_env **env, int exit_status)
-{
-	if (ft_strcmp(argv[0], "echo") == 0)
-		return (ft_echo(argv, arg_cpy));
-	if (ft_strcmp(argv[0], "cd") == 0)
-		return (ft_cd(argv, *env, exit_status));
-	if (ft_strcmp(argv[0], "pwd") == 0)
-		return (ft_pwd(*env, exit_status));
-	if (ft_strcmp(argv[0], "export") == 0)
-		return (ft_export(argv, *env, exit_status));
-	if (ft_strcmp(argv[0], "unset") == 0)
-		return (ft_unset(argv, env));
-	if (ft_strcmp(argv[0], "env") == 0)
-		return (ft_env(argv, *env));
-	if (ft_strcmp(argv[0], "exit") == 0)
-		return (ft_exit(argv));
-	return (0);
-}
-
 void	enoent_handler(char *cmd)
 {
 	if (errno == ENOENT)
 	{
-		if (cmd[0] == '/' || (cmd[0] == '.' && cmd[1] == '/') ||
-		(cmd[0] == '.' && cmd[1] == '.' && cmd[2] == '/'))
+		if (cmd[0] == '/' || (cmd[0] == '.' && cmd[1] == '/')
+			|| (cmd[0] == '.' && cmd[1] == '.' && cmd[2] == '/'))
 		{
 			ft_putstr_fd("minishell: ", 2);
 			ft_putstr_fd(cmd, 2);
@@ -124,7 +84,7 @@ int	exec_command(t_tree *cmd, t_env **env, int exit_status)
 {
 	char		**argv;
 	t_expand	**expand;
-	int	i;
+	int			i;
 
 	argv = cmd->args->argv;
 	expand = cmd->args->expand_list;

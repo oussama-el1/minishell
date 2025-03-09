@@ -3,29 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redirection_helpers.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
+/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 22:24:50 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/08 16:27:27 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/09 01:48:01 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*expand_env_herdoc(t_env *env, char *line, int fd, int exit_status, const char *delimiter)
+int	is_ambiguous(char **expanded)
 {
-	char	*var_value;
+	int	size;
 
-	var_value = get_env_var(env, &line[1], exit_status);
-	if (var_value && ft_strcmp(var_value, delimiter))
-	{
-		write(fd, var_value, ft_strlen(var_value));
-		return (var_value);
-	}
-	return (NULL);
+	size = 0;
+	while (expanded[size])
+		size++;
+	if (size > 1 || !*expanded[0])
+		return (1);
+	return (0);
 }
 
-void	herdoc_loop(const char *delimiter, t_env *env, int fd, int exit_status)
+void	herdoc_loop(const char *delimiter, int fd, t_helper *hp)
 {
 	char	*line;
 	char	*tmp;
@@ -37,7 +36,7 @@ void	herdoc_loop(const char *delimiter, t_env *env, int fd, int exit_status)
 		tmp = line;
 		if (!line)
 			return (herdoc_msg(delimiter));
-		expand_string(&line, env, exit_status, 1);
+		expand_string(&line, *hp->env, hp->exit_status, 1);
 		if (ft_strcmp(line, delimiter) == 0)
 			return (free(tmp), (void)0);
 		write(fd, line, ft_strlen(line));
@@ -46,7 +45,7 @@ void	herdoc_loop(const char *delimiter, t_env *env, int fd, int exit_status)
 	}
 }
 
-void	handle_heredoc(const char *delimiter, t_env *env, int exit_status)
+void	handle_heredoc(const char *delimiter, t_helper *hp)
 {
 	int	fd;
 
@@ -54,34 +53,12 @@ void	handle_heredoc(const char *delimiter, t_env *env, int exit_status)
 	fd = open("/tmp/heredoc_tmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0)
 		return (perror("open failed\n"));
-	herdoc_loop(delimiter, env, fd, exit_status);
+	herdoc_loop(delimiter, fd, hp);
 	close(fd);
 }
 
-int	get_last_heredoc(t_redir *redirection, t_redir **last_heredoc,
-	int exit_status, t_env *env)
-{
-	int	i;
-	int	last_heredoc_index;
-
-	i = 0;
-	last_heredoc_index = -1;
-	*last_heredoc = NULL;
-	while (redirection)
-	{
-		if (redirection->type == R_HEREDOC)
-		{
-			handle_heredoc(redirection->heredoc_delim, env, exit_status);
-			*last_heredoc = redirection;
-			last_heredoc_index = i;
-		}
-		redirection = redirection->next;
-		i++;
-	}
-	return (last_heredoc_index);
-}
-
-void	file_error_handler(t_redir *redirection, int *error_found, int ambiguous, t_ambiguous_err *err)
+void	file_error_handler(t_redir *redirection, int *error_found,
+		int ambiguous, t_ambiguous_err *err)
 {
 	if (!ambiguous)
 	{

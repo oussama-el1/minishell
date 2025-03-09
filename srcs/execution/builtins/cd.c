@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:16:05 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/04 21:01:22 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/08 23:59:52 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,12 @@ static int	update_env(char **argv, char *old_pwd, t_env *env)
 	new_pwd = getcwd(NULL, 0);
 	if (!new_pwd)
 	{
-		ft_putstr_fd("chdir: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory\n", 2);
+		ft_putstr_fd("chdir: error retrieving current directory: getcwd: \
+			cannot access parent directories: No such file or directory\n", 2);
 		set_env_var(&env, ft_strdup("OLDPWD", ENV), ft_strdup(old_pwd, ENV), 1);
 		change_home_dir(argv, env, 0, 1);
-		set_env_var(&env, ft_strdup("PWD", ENV), ft_strdup(get_env_var(env, "HOME", 0), ENV), 1);
+		set_env_var(&env, ft_strdup("PWD", ENV),
+			ft_strdup(get_env_var(env, "HOME", 0), ENV), 1);
 		return (1);
 	}
 	set_env_var(&env, ft_strdup("OLDPWD", ENV), ft_strdup(old_pwd, ENV), 1);
@@ -55,39 +57,35 @@ static int	update_env(char **argv, char *old_pwd, t_env *env)
 	return (0);
 }
 
-int	handle_oldpwd(char *oldpwd)
+// static int	handle_oldpwd(char *oldpwd)
+// {
+// 	if (!oldpwd)
+// 	{
+// 		ft_putstr_fd("minishell: cd: OLDPWD not set\n", 2);
+// 		return (1);
+// 	}
+// 	else
+// 	{
+// 		ft_putstr_fd("minishell: cd: ", 2);
+// 		ft_putstr_fd(oldpwd, 2);
+// 		ft_putstr_fd(": No such file or directory\n", 2);
+// 		return (1);
+// 	}
+// 	return (0);
+// }
+
+static int	ft_cd_helper(char **argv, struct stat path_stat)
 {
-	if (!oldpwd)
-	{
-		ft_putstr_fd("minishell: cd: OLDPWD not set\n", 2);
-		return (1);
-	}
-	else
+	if (stat(argv[1], &path_stat) == 0 && !S_ISDIR(path_stat.st_mode))
 	{
 		ft_putstr_fd("minishell: cd: ", 2);
-		ft_putstr_fd(oldpwd, 2);
-		ft_putstr_fd(": No such file or directory\n", 2);
+		ft_putstr_fd(argv[1], 2);
+		ft_putstr_fd(": Not a directory\n", 2);
 		return (1);
 	}
+	if (chdir(argv[1]) == -1)
+		return (print_cd_error(argv[1]), 1);
 	return (0);
-}
-
-static void	print_cd_error(char *path)
-{
-	ft_putstr_fd("minishell: cd: ", 2);
-	ft_putstr_fd(path, 2);
-	if (errno == ENOENT)
-		ft_putstr_fd(": No such file or directory\n", 2);
-	else if (errno == ENOTDIR)
-		ft_putstr_fd(": Not a directory\n", 2);
-	else if (errno == EACCES)
-		ft_putstr_fd(": Permission denied\n", 2);
-	else
-	{
-		ft_putstr_fd(": ", 2);
-		ft_putstr_fd(strerror(errno), 2);
-		ft_putstr_fd("\n", 2);
-	}
 }
 
 int	ft_cd(char **argv, t_env *env, int exit_status)
@@ -112,17 +110,7 @@ int	ft_cd(char **argv, t_env *env, int exit_status)
 			return (print_cd_error(oldpwd), 1);
 		printf("%s\n", oldpwd);
 	}
-	else if (argv[1])
-	{
-		if (stat(argv[1], &path_stat) == 0 && !S_ISDIR(path_stat.st_mode))
-		{
-			ft_putstr_fd("minishell: cd: ", 2);
-			ft_putstr_fd(argv[1], 2);
-			ft_putstr_fd(": Not a directory\n", 2);
-			return (1);
-		}
-		if (chdir(argv[1]) == -1)
-			return (print_cd_error(argv[1]), 1);
-	}
+	else if (argv[1] && ft_cd_helper(argv, path_stat))
+		return (1);
 	return (update_env(argv, old_pwd, env));
 }

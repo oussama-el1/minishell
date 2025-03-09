@@ -12,41 +12,46 @@
 
 #include "minishell.h"
 
+static void	subshell_worker(t_helper hp_cpy)
+{
+	int	red_res;
+	int	exit_code;
+	int	saved_in;
+	int	saved_out;
+
+	exit_code = 0;
+	red_res = 0;
+	saved_in = dup(STDIN_FILENO);
+	saved_out = dup(STDOUT_FILENO);
+	if (hp_cpy.node->left)
+	{
+		if (hp_cpy.node->args && hp_cpy.node->args->redir)
+			red_res = redirect_and_exec(&hp_cpy, NULL);
+		if (!red_res)
+		{
+			hp_cpy.node = hp_cpy.node->left;
+			exit_code = execute_ast(&hp_cpy, NULL);
+		}
+		else
+			exit_code = 1;
+		clean_resources(saved_in, saved_out);
+		exit(exit_code);
+	}
+	exit(0);
+}
+
 static void	subshell_handler(t_helper *hp, pid_t pid)
 {
 	t_env		*env_cpy;
 	t_helper	hp_cpy;
 	int			status;
-	int			saved_in;
-	int			saved_out;
-	int			exit_code;
-	int			red_res;
 
-	red_res = 0;
-	saved_in = dup(STDIN_FILENO);
-	saved_out = dup(STDOUT_FILENO);
 	env_cpy = dup_env(*hp->env);
 	hp_cpy.exit_status = hp->exit_status;
 	hp_cpy.env = &env_cpy;
 	hp_cpy.node = hp->node;
 	if (pid == 0)
-	{
-		if (hp_cpy.node->left)
-		{
-			if (hp_cpy.node->args && hp_cpy.node->args->redir)
-				red_res = redirect_and_exec(&hp_cpy, NULL);
-			if (!red_res)
-			{
-				hp_cpy.node = hp_cpy.node->left;
-				exit_code = execute_ast(&hp_cpy, NULL);
-			}
-			else
-				exit_code = 1;
-			clean_resources(saved_in, saved_out);
-			exit(exit_code);
-		}
-		exit(0);
-	}
+		subshell_worker(hp_cpy);
 	else
 	{
 		waitpid(pid, &status, 0);

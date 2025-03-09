@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
+/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/08 20:10:10 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/09 01:52:22 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,6 +139,15 @@ typedef	struct	s_helper
 	t_env	**env;
 	t_tree	*node;
 }	t_helper;
+
+typedef struct s_hredir
+{
+	t_redir	*last_in;
+	t_redir	*last_out;
+	t_redir	*last_heredoc;
+	int		last_her_idx;
+	int		last_in_idx;
+} t_hredir;
 
 typedef struct s_vars
 {
@@ -288,24 +297,35 @@ int	set_name_and_value(char *env, char **name, char **value);
 
 
 // exec
-void	setup_signals(void);
-char	*get_executable_path(char *cmd, t_env *env, int exit_status);
-int		execute_ast(t_helper *hp, t_herdoc *herdoc);
-int		exec_binary(char **argv, t_env *env, int exit_status);
-int		redirect_and_exec(t_helper *hp, t_herdoc *herdoc);
-int		exec_pipe(t_helper *hp);
-void	rl_replace_line(const char *text, int clear_undo);
-char	*expand_env_herdoc(t_env *env, char *line, int fd, int exit_status, const char *delimiter);
-void	herdoc_loop(const char *delimiter, t_env *env, int fd, int exit_status);
-void	handle_heredoc(const char *delimiter, t_env *env, int exit_status);
-int		get_last_heredoc(t_redir *redirection, t_redir **last_heredoc, int exit_status, t_env *env);
-void	file_error_handler(t_redir *redirection, int *error_found, int ambigous, t_ambiguous_err *err);
-void	clean_resources(int saved_in, int saved_out);
-char	**expand_one_arg(char *argument, t_expand *curr, t_env *env, int exit_status);
-void	expand_string(char **string, t_env *env, int exit_status, int fromherdoc);
-void	argv_expander(char ***argv, t_expand **expandArr, t_env *env, int exit_status);
-void	print_ast(t_tree *node, int depth, const char *relation);
-void	ambiguous_redirect(char *file);
+void		setup_signals(void);
+char		*get_executable_path(char *cmd, t_env *env, int exit_status);
+int			execute_ast(t_helper *hp, t_herdoc *herdoc);
+int			exec_binary(char **argv, t_env *env, int exit_status);
+int			redirect_and_exec(t_helper *hp, t_herdoc *herdoc);
+int			exec_pipe(t_helper *hp);
+void		rl_replace_line(const char *text, int clear_undo);
+void		herdoc_loop(const char *delimiter, int fd, t_helper *hp);
+void		handle_heredoc(const char *delimiter, t_helper *hp);
+int			get_last_heredoc(t_redir *redirection, t_redir **last_heredoc, t_helper *hp);
+void		file_error_handler(t_redir *redirection, int *error_found, int ambigous, t_ambiguous_err *err);
+void		clean_resources(int saved_in, int saved_out);
+char		**expand_one_arg(char *argument, t_expand *curr, t_env *env, int exit_status);
+void		expand_string(char **string, t_env *env, int exit_status, int fromherdoc);
+void		argv_expander(char ***argv, t_expand **expandArr, t_env *env, int exit_status);
+void		print_ast(t_tree *node, int depth, const char *relation);
+void		ambiguous_redirect(char *file);
+int			is_builtin(char *cmd);
+int			exec_builtin(char **argv, char **arg_cpy, t_env **env, int exit_status);
+void		process_herdocs(t_helper *hp, t_herdoc *herdoc, int left);
+void		print_cd_error(char *path);
+int			get_last_in(t_redir *redirection, t_redir **last_in,
+			int *error_found, t_ambiguous_err	*err);
+void		iterate_output_redirection(t_redir *redirection,
+			t_redir **last_out, int *error_found);
+void		redir_input(int last_heredoc_index, int last_in_index,
+			int *error_found, t_redir *last_in);
+void		redir_output(t_redir	*last_out, int *error_found);
+int			is_ambiguous(char **expanded);
 
 
 /*  Garbage Collector */

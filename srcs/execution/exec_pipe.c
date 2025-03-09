@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 21:40:37 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/07 00:48:53 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/08 23:18:10 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,18 +40,16 @@ static void	exec_pipe_side(int *fd, int left)
 	}
 }
 
-static void	process_herdocs(t_helper *hp, t_herdoc *herdoc, int left)
+static void	pipe_executer(t_helper *hp, int *fd, t_herdoc *herdoc, int left)
 {
-	herdoc->last_herdoc = NULL;
-	if (hp->node->left->args && left)
-		herdoc->index = get_last_heredoc(hp->node->left->args->redir,
-				&herdoc->last_herdoc, hp->exit_status, *hp->env);
-	else if (hp->node->right->args && !left)
-		herdoc->index = get_last_heredoc(hp->node->right->args->redir,
-				&herdoc->last_herdoc, hp->exit_status, *hp->env);
+	exec_pipe_side(fd, left);
+	if (herdoc && herdoc->last_herdoc)
+		exit(execute_ast(hp, herdoc));
+	exit(execute_ast(hp, NULL));
 }
 
-static int	exec_pipe_helper(t_helper *hp, int *fd, t_herdoc *left_herdoc, t_herdoc *right_herdoc)
+static int	exec_pipe_helper(t_helper *hp, int *fd,
+			t_herdoc *left_herdoc, t_herdoc *right_herdoc)
 {
 	pid_t	left_cmd;
 	pid_t	right_cmd;
@@ -63,23 +61,13 @@ static int	exec_pipe_helper(t_helper *hp, int *fd, t_herdoc *left_herdoc, t_herd
 		return (perror("fork failed"), 1);
 	hp->node = parent->left;
 	if (left_cmd == 0)
-	{
-		exec_pipe_side(fd, 1);
-		if (left_herdoc && left_herdoc->last_herdoc)
-			exit(execute_ast(hp, left_herdoc));
-		exit(execute_ast(hp, NULL));
-	}
+		pipe_executer(hp, fd, left_herdoc, 1);
 	right_cmd = fork();
 	if (right_cmd == -1)
 		return (perror("fork failed"), 1);
 	hp->node = parent->right;
 	if (right_cmd == 0)
-	{
-		exec_pipe_side(fd, 0);
-		if (right_herdoc && right_herdoc->last_herdoc)
-			exit(execute_ast(hp, right_herdoc));
-		exit(execute_ast(hp, NULL));
-	}
+		pipe_executer(hp, fd, right_herdoc, 0);
 	hp->node = parent;
 	return (wait_and_cleanup(fd, left_cmd,
 			right_cmd, &hp->exit_status), hp->exit_status);

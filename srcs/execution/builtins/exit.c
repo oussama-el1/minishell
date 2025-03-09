@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
+/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 18:04:04 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/08 13:59:03 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/09 00:00:15 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../inc/minishell.h"
 
-int	is_numeric(const char *str)
+static int	is_numeric(const char *str)
 {
 	int	i;
 
@@ -30,7 +30,7 @@ int	is_numeric(const char *str)
 	return (1);
 }
 
-int	ft_atoll(const char *str, int *error)
+static int	ft_atoll(const char *str, int *error)
 {
 	int				i;
 	unsigned long	result;
@@ -57,33 +57,38 @@ int	ft_atoll(const char *str, int *error)
 	return (result * sign);
 }
 
+static void	ft_exit_error(char **argv, long long *exit_code)
+{
+	int	overflow_error;
+
+	overflow_error = 0;
+	if (!is_numeric(argv[1]))
+	{
+		ft_putstr_fd("minishell: exit: ", 2);
+		ft_putstr_fd(argv[1], 2);
+		ft_putstr_fd(": numeric argument required\n", 2);
+		exit(255);
+	}
+	*exit_code = ft_atoll(argv[1], &overflow_error);
+	if (overflow_error)
+	{
+		ft_putstr_fd("minishell: exit: ", 2);
+		ft_putstr_fd(argv[1], 2);
+		ft_putstr_fd(": numeric argument required\n", 2);
+		exit(255);
+	}
+}
 
 int	ft_exit(char **argv)
 {
 	long long	exit_code;
-	int			overflow_error;
 
 	exit_code = 0;
-	overflow_error = 0;
 	if (!argv)
 		maroc(0, FULLFREE, 0);
 	else if (argv[1])
 	{
-		if (!is_numeric(argv[1]))
-		{
-			ft_putstr_fd("minishell: exit: ", 2);
-			ft_putstr_fd(argv[1], 2);
-			ft_putstr_fd(": numeric argument required\n", 2);
-			exit(255);
-		}
-		exit_code = ft_atoll(argv[1], &overflow_error);
-		if (overflow_error)
-		{
-			ft_putstr_fd("minishell: exit: ", 2);
-			ft_putstr_fd(argv[1], 2);
-			ft_putstr_fd(": numeric argument required\n", 2);
-			exit(255);
-		}
+		ft_exit_error(argv, &exit_code);
 		if (argv[2])
 		{
 			ft_putstr_fd("minishell: exit: too many arguments\n", 2);
