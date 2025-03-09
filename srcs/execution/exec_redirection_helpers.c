@@ -6,7 +6,7 @@
 /*   By: oussama <oussama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 22:24:50 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/09 04:04:19 by oussama          ###   ########.fr       */
+/*   Updated: 2025/03/09 04:22:20 by oussama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,8 @@ int	is_ambiguous(char **expanded, int empty_flag)
 	size = 0;
 	while (expanded[size])
 		size++;
-	printf("empty flag : %d\n", empty_flag);
 	if (size > 1 || (!empty_flag && !*expanded[0]))
-	{
-		printf("is ambigous\n");
 		return (1);
-	}
-	printf("not ambigous\n");
 	return (0);
 }
 
