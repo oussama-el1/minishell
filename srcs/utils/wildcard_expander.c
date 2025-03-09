@@ -3,23 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard_expander.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
+/*   By: oussama <oussama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/02 00:34:27 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/04 20:57:39 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/09 04:52:44 by oussama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	contain_wildcard(char **argv)
+int	contain_wildcard(char **argv, bool *wildcards)
 {
 	int	i;
 
 	i = 0;
 	while (argv[i])
 	{
-		if (ft_strchr(argv[i], '*'))
+		if (wildcards[i])
 			return (1);
 		i++;
 	}
@@ -85,7 +85,7 @@ char	**get_matching_files(const char *pattern, int *count)
 	return (files);
 }
 
-int	count_wildcard(char **old_argv)
+int	count_wildcard(char **old_argv, bool *wildcards)
 {
 	int	i;
 	int	count;
@@ -95,7 +95,7 @@ int	count_wildcard(char **old_argv)
 	i = count = 0;
 	while (old_argv[i])
 	{
-		if (ft_strchr(old_argv[i], '*'))
+		if (wildcards[i])
 		{
 			files = get_matching_files(old_argv[i], &file_count);
 			if (files)
@@ -110,7 +110,7 @@ int	count_wildcard(char **old_argv)
 	return (count);
 }
 
-void	fill_new_argv(char **new_argv, char **old_argv)
+void	fill_new_argv(char **new_argv, char **old_argv, bool *wildcards)
 {
 	int		i, j, k, file_count;
 	char	**files;
@@ -118,7 +118,7 @@ void	fill_new_argv(char **new_argv, char **old_argv)
 	i = k = 0;
 	while (old_argv[i])
 	{
-		if (ft_strchr(old_argv[i], '*'))
+		if (wildcards[i])
 		{
 			files = get_matching_files(old_argv[i], &file_count);
 			if (files)
@@ -137,17 +137,17 @@ void	fill_new_argv(char **new_argv, char **old_argv)
 	new_argv[k] = NULL;
 }
 
-void	expand_wildcard(char ***argv)
+void	expand_wildcard(char ***argv, bool *wildcards)
 {
 	char	**old_argv;
 	char	**new_argv;
 	int		count;
 
 	old_argv = *argv;
-	count = count_wildcard(old_argv);
+	count = count_wildcard(old_argv, wildcards);
 	new_argv = maroc((count + 1) * sizeof(char *), ALLOC, CMD);
 	if (!new_argv)
 		return ;
-	fill_new_argv(new_argv, old_argv);
+	fill_new_argv(new_argv, old_argv, wildcards);
 	*argv = new_argv;
 }

@@ -6,7 +6,7 @@
 /*   By: oussama <oussama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/09 03:54:09 by oussama          ###   ########.fr       */
+/*   Updated: 2025/03/09 04:52:53 by oussama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -334,8 +334,8 @@ void		open_output_error(t_redir *redirection, int error_index,
 /*  Garbage Collector */
 void	*maroc(size_t size, int flag, int type);
 
-void	expand_wildcard(char ***argv);
-int		contain_wildcard(char **argv);
+void	expand_wildcard(char ***argv, bool *wildcards);
+int	contain_wildcard(char **argv, bool *wildcards);
 
 // libft
 int			ft_handle_overflow(unsigned long nbr, int ndigit, int sign);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_tree.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oussama <oussama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 18:06:55 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/06 21:20:25 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/09 04:53:27 by oussama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,10 +73,10 @@ int	execute_ast(t_helper *hp, t_herdoc *herdoc)
 	setup_signals();
 	if (hp->node->args&& hp->node->args->argv && hp->node->args->expand_list)
 	{
-		hp->node->args->argv_cpy = hp->node->args->argv; 
+		hp->node->args->argv_cpy = hp->node->args->argv;
 		argv_expander(&hp->node->args->argv, hp->node->args->expand_list, *hp->env, hp->exit_status);
-		if (contain_wildcard(hp->node->args->argv))
-			expand_wildcard(&hp->node->args->argv);
+		if (contain_wildcard(hp->node->args->argv, hp->node->args->wildcards))
+			expand_wildcard(&hp->node->args->argv, hp->node->args->wildcards);
 	}
 	if (hp->node->type == T_CMD)
 		hp->exit_status = redirect_and_exec(hp, herdoc);
