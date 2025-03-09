@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 01:01:04 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/09 02:50:17 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/09 02:53:37 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ int	process_input(char *line, t_token **token, t_helper *helper, \
 			return (1);
 		tree = build_ast(*token);
 		helper->node = tree;
-		// printf("start execution\n");
 		execute_ast(helper, NULL);
 	}
 	else
