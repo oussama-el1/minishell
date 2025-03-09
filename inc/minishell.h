@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/09 01:29:48 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/09 01:43:51 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,11 +126,20 @@ typedef struct s_tree
 	struct s_tree	*right;
 } t_tree;
 
+typedef struct s_env
+{
+	char			*key;
+	char			*value;
+	int				exported;
+	struct s_env	*next;
+}	t_env;
+
 typedef	struct	s_helper
 {
-	int				exit_status;
-	int				tour;
-	struct s_env	**env;
+	int		exit_status;
+	int		tour;
+	t_env	**env;
+	t_tree	*node;
 }	t_helper;
 
 typedef struct s_vars
@@ -154,14 +163,6 @@ typedef struct s_syntax
 	t_token	*start;
 	t_token	*next_after;
 }	t_syntax;
-
-typedef struct s_env
-{
-	char			*key;
-	char			*value;
-	int				exported;
-	struct s_env	*next;
-}	t_env;
 
 typedef struct s_herdoc
 {
@@ -290,10 +291,10 @@ int	set_name_and_value(char *env, char **name, char **value);
 // exec
 void	setup_signals(void);
 char	*get_executable_path(char *cmd, t_env *env, int exit_status);
-int		execute_ast(t_tree *node, t_herdoc *herdoc, t_env **env, int *exit_status);
+int		execute_ast(t_helper *hp, t_herdoc *herdoc);
 int		exec_binary(char **argv, t_env *env, int exit_status);
-int		redirect_and_exec(t_tree *node, t_herdoc *herdoc, t_env **env, int exit_status);
-int		exec_pipe(t_tree *node, t_env **env, int *exit_status);
+int		redirect_and_exec(t_helper *hp, t_herdoc *herdoc);
+int		exec_pipe(t_helper *hp);
 void	rl_replace_line(const char *text, int clear_undo);
 char	*expand_env_herdoc(t_env *env, char *line, int fd, int exit_status, const char *delimiter);
 void	herdoc_loop(const char *delimiter, t_env *env, int fd, int exit_status);
@@ -315,6 +316,7 @@ void	expand_wildcard(char ***argv);
 int		contain_wildcard(char **argv);
 
 // libft
+int			ft_handle_overflow(unsigned long nbr, int ndigit, int sign);
 int			ft_isalpha(int c);
 int			ft_isdigit(int c);
 int			ft_is_alnum(int c);
@@ -342,7 +344,7 @@ void		ft_putendl_fd(char *s, int fd);
 void		ft_putnbr_fd(int n, int fd);
 int			ft_putstrn_fd(char *s, int fd, int n);
 int			ft_putnchar_fd(char c, int fd, int n);
-char		*ft_substr(char const *s, unsigned int start, size_t len, \
-	int type);
+char		*ft_substr(char const *s, unsigned int start, size_t len, int type);
+
 
 # endif

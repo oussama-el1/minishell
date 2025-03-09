@@ -36,7 +36,8 @@ int	process_input(char *line, t_token **token, t_helper *helper, \
 		if (!base)
 			return (1);
 		tree = build_ast(*token);
-		execute_ast(tree, NULL, helper->env, &helper->exit_status);
+		helper->node = tree;
+		execute_ast(helper, NULL);
 	}
 	else
 		return (add_history(line), 0);

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-static int	ft_handle_overflow(unsigned long nbr, int ndigit, int sign)
+int	ft_handle_overflow(unsigned long nbr, int ndigit, int sign)
 {
 	if (sign == 1)
 		if ((nbr >= 922337203685477580 && ndigit > 7)

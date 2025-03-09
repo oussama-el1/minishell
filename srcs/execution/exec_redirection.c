@@ -139,7 +139,7 @@ int	is_ambiguous(char **expanded)
 	size = 0;
 	while (expanded[size])
 		size++;
-	if (size > 1)
+	if (size > 1 || !*expanded[0])
 		return (1);
 	return (0);
 }
@@ -207,7 +207,7 @@ void open_output_error(t_redir *redirection, int error_index, int *error_found)
 	}
 }
 
-int	redirect_and_exec(t_tree *node, t_herdoc *herdoc, t_env **env, int exit_status)
+int	redirect_and_exec(t_helper *hp, t_herdoc *herdoc)
 {
 	int				saved_in;
 	int				saved_out;
@@ -226,16 +226,16 @@ int	redirect_and_exec(t_tree *node, t_herdoc *herdoc, t_env **env, int exit_stat
 	res = 0;
 	saved_in = dup(STDIN_FILENO);
 	saved_out = dup(STDOUT_FILENO);
-	if (node->args->redir)
-		err = expand_filnames(node->args->redir, *env, exit_status);
+	if (hp->node->args->redir)
+		err = expand_filnames(hp->node->args->redir, *hp->env, hp->exit_status);
 	if (herdoc && herdoc->last_herdoc)
 	{
 		last_heredoc = herdoc->last_herdoc;
 		last_heredoc_index = herdoc->index; 
 	}
 	else
-		last_heredoc_index = get_last_heredoc(node->args->redir, &last_heredoc, exit_status, *env);
-	last_in_index = get_last_in(node->args->redir, &last_in, &error_found, err);
+		last_heredoc_index = get_last_heredoc(hp->node->args->redir, &last_heredoc, hp->exit_status, *hp->env);
+	last_in_index = get_last_in(hp->node->args->redir, &last_in, &error_found, err);
 
 	error_index = last_in_index;
 	if (err)
@@ -248,18 +248,18 @@ int	redirect_and_exec(t_tree *node, t_herdoc *herdoc, t_env **env, int exit_stat
 		}
 	}
 	if (error_found)
-		open_output_error(node->args->redir, error_index, &error_found);
+		open_output_error(hp->node->args->redir, error_index, &error_found);
 	else
-		iterate_output_redirection(node->args->redir, &last_out, &error_found);
+		iterate_output_redirection(hp->node->args->redir, &last_out, &error_found);
 	if (!error_found && (last_in || last_heredoc))
 		redir_input(last_heredoc_index, last_in_index, &error_found, last_in);
 	if (last_out && !error_found)
 		redir_output(last_out, &error_found);
 	if (error_found)
 		res = 1;
-	else if (node->type == T_CMD && node->args->argv[0])
-		res = exec_command(node, env, exit_status);
-	if (node->type != T_SUBSHELL)
+	else if (hp->node->type == T_CMD && hp->node->args->argv[0])
+		res = exec_command(hp->node, hp->env, hp->exit_status);
+	if (hp->node->type != T_SUBSHELL)
 		clean_resources(saved_in, saved_out);
 	return (res);
 }
