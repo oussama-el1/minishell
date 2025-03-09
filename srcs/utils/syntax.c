@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 13:18:10 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/09 01:38:08 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/09 02:49:53 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	check_syntax(t_token *token, t_helper *hp)
 	copy = lst_dup(token);
 	if (check_syntax_1(&copy, 0, &heredoc))
 	{
-		if (end_with_op(token))
+		if (end_with_op(token) || g_signal_info.skip_herdoc)
 			handle_her(heredoc, hp);
 		return (1);
 	}
