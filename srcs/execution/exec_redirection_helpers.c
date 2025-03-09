@@ -3,24 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redirection_helpers.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oussama <oussama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 22:24:50 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/09 01:48:01 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/09 04:04:19 by oussama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	is_ambiguous(char **expanded)
+int	is_ambiguous(char **expanded, int empty_flag)
 {
 	int	size;
 
 	size = 0;
 	while (expanded[size])
 		size++;
-	if (size > 1 || !*expanded[0])
+	printf("empty flag : %d\n", empty_flag);
+	if (size > 1 || (!empty_flag && !*expanded[0]))
+	{
+		printf("is ambigous\n");
 		return (1);
+	}
+	printf("not ambigous\n");
 	return (0);
 }
 
@@ -73,4 +78,34 @@ void	file_error_handler(t_redir *redirection, int *error_found,
 	else
 		ambiguous_redirect(err->filename);
 	*error_found = 1;
+}
+
+void	open_output_error(t_redir *redirection, int error_index,
+		int *error_found)
+{
+	int	fd;
+	int	i;
+
+	i = 0;
+	while (redirection && i < error_index)
+	{
+		if ((redirection->type == R_REDIR_OUT
+				|| redirection->type == R_REDIR_APPEND))
+		{
+			if (redirection->type == R_REDIR_OUT)
+				fd = open(redirection->filename,
+						O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			else
+				fd = open(redirection->filename,
+						O_WRONLY | O_CREAT | O_APPEND, 0644);
+			if (fd < 0)
+			{
+				file_error_handler(redirection, error_found, 0, NULL);
+				break ;
+			}
+			close(fd);
+		}
+		i++;
+		redirection = redirection->next;
+	}
 }

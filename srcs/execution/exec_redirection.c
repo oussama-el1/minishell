@@ -3,17 +3,34 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redirection.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oussama <oussama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 14:43:35 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/09 02:22:53 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/09 04:11:11 by oussama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_ambiguous_err	*expand_filnames(t_redir *redirection,
-				t_env *env, int exit_status)
+t_ambiguous_err	*expand_filnames_helper(t_redir *redirection,
+				t_ambiguous_err **err, t_helper *hp, int i)
+{
+	char	**expanded;
+
+	expanded = expand_one_arg(redirection->filename,
+			redirection->expand_list, *hp->env, hp->exit_status);
+	if (!is_ambiguous(expanded, redirection->filename[0] == '\0'))
+		redirection->filename = expanded[0];
+	else
+	{
+		(*err)->filename = redirection->filename;
+		(*err)->index = i;
+		return (*err);
+	}
+	return (NULL);
+}
+
+t_ambiguous_err	*expand_filnames(t_redir *redirection, t_helper *hp)
 {
 	t_ambiguous_err	*err;
 	int				i;
@@ -26,56 +43,18 @@ t_ambiguous_err	*expand_filnames(t_redir *redirection,
 		if (redirection->type == R_HEREDOC)
 		{
 			expanded = expand_one_arg(redirection->heredoc_delim,
-					redirection->expand_list, env, exit_status);
+					redirection->expand_list, *hp->env, hp->exit_status);
 			redirection->heredoc_delim = expanded[0];
 		}
 		else
 		{
-			expanded = expand_one_arg(redirection->filename,
-					redirection->expand_list, env, exit_status);
-			if (!is_ambiguous(expanded))
-				redirection->filename = expanded[0];
-			else
-			{
-				err->filename = redirection->filename;
-				err->index = i;
+			if (expand_filnames_helper(redirection, &err, hp, i))
 				return (err);
-			}
 		}
 		i++;
 		redirection = redirection->next;
 	}
 	return (NULL);
-}
-
-void	open_output_error(t_redir *redirection, int error_index,
-		int *error_found)
-{
-	int	fd;
-	int	i;
-
-	i = 0;
-	while (redirection && i < error_index)
-	{
-		if ((redirection->type == R_REDIR_OUT
-				|| redirection->type == R_REDIR_APPEND))
-		{
-			if (redirection->type == R_REDIR_OUT)
-				fd = open(redirection->filename,
-						O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			else
-				fd = open(redirection->filename,
-						O_WRONLY | O_CREAT | O_APPEND, 0644);
-			if (fd < 0)
-			{
-				file_error_handler(redirection, error_found, 0, NULL);
-				break ;
-			}
-			close(fd);
-		}
-		i++;
-		redirection = redirection->next;
-	}
 }
 
 static int	redirect_and_exec_helper(t_helper *hp, t_hredir *hr,
@@ -93,8 +72,10 @@ static int	redirect_and_exec_helper(t_helper *hp, t_hredir *hr,
 	else
 		iterate_output_redirection(hp->node->args->redir,
 			&hr->last_out, &error_found);
-	if (!error_found && ((hr->last_in || hr->last_heredoc) || g_signal_info.skip_herdoc))
-		redir_input(hr->last_her_idx, hr->last_in_idx, &error_found, hr->last_in);
+	if (!error_found && ((hr->last_in || hr->last_heredoc)
+			|| g_signal_info.skip_herdoc))
+		redir_input(hr->last_her_idx, hr->last_in_idx,
+			&error_found, hr->last_in);
 	if (hr->last_out && !error_found)
 		redir_output(hr->last_out, &error_found);
 	if (error_found)
@@ -128,7 +109,7 @@ int	redirect_and_exec(t_helper *hp, t_herdoc *herdoc)
 	err = NULL;
 	error_found = 0;
 	if (hp->node->args->redir)
-		err = expand_filnames(hp->node->args->redir, *hp->env, hp->exit_status);
+		err = expand_filnames(hp->node->args->redir, hp);
 	redirect_herdoc(hp, &redir_h, herdoc);
 	redir_h.last_in_idx = get_last_in(hp->node->args->redir,
 			&redir_h.last_in, &error_found, err);

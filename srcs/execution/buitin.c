@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   buitin.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oussama <oussama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 23:10:12 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/09 01:49:15 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/09 03:29:06 by oussama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,11 @@ void	process_herdocs(t_helper *hp, t_herdoc *herdoc, int left)
 {
 	herdoc->last_herdoc = NULL;
 	if (hp->node->left->args && left)
-		herdoc->index = get_last_heredoc(hp->node->left->args->redir, &herdoc->last_herdoc, hp);
+		herdoc->index = get_last_heredoc(hp->node->left->args->redir,
+				&herdoc->last_herdoc, hp);
 	else if (hp->node->right->args && !left)
-		herdoc->index = get_last_heredoc(hp->node->right->args->redir, &herdoc->last_herdoc, hp);
+		herdoc->index = get_last_heredoc(hp->node->right->args->redir,
+				&herdoc->last_herdoc, hp);
 }
 
 int	is_builtin(char *cmd)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oussama <oussama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/09 01:57:05 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/09 03:54:09 by oussama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -326,7 +326,9 @@ void		iterate_output_redirection(t_redir *redirection,
 void		redir_input(int last_heredoc_index, int last_in_index,
 			int *error_found, t_redir *last_in);
 void		redir_output(t_redir	*last_out, int *error_found);
-int			is_ambiguous(char **expanded);
+int			is_ambiguous(char **expanded, int empty_flag);
+void		open_output_error(t_redir *redirection, int error_index,
+			int *error_found);
 
 
 /*  Garbage Collector */
