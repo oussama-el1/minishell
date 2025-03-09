@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 21:50:44 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/04 20:57:39 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/09 01:28:39 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ t_token	*last_token(t_token *token)
 	if (token && token->visited == 1 && \
 		token->type != OPEN_BRACKET)
 		return (token->prev);
-	while (token->next && token->next->visited != 1)
+	while (token && token->next && token->next->visited != 1)
 		token = token->next;
 	return (token);
 }

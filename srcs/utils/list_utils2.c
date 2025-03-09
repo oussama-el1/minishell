@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 13:58:51 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/08 21:15:14 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/09 01:31:29 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,4 +108,12 @@ void	expansion_func(t_expand	**head, t_token *curr, char **str, size_t *start)
 		tail->next = new;
 	}
 	tail = new;
+}
+
+int	end_with_op(t_token *token)
+{
+	token = last_token(token);
+	if (!token)
+		return (0);
+	return (is_dilim(token->type));
 }

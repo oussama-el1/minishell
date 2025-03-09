@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/08 20:10:10 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/09 01:29:48 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ typedef struct	s_signal_info
 {
 	int received_signal;
 	int line_count;
+	int skip_herdoc;
 }	t_signal_info;
 
 extern t_signal_info g_signal_info;
@@ -128,6 +129,7 @@ typedef struct s_tree
 typedef	struct	s_helper
 {
 	int				exit_status;
+	int				tour;
 	struct s_env	**env;
 }	t_helper;
 
@@ -201,7 +203,6 @@ int		non_control(enum e_token_type type);
 int		islogical(enum e_token_type type);
 int		is_quote(enum e_token_type type);
 int 	is_regular(enum e_token_type type);
-char	*remove_quotes(char *str);
 int		get_type(const char *str);
 int		ft_strcmp(const char *s1, const char *s2);
 t_token	*last_token(t_token *token);
@@ -218,7 +219,7 @@ void	while_ft(t_token **token, t_token **last, t_syntax *syntax);
 int		check_operators(t_token *token);
 int		check_redirections(t_token *token, t_redir **heredoc);
 void	herdoc_msg(const char *delimiter);
-
+int		end_with_op(t_token *token);
 
 void	init_token(t_token **token, int allocate);
 int		before_space(char *str, int i);
@@ -234,9 +235,9 @@ int		parse_quote(t_token **token, t_vars **vars, int *ret);
 void	parse_dollar(t_token **token, t_vars **vars, int *ret);
 void	parse_separator(t_token **token, t_vars **vars, int *ret);
 void	parse_parenthesis(t_token **token, t_vars **vars, int *ret);
-int		check_syntax(t_token *token, int inside_brackets);
+int		check_syntax(t_token *token, t_helper *hp);
 
-void	handle_her(t_redir *herdc);
+void	handle_her(t_redir *herdc, t_helper *hp);
 void	init_setup(t_helper *hp, t_env **env);
 
 /* tree.c */
@@ -317,7 +318,6 @@ int		contain_wildcard(char **argv);
 int			ft_isalpha(int c);
 int			ft_isdigit(int c);
 int			ft_is_alnum(int c);
-int			ft_isascii(int c);
 int			ft_isprint(int c);
 int			ft_isnum(char c);
 size_t		ft_strlen(const char *str);
