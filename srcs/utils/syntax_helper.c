@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 18:28:01 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/08 02:33:12 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/10 23:23:44 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,8 @@ int	check_operators(t_token *token)
 	return (1);
 }
 
-int	check_redirections(t_token *token, t_redir **heredoc)
+int	check_redirections(t_token *token)
 {
-	t_token	*curr;
-
-	curr = token;
-	if (curr && curr->type == HEREDOC && curr->next && \
-		non_control2(curr->next->type))
-		handle_redirection(heredoc, &curr);
 	if (!token->next || token->next->type == CLOSED_BRACKET || \
 		!is_regular(token->next->type))
 	{

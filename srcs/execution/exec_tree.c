@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 18:06:55 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/10 22:17:28 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/10 23:57:07 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	execute_herdocs(t_helper *hp)
 	if (!hp->node)
 		return ;
 
-	if ((hp->node->type == T_CMD || hp->node->type == T_SUBSHELL) && !hp->node->args->herdoc_file)
+	if ((hp->node->type == T_CMD || hp->node->type == T_SUBSHELL))
 		get_last_heredoc(hp->node->args->redir, hp);
 
 	if (hp->node->type == T_PIPE || hp->node->type == T_AND || hp->node->type == T_OR)
@@ -97,9 +97,10 @@ int	execute_ast(t_helper *hp)
 	if (hp->node->args && hp->node->args->argv && hp->node->args->expand_list)
 	{
 		hp->node->args->argv_cpy = hp->node->args->argv;
+		hp->node->args->argv_cpy = hp->node->args->argv;
 		argv_expander(&hp->node->args->argv, hp->node->args->expand_list, *hp->env, hp->exit_status);
-		if (contain_wildcard(hp->node->args->argv))
-			expand_wildcard(&hp->node->args->argv);
+		if (contain_wildcard(hp->node->args->argv, hp->node->args->wildcards))
+			expand_wildcard(&hp->node->args->argv, hp->node->args->wildcards);
 	}
 
 	if (hp->node->type == T_CMD)

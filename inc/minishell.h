@@ -6,13 +6,14 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/10 22:30:03 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/10 23:46:44 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include <stddef.h>
 # include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -33,6 +34,7 @@ typedef struct	s_signal_info
 	int received_signal;
 	int line_count;
 	int skip_herdoc;
+	int	delim;
 }	t_signal_info;
 
 extern t_signal_info g_signal_info;
@@ -224,7 +226,7 @@ int		print_syntax_error(char *token);
 int		check_brackets(t_token *token);
 void	while_ft(t_token **token, t_token **last, t_syntax *syntax);
 int		check_operators(t_token *token);
-int		check_redirections(t_token *token, t_redir **heredoc);
+int		check_redirections(t_token *token);
 void	herdoc_msg(const char *delimiter);
 int		end_with_op(t_token *token);
 
@@ -243,8 +245,6 @@ void	parse_dollar(t_token **token, t_vars **vars, int *ret);
 void	parse_separator(t_token **token, t_vars **vars, int *ret);
 void	parse_parenthesis(t_token **token, t_vars **vars, int *ret);
 int		check_syntax(t_token *token, t_helper *hp);
-
-void	handle_her(t_redir *herdc, t_helper *hp);
 void	init_setup(t_helper *hp, t_env **env);
 
 /* tree.c */
@@ -323,14 +323,16 @@ void		iterate_output_redirection(t_redir *redirection,
 			t_redir **last_out, int *error_found);
 void		redir_input(t_helper *hp, t_hredir *hr, int *error_found);
 void		redir_output(t_redir	*last_out, int *error_found);
-int			is_ambiguous(char **expanded);
+int			is_ambiguous(char **expanded, int empty_flag);
+void		open_output_error(t_redir *redirection, int error_index,
+			int *error_found);
 
 
 /*  Garbage Collector */
 void	*maroc(size_t size, int flag, int type);
 
-void	expand_wildcard(char ***argv);
-int		contain_wildcard(char **argv);
+void	expand_wildcard(char ***argv, bool *wildcards);
+int	contain_wildcard(char **argv, bool *wildcards);
 
 // libft
 int			ft_handle_overflow(unsigned long nbr, int ndigit, int sign);

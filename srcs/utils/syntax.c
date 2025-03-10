@@ -6,38 +6,29 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 13:18:10 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/09 02:49:53 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/10 23:24:30 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	handle_bracket_content(t_token **curr, t_syntax *syntax, t_redir **heredoc);
-static int	handle_special_tokens(t_token *curr, t_redir **heredoc);
-static int	check_syntax_1(t_token **token, int inside_brackets, \
-	t_redir **heredoc);
+static int	handle_bracket_content(t_token **curr, t_syntax *syntax);
+static int	handle_special_tokens(t_token *curr);
+static int	check_syntax_1(t_token **token, int inside_brackets);
 static int	check_next_closed(t_token *token);
 
 int	check_syntax(t_token *token, t_helper *hp)
 {
 	t_token	*copy;
-	t_redir *heredoc = NULL;
 
-	heredoc = NULL;
 	copy = lst_dup(token);
-	if (check_syntax_1(&copy, 0, &heredoc))
-	{
-		if (end_with_op(token) || g_signal_info.skip_herdoc)
-			handle_her(heredoc, hp);
+	if (check_syntax_1(&copy, 0))
 		return (1);
-	}
-	handle_her(heredoc, hp);
 	hp->exit_status = 2;
 	return (0);
 }
 
-static int	check_syntax_1(t_token **token, int inside_brackets, \
-	t_redir **herdc)
+static int	check_syntax_1(t_token **token, int inside_brackets)
 {
 	t_token		*curr;
 	t_syntax	syntax;
@@ -52,29 +43,32 @@ static int	check_syntax_1(t_token **token, int inside_brackets, \
 	{
 		if (curr->type == OPEN_BRACKET)
 		{
-			if (!handle_bracket_content(&curr, &syntax, herdc))
+			if (!handle_bracket_content(&curr, &syntax))
 				return (0);
 		}
-		else if (!handle_special_tokens(curr, herdc))
+		else if (!handle_special_tokens(curr))
 			return (0);
 		curr = curr->next;
 	}
 	return (1);
 }
 
-static int	handle_special_tokens(t_token *curr, t_redir **herdc)
+static int	handle_special_tokens(t_token *curr)
 {
 	if (curr->type == REDIR_IN || curr->type == REDIR_OUT || \
 		curr->type == REDIR_APPEND || curr->type == HEREDOC)
-		return (check_redirections(curr, herdc));
-	else if (curr->type == PIPE || curr->type == AND || curr->type == OR)
+		return (check_redirections(curr));
+	else if (is_dilim(curr->type))
+	{
+		g_signal_info.delim = 1;
 		return (check_operators(curr));
+	}
 	if (contains_unquoted_ampersand(curr->value))
 			return (print_syntax_error("&"));
 	return (1);
 }
 
-static int	handle_bracket_content(t_token **curr, t_syntax *syntax, t_redir **heredoc)
+static int	handle_bracket_content(t_token **curr, t_syntax *syntax)
 {
 	t_token	*token;
 	t_token	*last;
@@ -93,7 +87,7 @@ static int	handle_bracket_content(t_token **curr, t_syntax *syntax, t_redir **he
 	if (!token || syntax->bracket_level > 0)
 		return (print_syntax_error("("));
 	bracket_list = sublist(syntax->start, token);
-	if (!check_syntax_1(&bracket_list, 1, heredoc))
+	if (!check_syntax_1(&bracket_list, 1))
 		return (0);
 	*curr = token;
 	return (1);

@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 01:01:04 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/10 22:21:10 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/10 23:56:02 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ int	process_input(char *line, t_token **token, t_helper *helper, \
 	int base)
 {
 	t_vars	*vars;
-	t_tree	*tree;
 
 	init_vars(&vars, line);
 	init_token(token, 0);
@@ -35,8 +34,7 @@ int	process_input(char *line, t_token **token, t_helper *helper, \
 			return (0);
 		if (!base)
 			return (1);
-		tree = build_ast(*token);
-		helper->node = tree;
+		helper->node = build_ast(*token);
 		execute_herdocs(helper);
 		execute_ast(helper);
 	}
