@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 21:26:48 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/09 01:18:08 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/10 23:24:10 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,5 @@ static int	contain_wild(char *str)
 void	init_setup(t_helper *hp, t_env **env)
 {
 	hp->exit_status = 0;
-	hp->tour = 0;
 	hp->env = env;
 }

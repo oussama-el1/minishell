@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:08:50 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/09 01:15:55 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/10 23:21:01 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,5 +56,4 @@ static void	get_exec_cmd(t_token **token, t_helper*helper)
 	free(line);
 	process_input(tmp, token, helper, 1);
 	g_signal_info.skip_herdoc = 0;
-	helper->tour = 0;
 }

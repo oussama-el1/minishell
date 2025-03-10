@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oussama <oussama@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/09 04:52:53 by oussama          ###   ########.fr       */
+/*   Updated: 2025/03/10 23:23:56 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ typedef struct	s_signal_info
 	int received_signal;
 	int line_count;
 	int skip_herdoc;
+	int	delim;
 }	t_signal_info;
 
 extern t_signal_info g_signal_info;
@@ -137,7 +138,8 @@ typedef struct s_env
 typedef	struct	s_helper
 {
 	int		exit_status;
-	int		tour;
+	int		stop;
+	char	**open_files;
 	t_env	**env;
 	t_tree	*node;
 }	t_helper;
@@ -175,8 +177,10 @@ typedef struct s_syntax
 
 typedef struct s_herdoc
 {
-	t_redir	*last_herdoc;
-	int		index;
+	t_redir				*last_herdoc;
+	int					index;
+	t_redir				*herdc;
+	struct 	s_herdoc	*next;
 } t_herdoc;
 
 typedef struct {
@@ -227,7 +231,7 @@ int		print_syntax_error(char *token);
 int		check_brackets(t_token *token);
 void	while_ft(t_token **token, t_token **last, t_syntax *syntax);
 int		check_operators(t_token *token);
-int		check_redirections(t_token *token, t_redir **heredoc);
+int		check_redirections(t_token *token);
 void	herdoc_msg(const char *delimiter);
 int		end_with_op(t_token *token);
 
@@ -246,8 +250,6 @@ void	parse_dollar(t_token **token, t_vars **vars, int *ret);
 void	parse_separator(t_token **token, t_vars **vars, int *ret);
 void	parse_parenthesis(t_token **token, t_vars **vars, int *ret);
 int		check_syntax(t_token *token, t_helper *hp);
-
-void	handle_her(t_redir *herdc, t_helper *hp);
 void	init_setup(t_helper *hp, t_env **env);
 
 /* tree.c */
