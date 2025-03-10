@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_check.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
+/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 20:41:55 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/09 02:53:30 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/09 17:28:22 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	handle_her(t_redir *herdc, t_helper *hp)
 		herdc = herdc->next;
 	while (herdc)
 	{
-		handle_heredoc(herdc->heredoc_delim, hp);
+		handle_heredoc(herdc->heredoc_delim, hp, 1);
 		hp->tour++;
 		herdc = herdc->next;
 	}

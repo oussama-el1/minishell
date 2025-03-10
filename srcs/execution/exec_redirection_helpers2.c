@@ -6,22 +6,21 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 00:05:01 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/09 02:27:26 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/10 21:28:54 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	redir_input(int last_heredoc_index, int last_in_index,
-		int *error_found, t_redir *last_in)
+void	redir_input(t_helper *hp, t_hredir *hr, int *error_found)
 {
 	int	fd;
 
 	fd = -1;
-	if ((last_heredoc_index > last_in_index) || (g_signal_info.skip_herdoc))
-		fd = open("/tmp/heredoc_tmp", O_RDONLY);
-	else if (last_in)
-		fd = open(last_in->filename, O_RDONLY);
+	if ((hp->node->args->herdoc_idx > hr->last_in_idx) || (g_signal_info.skip_herdoc))
+		fd = open(hp->node->args->herdoc_file, O_RDONLY);
+	else if (hr->last_in)
+		fd = open(hr->last_in->filename, O_RDONLY);
 	if (fd == -1)
 	{
 		*error_found = 1;
@@ -64,26 +63,29 @@ void	redir_output(t_redir	*last_out, int *error_found)
 	}
 }
 
-int	get_last_heredoc(t_redir *redirection, t_redir **last_heredoc, t_helper *hp)
+int	get_last_heredoc(t_redir *redirection, t_helper *hp)
 {
 	int	i;
-	int	last_heredoc_index;
 
 	i = 0;
-	last_heredoc_index = -1;
-	*last_heredoc = NULL;
+	hp->node->args->herdoc_idx = -1;
+	hp->node->args->herdoc_file = NULL;
 	while (redirection && !g_signal_info.skip_herdoc)
 	{
 		if (redirection->type == R_HEREDOC)
 		{
-			handle_heredoc(redirection->heredoc_delim, hp);
-			*last_heredoc = redirection;
-			last_heredoc_index = i;
+			if (!redirection->next)
+			{
+				hp->node->args->herdoc_file = handle_heredoc(redirection->heredoc_delim, hp, 0);
+				hp->node->args->herdoc_idx = i;
+			}
+			else
+				handle_heredoc(redirection->heredoc_delim, hp, 1);
 		}
 		redirection = redirection->next;
 		i++;
 	}
-	return (last_heredoc_index);
+	return (hp->node->args->herdoc_idx);
 }
 
 int	get_last_in(t_redir *redirection, t_redir **last_in,

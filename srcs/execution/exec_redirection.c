@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 14:43:35 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/09 02:22:53 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/10 22:34:06 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,34 +91,19 @@ static int	redirect_and_exec_helper(t_helper *hp, t_hredir *hr,
 	if (error_found)
 		open_output_error(hp->node->args->redir, error_index, &error_found);
 	else
-		iterate_output_redirection(hp->node->args->redir,
-			&hr->last_out, &error_found);
-	if (!error_found && ((hr->last_in || hr->last_heredoc) || g_signal_info.skip_herdoc))
-		redir_input(hr->last_her_idx, hr->last_in_idx, &error_found, hr->last_in);
-	if (hr->last_out && !error_found)
-		redir_output(hr->last_out, &error_found);
+		iterate_output_redirection(hp->node->args->redir, &hr->last_out, &error_found);
+	if (!error_found && ((hr->last_in || hp->node->args->herdoc_file) || g_signal_info.skip_herdoc))
+		redir_input(hp, hr, &error_found);
 	if (error_found)
 		res = 1;
 	else if (hp->node->type == T_CMD && hp->node->args->argv[0])
 		res = exec_command(hp->node, hp->env, hp->exit_status);
 	if (hp->node->type != T_SUBSHELL)
-		clean_resources(saved_in, saved_out);
+		clean_resources(hp, saved_in, saved_out);
 	return (res);
 }
 
-static void	redirect_herdoc(t_helper *hp, t_hredir *redir_h, t_herdoc *herdoc)
-{
-	if (herdoc && herdoc->last_herdoc)
-	{
-		redir_h->last_heredoc = herdoc->last_herdoc;
-		redir_h->last_her_idx = herdoc->index;
-	}
-	else
-		redir_h->last_her_idx = get_last_heredoc(hp->node->args->redir,
-				&redir_h->last_heredoc, hp);
-}
-
-int	redirect_and_exec(t_helper *hp, t_herdoc *herdoc)
+int	redirect_and_exec(t_helper *hp)
 {
 	int				error_found;
 	int				error_index;
@@ -129,7 +114,6 @@ int	redirect_and_exec(t_helper *hp, t_herdoc *herdoc)
 	error_found = 0;
 	if (hp->node->args->redir)
 		err = expand_filnames(hp->node->args->redir, *hp->env, hp->exit_status);
-	redirect_herdoc(hp, &redir_h, herdoc);
 	redir_h.last_in_idx = get_last_in(hp->node->args->redir,
 			&redir_h.last_in, &error_found, err);
 	error_index = redir_h.last_in_idx;

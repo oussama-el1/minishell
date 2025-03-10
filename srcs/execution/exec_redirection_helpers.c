@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 22:24:50 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/09 01:48:01 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/09 18:06:56 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,16 +45,26 @@ void	herdoc_loop(const char *delimiter, int fd, t_helper *hp)
 	}
 }
 
-void	handle_heredoc(const char *delimiter, t_helper *hp)
+char *handle_heredoc(const char *delimiter, t_helper *hp, int skip)
 {
-	int	fd;
-
+	static int	id;
+	int			fd;
+	char		*filename;
+	
 	signal(SIGINT, SIG_DFL);
-	fd = open("/tmp/heredoc_tmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (fd < 0)
-		return (perror("open failed\n"));
-	herdoc_loop(delimiter, fd, hp);
-	close(fd);
+	if (!skip)
+	{
+		filename = ft_strjoin("/tmp/heredoc_", ft_itoa(++id, CMD), CMD);
+		fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (fd < 0)
+			return (perror("open failed\n"), NULL);
+		herdoc_loop(delimiter, fd, hp);	
+		close(fd);
+		return (filename);
+	}
+	else
+		herdoc_loop(delimiter, -1, hp);
+	return (NULL);
 }
 
 void	file_error_handler(t_redir *redirection, int *error_found,

@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 21:40:37 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/08 23:18:10 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/10 21:17:19 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,16 +40,13 @@ static void	exec_pipe_side(int *fd, int left)
 	}
 }
 
-static void	pipe_executer(t_helper *hp, int *fd, t_herdoc *herdoc, int left)
+static void	pipe_executer(t_helper *hp, int *fd, int left)
 {
 	exec_pipe_side(fd, left);
-	if (herdoc && herdoc->last_herdoc)
-		exit(execute_ast(hp, herdoc));
-	exit(execute_ast(hp, NULL));
+	exit(execute_ast(hp));
 }
 
-static int	exec_pipe_helper(t_helper *hp, int *fd,
-			t_herdoc *left_herdoc, t_herdoc *right_herdoc)
+static int	exec_pipe_helper(t_helper *hp, int *fd)
 {
 	pid_t	left_cmd;
 	pid_t	right_cmd;
@@ -61,13 +58,13 @@ static int	exec_pipe_helper(t_helper *hp, int *fd,
 		return (perror("fork failed"), 1);
 	hp->node = parent->left;
 	if (left_cmd == 0)
-		pipe_executer(hp, fd, left_herdoc, 1);
+		pipe_executer(hp, fd, 1);
 	right_cmd = fork();
 	if (right_cmd == -1)
 		return (perror("fork failed"), 1);
 	hp->node = parent->right;
 	if (right_cmd == 0)
-		pipe_executer(hp, fd, right_herdoc, 0);
+		pipe_executer(hp, fd, 0);
 	hp->node = parent;
 	return (wait_and_cleanup(fd, left_cmd,
 			right_cmd, &hp->exit_status), hp->exit_status);
@@ -76,24 +73,10 @@ static int	exec_pipe_helper(t_helper *hp, int *fd,
 int	exec_pipe(t_helper *hp)
 {
 	int			fd[2];
-	t_herdoc	*left_herdoc;
-	t_herdoc	*right_herdoc;
 
-	left_herdoc = NULL;
-	right_herdoc = NULL;
 	if (!hp->node || !hp->node->left || !hp->node->right)
 		return (1);
 	if (pipe(fd) == -1)
 		return (perror("pipe failed"), 1);
-	if (hp->node->left->type == T_CMD)
-	{
-		left_herdoc = maroc(sizeof(t_herdoc), ALLOC, CMD);
-		process_herdocs(hp, left_herdoc, 1);
-	}
-	if (hp->node->right->type == T_CMD)
-	{
-		right_herdoc = maroc(sizeof(t_herdoc), ALLOC, CMD);
-		process_herdocs(hp, right_herdoc, 0);
-	}
-	return (exec_pipe_helper(hp, fd, left_herdoc, right_herdoc));
+	return (exec_pipe_helper(hp, fd));
 }
