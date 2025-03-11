@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
+/*   By: oussama <oussama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 15:40:55 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/11 06:55:38 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/11 08:35:17 by oussama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ char	*get_next_line(int fd)
 		return (NULL);
 	}
 	bytes = 1;
+	printf("call get_next_line\n");
 	while (ft_strchr(stash[fd], '\n') == NULL && bytes > 0)
 		bytes = read_buffer(fd, &stash[fd], buffer);
 	if (bytes == -1 || ft_strlen(stash[fd]) == 0)

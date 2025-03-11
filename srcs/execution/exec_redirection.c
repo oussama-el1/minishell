@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redirection.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oussama <oussama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 14:43:35 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/10 23:51:28 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/11 08:00:40 by oussama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,23 +34,14 @@ t_ambiguous_err	*expand_filnames(t_redir *redirection, t_helper *hp)
 {
 	t_ambiguous_err	*err;
 	int				i;
-	char			**expanded;
 
 	i = 0;
 	err = maroc(sizeof(t_ambiguous_err), ALLOC, CMD);
 	while (redirection)
 	{
-		if (redirection->type == R_HEREDOC)
-		{
-			expanded = expand_one_arg(redirection->heredoc_delim,
-					redirection->expand_list, *hp->env, hp->exit_status);
-			redirection->heredoc_delim = expanded[0];
-		}
-		else
-		{
-			if (expand_filnames_helper(redirection, &err, hp, i))
-				return (err);
-		}
+		if (redirection->type != R_HEREDOC
+			&& expand_filnames_helper(redirection, &err, hp, i))
+			return (err);
 		i++;
 		redirection = redirection->next;
 	}

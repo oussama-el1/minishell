@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redirection_helpers.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oussama <oussama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 22:24:50 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/10 23:44:42 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/11 08:35:26 by oussama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	herdoc_loop(const char *delimiter, int fd, t_helper *hp)
 	char	*line;
 	char	*tmp;
 
+	(void)hp;
 	line = NULL;
 	while (1)
 	{
@@ -36,7 +37,6 @@ void	herdoc_loop(const char *delimiter, int fd, t_helper *hp)
 		tmp = line;
 		if (!line)
 			return (herdoc_msg(delimiter));
-		expand_string(&line, *hp->env, hp->exit_status, 1);
 		if (ft_strcmp(line, delimiter) == 0)
 			return (free(tmp), (void)0);
 		write(fd, line, ft_strlen(line));
@@ -50,7 +50,7 @@ char *handle_heredoc(const char *delimiter, t_helper *hp, int skip)
 	static int	id;
 	int			fd;
 	char		*filename;
-	
+
 	signal(SIGINT, SIG_DFL);
 	if (!skip)
 	{
@@ -58,7 +58,7 @@ char *handle_heredoc(const char *delimiter, t_helper *hp, int skip)
 		fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (fd < 0)
 			return (perror("open failed\n"), NULL);
-		herdoc_loop(delimiter, fd, hp);	
+		herdoc_loop(delimiter, fd, hp);
 		close(fd);
 		return (filename);
 	}
