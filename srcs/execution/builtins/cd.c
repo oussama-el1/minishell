@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:16:05 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/08 23:59:52 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/11 19:45:37 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,10 @@ static int	update_env(char **argv, char *old_pwd, t_env *env)
 // 	return (0);
 // }
 
-static int	ft_cd_helper(char **argv, struct stat path_stat)
+static int	ft_cd_helper(char **argv)
 {
+	struct stat	path_stat;
+
 	if (stat(argv[1], &path_stat) == 0 && !S_ISDIR(path_stat.st_mode))
 	{
 		ft_putstr_fd("minishell: cd: ", 2);
@@ -93,7 +95,6 @@ int	ft_cd(char **argv, t_env *env, int exit_status)
 	char		*old_pwd;
 	int			home_res;
 	char		*oldpwd;
-	struct stat	path_stat;
 
 	old_pwd = get_env_var(env, "PWD", exit_status);
 	home_res = change_home_dir(argv, env, exit_status, 0);
@@ -110,7 +111,7 @@ int	ft_cd(char **argv, t_env *env, int exit_status)
 			return (print_cd_error(oldpwd), 1);
 		printf("%s\n", oldpwd);
 	}
-	else if (argv[1] && ft_cd_helper(argv, path_stat))
+	else if (argv[1] && ft_cd_helper(argv))
 		return (1);
 	return (update_env(argv, old_pwd, env));
 }
