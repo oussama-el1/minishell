@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/11 06:58:30 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/11 19:48:18 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define MINISHELL_H
 
 # include <stdint.h>
-// # include <stddef.h>
+# include <string.h>
 # include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>
