@@ -6,14 +6,15 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/11 01:12:49 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/11 06:58:30 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include <stddef.h>
+# include <stdint.h>
+// # include <stddef.h>
 # include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -198,7 +199,6 @@ typedef struct s_gc_manager
 	int		first_iter;
 }	t_gc_manager;
 
-
 /* helper.c && helper2.c && string_utils.c && list_utils.c */
 int		is_space(char c);
 int		empty(char *str);
@@ -236,6 +236,8 @@ int		before_space(char *str, int i);
 int		process_input(char *line, t_token **token, t_helper *helper, int base);
 void	init_vars(t_vars **vars, char *line);
 void	ft_newnode(t_token **token, char *value, int before_space);
+
+char	*get_next_line(int fd);
 
 // /* parsing_type.c && parser.c */
 void	ft_space(t_vars **vars, int *ret);
@@ -365,5 +367,12 @@ int			ft_putstrn_fd(char *s, int fd, int n);
 int			ft_putnchar_fd(char c, int fd, int n);
 char		*ft_substr(char const *s, unsigned int start, size_t len, int type);
 
+# ifndef MAX_FILES_OPENED
+#  define MAX_FILES_OPENED 1024
+# endif
+
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 50
+# endif
 
 # endif
