@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 15:40:55 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/11 17:49:51 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/11 17:56:31 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ char	*get_next_line(int fd)
 	buffer = (char *)maroc(((size_t)BUFFER_SIZE + 1) * sizeof(char), \
 			ALLOC, CMD);
 	bytes = 1;
+	printf("call get_next_line\n");
 	while (ft_strchr(stash[fd], '\n') == NULL && bytes > 0)
 		bytes = read_buffer(fd, &stash[fd], buffer);
 	if (bytes == -1 || ft_strlen(stash[fd]) == 0)
