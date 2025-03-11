@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:16:05 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/08 23:59:52 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/11 20:15:16 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,23 +57,6 @@ static int	update_env(char **argv, char *old_pwd, t_env *env)
 	return (0);
 }
 
-// static int	handle_oldpwd(char *oldpwd)
-// {
-// 	if (!oldpwd)
-// 	{
-// 		ft_putstr_fd("minishell: cd: OLDPWD not set\n", 2);
-// 		return (1);
-// 	}
-// 	else
-// 	{
-// 		ft_putstr_fd("minishell: cd: ", 2);
-// 		ft_putstr_fd(oldpwd, 2);
-// 		ft_putstr_fd(": No such file or directory\n", 2);
-// 		return (1);
-// 	}
-// 	return (0);
-// }
-
 static int	ft_cd_helper(char **argv, struct stat path_stat)
 {
 	if (stat(argv[1], &path_stat) == 0 && !S_ISDIR(path_stat.st_mode))
@@ -93,7 +76,7 @@ int	ft_cd(char **argv, t_env *env, int exit_status)
 	char		*old_pwd;
 	int			home_res;
 	char		*oldpwd;
-	struct stat	path_stat;
+	struct stat	path_stat;	
 
 	old_pwd = get_env_var(env, "PWD", exit_status);
 	home_res = change_home_dir(argv, env, exit_status, 0);
