@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 01:01:04 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/10 23:56:02 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/11 02:54:00 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,14 +100,27 @@ static int	end_with_operator(char *line)
 static int	handle_end_of_line(char **line, t_token **token, t_helper *helper)
 {
 	char	*new_line;
-
 	if (!end_with_operator(*line))
 	{
 		if (*line)
 			add_history(*line);
 		return (1);
 	}
-	g_signal_info.skip_herdoc = 1;
+	// g_signal_info.skip_herdoc = 1;
+
+	// subtree
+	t_token *tmp = *token;
+	while (tmp && tmp->next && tmp->next->next)
+		tmp = tmp->next;
+	t_token *curr = sublist(*token, tmp);
+	t_tree *subtree = build_ast(curr);
+	t_helper hp_cpy;
+	hp_cpy.env = helper->env;
+	hp_cpy.exit_status = helper->exit_status;
+	hp_cpy.node = subtree;
+	execute_herdocs(&hp_cpy);
+	printf("after execute_herdocs\n");
+	
 	new_line = readline("> ");
 	if (!new_line)
 		return (printf("minishell: syntax error: unexpected end of file\n"), 0);

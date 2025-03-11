@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 21:00:32 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/04 22:50:19 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/11 02:53:41 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,8 @@ void	extract_args(t_args *args, t_token *token)
 	args->argv = res;
 	args->wildcards = wildcards;
 	args->redir = redir;
+	args->herdoc_file = NULL;
+	args->herdoc_idx = -1;
 }
 
 t_tree_type get_tree_type(int type)
@@ -109,5 +111,7 @@ void extract_subshell_args(t_args **args, t_token *token)
 		*args = (t_args *)maroc(sizeof(t_args), ALLOC, CMD);
 		(*args)->redir = redir;
 		(*args)->argv = NULL;
+		(*args)->herdoc_file = NULL;
+		(*args)->herdoc_idx = -1;
 	}
 }
