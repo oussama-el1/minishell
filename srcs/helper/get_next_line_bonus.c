@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 15:40:55 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/11 06:55:38 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/11 17:49:51 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,17 +74,14 @@ char	*get_next_line(int fd)
 	char		*buffer;
 	int			bytes;
 
+	printf("BUFFER_SIZE: %d\n", BUFFER_SIZE);
+	printf("file descriptor: %d\n", fd);
 	if (fd < 0 || fd >= MAX_FILES_OPENED || BUFFER_SIZE <= 0)
 		return (NULL);
 	if ((size_t)BUFFER_SIZE == SIZE_MAX)
 		return (NULL);
 	buffer = (char *)maroc(((size_t)BUFFER_SIZE + 1) * sizeof(char), \
 			ALLOC, CMD);
-	if (!buffer)
-	{
-		stash[fd] = NULL;
-		return (NULL);
-	}
 	bytes = 1;
 	while (ft_strchr(stash[fd], '\n') == NULL && bytes > 0)
 		bytes = read_buffer(fd, &stash[fd], buffer);
