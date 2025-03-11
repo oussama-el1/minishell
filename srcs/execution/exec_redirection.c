@@ -3,17 +3,47 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redirection.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oussama <oussama@student.42.fr>            +#+  +:+       +#+        */
+/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 14:43:35 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/11 08:00:40 by oussama          ###   ########.fr       */
+/*   Updated: 2025/03/11 20:41:28 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+void	iterate_output_redirection(t_redir *redirection,
+								t_redir **last_out, int *error_found)
+{
+	int	fd;
+
+	*last_out = NULL;
+	while (redirection && !*error_found)
+	{
+		if ((redirection->type == R_REDIR_OUT \
+				|| redirection->type == R_REDIR_APPEND))
+		{
+			if (redirection->type == R_REDIR_OUT)
+				fd = open(redirection->filename,
+						O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			else
+				fd = open(redirection->filename,
+						O_WRONLY | O_CREAT | O_APPEND, 0644);
+			if (fd < 0)
+				return (file_error_handler(redirection,
+						error_found, 0, NULL), (void)0);
+			else
+			{
+				close(fd);
+				*last_out = redirection;
+			}
+		}
+		redirection = redirection->next;
+	}
+}
+
 t_ambiguous_err	*expand_filnames_helper(t_redir *redirection,
-				t_ambiguous_err **err, t_helper *hp, int i)
+					t_ambiguous_err **err, t_helper *hp, int i)
 {
 	char	**expanded;
 
@@ -49,7 +79,7 @@ t_ambiguous_err	*expand_filnames(t_redir *redirection, t_helper *hp)
 }
 
 static int	redirect_and_exec_helper(t_helper *hp, t_hredir *hr,
-	int error_found, int error_index)
+									int error_found, int error_index)
 {
 	int	res;
 	int	saved_in;
@@ -61,8 +91,10 @@ static int	redirect_and_exec_helper(t_helper *hp, t_hredir *hr,
 	if (error_found)
 		open_output_error(hp->node->args->redir, error_index, &error_found);
 	else
-		iterate_output_redirection(hp->node->args->redir, &hr->last_out, &error_found);
-	if (!error_found && ((hr->last_in || hp->node->args->herdoc_file) || g_signal_info.skip_herdoc))
+		iterate_output_redirection(hp->node->args->redir,
+			&hr->last_out, &error_found);
+	if (!error_found && ((hr->last_in
+				|| hp->node->args->herdoc_file) || g_signal_info.skip_herdoc))
 		redir_input(hp, hr, &error_found);
 	if (error_found)
 		res = 1;

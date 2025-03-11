@@ -3,39 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redirection_helpers2.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oussama <oussama@student.42.fr>            +#+  +:+       +#+        */
+/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 00:05:01 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/11 08:34:54 by oussama          ###   ########.fr       */
+/*   Updated: 2025/03/11 20:50:01 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	read_expand_herdoc(t_helper *hp, int fd, int *error_found)
+static void	read_expand_herdoc(t_helper *hp, int fd, int *error_found)
 {
 	int		pipe_fd[2];
 	char	*line;
 
 	if (pipe(pipe_fd) == -1)
-    {
-        perror("pipe failed");
-        *error_found = 1;
-        close(fd);
-       	return;
-    }
+	{
+		perror("pipe failed");
+		*error_found = 1;
+		return (close(fd), (void)0);
+	}
 	line = get_next_line(fd);
 	while (line)
-    {
-        expand_string(&line, *(hp->env), hp->exit_status, 1);
+	{
+		expand_string(&line, *(hp->env), hp->exit_status, 1);
 		write(pipe_fd[1], line, ft_strlen(line));
-        write(pipe_fd[1], "\n", 1);
 		line = get_next_line(fd);
-    }
+	}
 	close(fd);
-    close(pipe_fd[1]);
+	close(pipe_fd[1]);
 	dup2(pipe_fd[0], STDIN_FILENO);
-    close(pipe_fd[0]);
+	close(pipe_fd[0]);
 }
 
 void	redir_input(t_helper *hp, t_hredir *hr, int *error_found)
@@ -43,7 +41,7 @@ void	redir_input(t_helper *hp, t_hredir *hr, int *error_found)
 	int	fd;
 
 	fd = -1;
-	if ((hp->node->args->herdoc_idx > hr->last_in_idx) || (g_signal_info.skip_herdoc))
+	if ((hp->node->args->herdoc_idx > hr->last_in_idx))
 		fd = open(hp->node->args->herdoc_file, O_RDONLY);
 	else if (hr->last_in)
 		fd = open(hr->last_in->filename, O_RDONLY);
@@ -52,7 +50,7 @@ void	redir_input(t_helper *hp, t_hredir *hr, int *error_found)
 		*error_found = 1;
 		return ;
 	}
-	if ((hp->node->args->herdoc_idx > hr->last_in_idx) || (g_signal_info.skip_herdoc))
+	if ((hp->node->args->herdoc_idx > hr->last_in_idx))
 		read_expand_herdoc(hp, fd, error_found);
 	else if (fd >= 0)
 	{
@@ -104,7 +102,8 @@ int	get_last_heredoc(t_redir *redirection, t_helper *hp)
 		{
 			if (!redirection->next)
 			{
-				hp->node->args->herdoc_file = handle_heredoc(redirection->heredoc_delim, hp, 0);
+				hp->node->args->herdoc_file = \
+					handle_heredoc(redirection->heredoc_delim, hp, 0);
 				hp->node->args->herdoc_idx = i;
 			}
 			else
@@ -144,34 +143,4 @@ int	get_last_in(t_redir *redirection, t_redir **last_in,
 		i++;
 	}
 	return (last_in_index);
-}
-
-void	iterate_output_redirection(t_redir *redirection,
-		t_redir **last_out, int *error_found)
-{
-	int	fd;
-
-	*last_out = NULL;
-	while (redirection && !*error_found)
-	{
-		if ((redirection->type == R_REDIR_OUT
-				|| redirection->type == R_REDIR_APPEND))
-		{
-			if (redirection->type == R_REDIR_OUT)
-				fd = open(redirection->filename,
-						O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			else
-				fd = open(redirection->filename,
-						O_WRONLY | O_CREAT | O_APPEND, 0644);
-			if (fd < 0)
-				return (file_error_handler(redirection,
-						error_found, 0, NULL), (void)0);
-			else
-			{
-				close(fd);
-				*last_out = redirection;
-			}
-		}
-		redirection = redirection->next;
-	}
 }

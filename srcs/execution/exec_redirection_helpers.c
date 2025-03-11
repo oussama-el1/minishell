@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redirection_helpers.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oussama <oussama@student.42.fr>            +#+  +:+       +#+        */
+/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 22:24:50 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/11 08:35:26 by oussama          ###   ########.fr       */
+/*   Updated: 2025/03/11 20:45:55 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	herdoc_loop(const char *delimiter, int fd, t_helper *hp)
 	}
 }
 
-char *handle_heredoc(const char *delimiter, t_helper *hp, int skip)
+char	*handle_heredoc(const char *delimiter, t_helper *hp, int skip)
 {
 	static int	id;
 	int			fd;
