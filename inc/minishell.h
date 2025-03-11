@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
+/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/11 19:48:18 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/11 21:23:34 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -328,6 +328,8 @@ void		redir_output(t_redir	*last_out, int *error_found);
 int			is_ambiguous(char **expanded, int empty_flag);
 void		open_output_error(t_redir *redirection, int error_index,
 			int *error_found);
+void		subshell_worker(t_helper hp_cpy);
+void		subshell_handler(t_helper *hp, pid_t pid);
 
 
 /*  Garbage Collector */
