@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 01:01:04 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/12 01:25:42 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/12 08:04:47 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,5 +112,6 @@ static int	handle_end_of_line(char **line, t_token **token, t_helper *helper)
 		return (printf("minishell: syntax error: unexpected end of file\n"), 0);
 	*line = ft_strjoin(*line, " ", CMD);
 	*line = ft_strjoin(*line, new_line, CMD);
+	free(new_line);
 	return (process_input(*line, token, helper, 0));
 }
