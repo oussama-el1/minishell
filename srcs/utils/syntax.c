@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 13:18:10 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/10 23:24:30 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/12 00:23:55 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,7 @@ static int	handle_special_tokens(t_token *curr)
 		curr->type == REDIR_APPEND || curr->type == HEREDOC)
 		return (check_redirections(curr));
 	else if (is_dilim(curr->type))
-	{
-		g_signal_info.delim = 1;
 		return (check_operators(curr));
-	}
 	if (contains_unquoted_ampersand(curr->value))
 			return (print_syntax_error("&"));
 	return (1);

@@ -6,13 +6,13 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 17:31:02 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/12 00:15:57 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/12 00:23:40 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-received_signal = 0;
+int received_signal = 0;
 
 void	handle_sigint(int sig)
 {
