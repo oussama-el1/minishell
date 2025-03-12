@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 00:05:01 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/11 20:50:01 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/11 23:57:44 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,26 +89,29 @@ void	redir_output(t_redir	*last_out, int *error_found)
 	}
 }
 
-int	get_last_heredoc(t_redir *redirection, t_helper *hp)
+int	herdoc_runner(t_redir *redirection, t_helper *hp)
 {
 	int		i;
+	t_redir	*last_herdoc;
+	t_redir	*save;
 
-	i = 0;
-	hp->node->args->herdoc_idx = -1;
-	hp->node->args->herdoc_file = NULL;
-	while (redirection && !g_signal_info.skip_herdoc)
+	save = redirection;
+	while (save)
 	{
-		if (redirection->type == R_HEREDOC)
+		if (save->type == R_HEREDOC)
+			last_herdoc = save;
+		save = save->next;
+	}
+	i = 0;
+	while (redirection)
+	{
+		if (redirection == last_herdoc)
 		{
-			if (!redirection->next)
-			{
-				hp->node->args->herdoc_file = \
-					handle_heredoc(redirection->heredoc_delim, hp, 0);
-				hp->node->args->herdoc_idx = i;
-			}
-			else
-				handle_heredoc(redirection->heredoc_delim, hp, 1);
+			hp->node->args->herdoc_file = handle_heredoc(redirection->heredoc_delim, hp, 0);
+			hp->node->args->herdoc_idx = i;
 		}
+		else if (redirection->type == R_HEREDOC)
+			handle_heredoc(redirection->heredoc_delim, hp, 1);
 		redirection = redirection->next;
 		i++;
 	}

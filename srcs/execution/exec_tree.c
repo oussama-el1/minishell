@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 18:06:55 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/11 21:37:07 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/11 23:21:19 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,17 @@ void	execute_herdocs(t_helper *hp)
 
 	if (!hp->node)
 		return ;
-	if (hp->node->args && (hp->node->type == T_CMD || hp->node->type == T_SUBSHELL))
-		get_last_heredoc(hp->node->args->redir, hp);
+	if (hp->node->args && hp->node->type == T_CMD)
+		herdoc_runner(hp->node->args->redir, hp);
+	if (hp->node->type == T_SUBSHELL)
+	{
+		parent = hp->node;
+		hp->node = parent->left;
+		execute_herdocs(hp);
+		hp->node = parent;
+		if (hp->node->args)
+			herdoc_runner(hp->node->args->redir, hp);
+	}
 	if (hp->node->type == T_PIPE
 		|| hp->node->type == T_AND || hp->node->type == T_OR)
 	{
