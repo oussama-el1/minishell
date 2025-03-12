@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/12 00:19:38 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/12 00:20:59 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -299,7 +299,7 @@ int			exec_pipe(t_helper *hp);
 void		rl_replace_line(const char *text, int clear_undo);
 void		herdoc_loop(const char *delimiter, int fd, t_helper *hp);
 char		*handle_heredoc(const char *delimiter, t_helper *hp, int mode);
-int			get_last_heredoc(t_redir *redirection, t_helper *hp);
+int			herdoc_runner(t_redir *redirection, t_helper *hp);
 void		file_error_handler(t_redir *redirection, int *error_found, int ambigous, t_ambiguous_err *err);
 void		clean_resources(t_helper *hp, int saved_in, int saved_out);
 char		**expand_one_arg(char *argument, t_expand *curr, t_env *env, int exit_status);
