@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 13:58:51 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/09 01:31:29 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/12 04:29:18 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,18 @@ t_token	*sublist(t_token *start, t_token *end)
 {
 	t_token	*head;
 	t_token	*tail;
-	t_token *new;
+	t_token	*new;
 
 	head = NULL;
 	tail = NULL;
-	while(start)
+	while (start)
 	{
 		init_token(&new, 1);
 		new->value = ft_strdup(start->value, CMD);
 		new->type = start->type;
 		new->bef_space = start->bef_space;
 		new->visited = start->visited;
-		new->prev =tail;
+		new->prev = tail;
 		if (!head)
 			head = new;
 		else
@@ -40,7 +40,8 @@ t_token	*sublist(t_token *start, t_token *end)
 	return (head);
 }
 
-char	*quoted_process(t_token **curr, t_expand **expansion_list, bool *wildcard)
+char	*quoted_process(t_token **curr, t_expand **expansion_list, \
+	bool *wildcard)
 {
 	char		*tmp;
 	char		*arg;
@@ -58,10 +59,7 @@ char	*quoted_process(t_token **curr, t_expand **expansion_list, bool *wildcard)
 		if (*curr)
 			tmp = (*curr)->value;
 		expansion_func(&head, *curr, &tmp, &start);
-		if (arg && !(*curr)->bef_space)
-			arg = ft_strjoin(arg, tmp, CMD);
-		else
-			arg = ft_strdup(tmp, CMD);
+		concat_str(&arg, tmp, (*curr)->bef_space);
 		start += ft_strlen(tmp);
 		*curr = (*curr)->next;
 		if (!*curr || (*curr)->visited == 1 || (*curr)->bef_space == 1)
@@ -71,7 +69,7 @@ char	*quoted_process(t_token **curr, t_expand **expansion_list, bool *wildcard)
 	return (arg);
 }
 
-char *remove_quote(t_token *curr, char *str)
+char	*remove_quote(t_token *curr, char *str)
 {
 	char	*res;
 
@@ -82,7 +80,8 @@ char *remove_quote(t_token *curr, char *str)
 	return (res);
 }
 
-void	expansion_func(t_expand	**head, t_token *curr, char **str, size_t *start)
+void	expansion_func(t_expand	**head, t_token *curr, char **str, \
+	size_t *start)
 {
 	size_t			end;
 	t_expand		*new;

@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 21:26:48 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/12 00:18:27 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/12 04:30:17 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	is_quote(enum e_token_type type)
 	return (0);
 }
 
-int is_regular(enum e_token_type type)
+int	is_regular(enum e_token_type type)
 {
 	if (type == EXPR || type == DOLLAR || is_quote(type))
 		return (1);

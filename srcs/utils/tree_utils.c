@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 20:05:21 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/04 21:12:24 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/12 04:07:07 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	args_count(t_token *token)
 			curr = curr->next;
 			while (curr && curr->next && !curr->next->bef_space && \
 			!isredirect(curr->next->type) && !isredirect(curr->type))
-			curr = curr->next;
+				curr = curr->next;
 		}
 		else
 			arg_count++;
@@ -46,7 +46,7 @@ t_token	*back_prev(t_token *token)
 	return (token);
 }
 
-t_token *left_back(t_token *token)
+t_token	*left_back(t_token *token)
 {
 	t_token	*curr;
 
@@ -98,7 +98,7 @@ void	skip_brackets_next(t_token **token, int *has_brackets)
 			else if ((*token)->type == CLOSED_BRACKET)
 				level--;
 			if (!level)
-				break;
+				break ;
 			(*token) = (*token)->next;
 		}
 		if (*token && (*token)->type == CLOSED_BRACKET)

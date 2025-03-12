@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 13:18:10 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/12 00:23:55 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/12 04:08:27 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ static int	handle_special_tokens(t_token *curr)
 	else if (is_dilim(curr->type))
 		return (check_operators(curr));
 	if (contains_unquoted_ampersand(curr->value))
-			return (print_syntax_error("&"));
+		return (print_syntax_error("&"));
 	return (1);
 }
 
@@ -80,7 +80,7 @@ static int	handle_bracket_content(t_token **curr, t_syntax *syntax)
 	last = token;
 	while_ft(&token, &last, syntax);
 	if (token->type == CLOSED_BRACKET && !check_next_closed(token))
-			return (0);
+		return (0);
 	if (!token || syntax->bracket_level > 0)
 		return (print_syntax_error("("));
 	bracket_list = sublist(syntax->start, token);
@@ -94,10 +94,11 @@ static int	check_next_closed(t_token *token)
 {
 	t_token	*curr;
 
-	if (token->next && token->next->type != CLOSED_BRACKET && non_control(token->next->type))
+	if (token->next && token->next->type != CLOSED_BRACKET && \
+		non_control(token->next->type))
 		return (print_syntax_error(token->next->value));
 	curr = token->next;
-	while(curr)
+	while (curr)
 	{
 		if (curr->type == EXPR || curr->type == DOLLAR || is_quote(curr->type))
 			return (print_syntax_error(curr->value));

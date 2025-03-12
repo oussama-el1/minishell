@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/12 00:20:59 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/12 07:14:34 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,8 @@ enum e_gc
 	FULLFREE,
 	CMD,
 	ENV,
+	OPEN,
+	CLEAR,
 } ;
 
 typedef struct s_token
@@ -185,10 +187,18 @@ typedef struct s_gc
 	struct s_gc	*prev;
 }	t_gc;
 
+typedef struct	s_fd_gc
+{
+	int					fd;
+	char				*filename;
+	int					type;;
+	struct s_fd_gc		*next;
+}	t_fd_gc;
+
 typedef struct s_gc_manager
 {
-	t_gc	*gc;
-	int		first_iter;
+	t_gc		*gc;
+	int			first_iter;
 }	t_gc_manager;
 
 /* helper.c && helper2.c && string_utils.c && list_utils.c */
@@ -213,6 +223,8 @@ int		contains_unquoted_ampersand(const char *str);
 char 	*remove_quote(t_token *curr, char *str);
 void	is_wildcard(t_token *curr, bool *wildcard);
 int		non_control2(enum e_token_type type);
+char	*input_cmd(t_token *token);
+void	concat_str(char **arg, char *tmp, int bef_space);
 /* syntax_helper.c */
 int		print_syntax_error(char *token);
 int		check_brackets(t_token *token);
@@ -258,8 +270,9 @@ char		*quoted_process(t_token **curr, t_expand **expansion_list, bool *wildcard)
 t_token		*left_back(t_token *token);
 int			args_count(t_token *token);
 void		expansion_func(t_expand	**head, t_token *curr, char **str, size_t *start);
-void			handle_redirection(t_redir **redir_list, t_token **curr);
-void 			extract_subshell_args(t_args **args, t_token *token);
+void		handle_redirection(t_redir **redir_list, t_token **curr);
+void 		extract_subshell_args(t_args **args, t_token *token);
+void		process_token(t_token **curr, t_args *args, t_redir **redir, int *i);
 
 
 // builtins
@@ -326,7 +339,7 @@ void		subshell_handler(t_helper *hp, pid_t pid);
 
 /*  Garbage Collector */
 void	*maroc(size_t size, int flag, int type);
-
+int		fdmaroc(char *filename, int type, int flag, int flags);
 void	expand_wildcard(char ***argv, bool *wildcards);
 int	contain_wildcard(char **argv, bool *wildcards);
 

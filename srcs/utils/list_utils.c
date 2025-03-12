@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 21:50:44 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/09 01:28:39 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/12 04:29:53 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,11 +64,11 @@ t_token	*lst_dup(t_token *token)
 {
 	t_token	*head;
 	t_token	*tail;
-	t_token *new;
+	t_token	*new;
 
 	head = NULL;
 	tail = NULL;
-	while(token)
+	while (token)
 	{
 		init_token(&new, 1);
 		new->value = ft_strdup(token->value, CMD);

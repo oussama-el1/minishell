@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 21:00:32 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/11 02:53:41 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/12 01:27:26 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ t_tree	*create_subshell(t_token *token)
 	t_tree	*node;
 	t_args	*args;
 
-	if(!token)
+	if (!token)
 		return (NULL);
 	node = (t_tree *)maroc(sizeof(t_tree), ALLOC, CMD);
 	node->type = T_SUBSHELL;
@@ -34,7 +34,7 @@ t_tree	*create_cmd(t_token *token)
 	t_tree	*node;
 	t_args	*args;
 
-	if(!token)
+	if (!token)
 		return (NULL);
 	node = (t_tree *)maroc(sizeof(t_tree), ALLOC, CMD);
 	node->type = T_CMD;
@@ -49,38 +49,29 @@ t_tree	*create_cmd(t_token *token)
 void	extract_args(t_args *args, t_token *token)
 {
 	t_token	*curr;
-	char	**res;
-	bool	*wildcards;
 	t_redir	*redir;
 	int		i;
 	int		arg_count;
 
 	arg_count = args_count(token);
-	res = (char **)maroc((arg_count + 1) * sizeof(char *), ALLOC, CMD);
-	wildcards = (bool *)maroc((arg_count + 1) * sizeof(bool), ALLOC, CMD);
-	args->expand_list = (t_expand **)maroc((arg_count + 1) * sizeof(t_expand *), ALLOC, CMD);
+	args->argv = (char **)maroc((arg_count + 1) * sizeof(char *), ALLOC, CMD);
+	args->wildcards = (bool *)maroc((arg_count + 1) * sizeof(bool), ALLOC, CMD);
+	args->expand_list = (t_expand **)maroc((arg_count + 1) * \
+		sizeof(t_expand *), ALLOC, CMD);
 	curr = token;
 	i = 0;
 	redir = NULL;
 	while (curr && curr->visited != 1)
-	{
-		if (isredirect(curr->type))
-			handle_redirection(&redir, &curr);
-		res[i] = quoted_process(&curr, &args->expand_list[i], &wildcards[i]);
-		if (res[i])
-			i++;
-	}
-	res[i] = NULL;
-	wildcards[i] = false;
+		process_token(&curr, args, &redir, &i);
+	args->argv[i] = NULL;
 	args->expand_list[i] = NULL;
-	args->argv = res;
-	args->wildcards = wildcards;
+	args->wildcards[i] = false;
 	args->redir = redir;
 	args->herdoc_file = NULL;
 	args->herdoc_idx = -1;
 }
 
-t_tree_type get_tree_type(int type)
+t_tree_type	get_tree_type(int type)
 {
 	if (type == AND)
 		return (T_AND);
@@ -89,7 +80,7 @@ t_tree_type get_tree_type(int type)
 	return (T_PIPE);
 }
 
-void extract_subshell_args(t_args **args, t_token *token)
+void	extract_subshell_args(t_args **args, t_token *token)
 {
 	t_token	*curr;
 	t_redir	*redir;

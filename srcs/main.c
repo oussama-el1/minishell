@@ -6,13 +6,13 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:08:50 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/12 00:18:09 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/12 04:35:25 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	get_exec_cmd(t_token **token, t_helper*helper);
+static void	parse_exec_cmd(t_token **token, t_helper*helper);
 static void	bash_loop(t_env **env);
 
 int	main(int ac, char **av, char **envp)
@@ -36,12 +36,12 @@ static void	bash_loop(t_env **env)
 	while (1)
 	{
 		init_token(&token, 1);
-		get_exec_cmd(&token, &hp);
+		parse_exec_cmd(&token, &hp);
 		maroc(0, FREE, CMD);
 	}
 }
 
-static void	get_exec_cmd(t_token **token, t_helper *hp)
+static void	parse_exec_cmd(t_token **token, t_helper *hp)
 {
 	char	*line;
 	char	*tmp;
