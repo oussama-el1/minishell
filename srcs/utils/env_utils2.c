@@ -3,14 +3,38 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
+/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 21:52:48 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/04 20:57:39 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/12 00:45:32 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	add_env_var(t_env **env, char *key,
+		char *value, int exported)
+{
+	t_env	*new;
+	t_env	*tmp;
+
+	new = maroc(sizeof(t_env), ALLOC, ENV);
+	if (!new)
+		return ;
+	new->key = key;
+	new->value = value;
+	new->exported = exported;
+	new->next = NULL;
+	if (!*env)
+	{
+		*env = new;
+		return ;
+	}
+	tmp = *env;
+	while (tmp->next)
+		tmp = tmp->next;
+	tmp->next = new;
+}
 
 t_env	*init_env(char **environ)
 {
@@ -25,9 +49,11 @@ t_env	*init_env(char **environ)
 	if (!environ || !*environ)
 	{
 		pwd = getcwd(NULL, 0);
-		add_env_var(&env, ft_strdup("PATH", ENV), ft_strdup("/usr/local/bin:/usr/bin:/bin", ENV), 1);
+		add_env_var(&env, ft_strdup("PATH", ENV),
+			ft_strdup("/usr/local/bin:/usr/bin:/bin", ENV), 1);
 		add_env_var(&env, ft_strdup("PWD", ENV), ft_strdup(pwd, ENV), 1);
-		add_env_var(&env, ft_strdup("_", ENV), ft_strdup("/usr/bin/env", ENV), 1);
+		add_env_var(&env, ft_strdup("_", ENV),
+			ft_strdup("/usr/bin/env", ENV), 1);
 		return (free(pwd), env);
 	}
 	while (environ[i])
@@ -38,7 +64,6 @@ t_env	*init_env(char **environ)
 	}
 	return (env);
 }
-
 
 int	env_size(t_env *env)
 {

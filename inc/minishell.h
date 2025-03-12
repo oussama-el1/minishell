@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
+/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/12 00:20:59 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/12 04:25:47 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 # include <errno.h>
 # include <dirent.h>
 
-extern int	received_signal;
+extern int	g_received_signal;
 
 enum e_token_type
 {
@@ -285,8 +285,7 @@ void	set_env_var(t_env **env, char *key, char *value, int exported);
 char	**get_env_array(t_env *env);
 t_env	*dup_env(t_env *original);
 int		validate_var_name(const char *var);
-int	set_name_and_value(char *env, char **name, char **value);
-
+int		set_name_and_value(char *env, char **name, char **value);
 
 // exec
 void		setup_signals(void);
@@ -299,12 +298,12 @@ int			exec_pipe(t_helper *hp);
 void		rl_replace_line(const char *text, int clear_undo);
 void		herdoc_loop(const char *delimiter, int fd, t_helper *hp);
 char		*handle_heredoc(const char *delimiter, t_helper *hp, int mode);
-int			herdoc_runner(t_redir *redirection, t_helper *hp);
+void		herdoc_runner(t_redir *redirection, t_helper *hp);
 void		file_error_handler(t_redir *redirection, int *error_found, int ambigous, t_ambiguous_err *err);
 void		clean_resources(t_helper *hp, int saved_in, int saved_out);
-char		**expand_one_arg(char *argument, t_expand *curr, t_env *env, int exit_status);
-void		expand_string(char **string, t_env *env, int exit_status, int fromherdoc);
-void		argv_expander(char ***argv, t_expand **expandArr, t_env *env, int exit_status);
+char		**expand_one_arg(char *argument, t_expand *curr, t_helper *hp);
+void		expand_string(char **string, t_helper *hp, int fromherdoc);
+void		argv_expander(char ***argv, t_expand **expandArr, t_helper *hp);
 void		print_ast(t_tree *node, int depth, const char *relation);
 void		ambiguous_redirect(char *file);
 int			is_builtin(char *cmd);
@@ -322,13 +321,15 @@ void		open_output_error(t_redir *redirection, int error_index,
 			int *error_found);
 void		subshell_worker(t_helper hp_cpy);
 void		subshell_handler(t_helper *hp, pid_t pid);
-
+char		*extract_key(char *str);
+int			matches_pattern(const char *filename, const char *pattern);
+int			count_matching_files(const char *pattern, int *count);
+char		**split_arg(char *new_arg, t_expand *cp);
 
 /*  Garbage Collector */
 void	*maroc(size_t size, int flag, int type);
-
 void	expand_wildcard(char ***argv, bool *wildcards);
-int	contain_wildcard(char **argv, bool *wildcards);
+int		contain_wildcard(char **argv, bool *wildcards);
 
 // libft
 int			ft_handle_overflow(unsigned long nbr, int ndigit, int sign);

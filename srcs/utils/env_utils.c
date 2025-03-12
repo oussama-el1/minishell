@@ -6,35 +6,11 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 23:46:35 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/05 22:41:11 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/12 00:45:04 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	add_env_var(t_env **env, char *key,
-		char *value, int exported)
-{
-	t_env	*new;
-	t_env	*tmp;
-
-	new = maroc(sizeof(t_env), ALLOC, ENV);
-	if (!new)
-		return ;
-	new->key = key;
-	new->value = value;
-	new->exported = exported;
-	new->next = NULL;
-	if (!*env)
-	{
-		*env = new;
-		return ;
-	}
-	tmp = *env;
-	while (tmp->next)
-		tmp = tmp->next;
-	tmp->next = new;
-}
 
 void	print_env(t_env *env)
 {

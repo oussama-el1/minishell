@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 00:05:01 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/11 23:57:44 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/12 01:07:58 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static void	read_expand_herdoc(t_helper *hp, int fd, int *error_found)
 	line = get_next_line(fd);
 	while (line)
 	{
-		expand_string(&line, *(hp->env), hp->exit_status, 1);
+		expand_string(&line, hp, 1);
 		write(pipe_fd[1], line, ft_strlen(line));
 		line = get_next_line(fd);
 	}
@@ -89,7 +89,7 @@ void	redir_output(t_redir	*last_out, int *error_found)
 	}
 }
 
-int	herdoc_runner(t_redir *redirection, t_helper *hp)
+void	herdoc_runner(t_redir *redirection, t_helper *hp)
 {
 	int		i;
 	t_redir	*last_herdoc;
@@ -107,7 +107,8 @@ int	herdoc_runner(t_redir *redirection, t_helper *hp)
 	{
 		if (redirection == last_herdoc)
 		{
-			hp->node->args->herdoc_file = handle_heredoc(redirection->heredoc_delim, hp, 0);
+			hp->node->args->herdoc_file = \
+				handle_heredoc(redirection->heredoc_delim, hp, 0);
 			hp->node->args->herdoc_idx = i;
 		}
 		else if (redirection->type == R_HEREDOC)
@@ -115,7 +116,6 @@ int	herdoc_runner(t_redir *redirection, t_helper *hp)
 		redirection = redirection->next;
 		i++;
 	}
-	return (hp->node->args->herdoc_idx);
 }
 
 int	get_last_in(t_redir *redirection, t_redir **last_in,
