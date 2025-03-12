@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 00:05:01 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/12 01:07:58 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/12 10:45:26 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ static void	read_expand_herdoc(t_helper *hp, int fd, int *error_found)
 		write(pipe_fd[1], line, ft_strlen(line));
 		line = get_next_line(fd);
 	}
-	close(fd);
 	close(pipe_fd[1]);
 	dup2(pipe_fd[0], STDIN_FILENO);
 	close(pipe_fd[0]);
@@ -42,9 +41,9 @@ void	redir_input(t_helper *hp, t_hredir *hr, int *error_found)
 
 	fd = -1;
 	if ((hp->node->args->herdoc_idx > hr->last_in_idx))
-		fd = open(hp->node->args->herdoc_file, O_RDONLY);
+		fd = fdmaroc(hp->node->args->herdoc_file, HEREDOC, OPEN, O_RDONLY);
 	else if (hr->last_in)
-		fd = open(hr->last_in->filename, O_RDONLY);
+		fd = fdmaroc(hr->last_in->filename, REDIR_IN, OPEN, O_RDONLY);
 	if (fd == -1)
 	{
 		*error_found = 1;
@@ -57,10 +56,8 @@ void	redir_input(t_helper *hp, t_hredir *hr, int *error_found)
 		if (dup2(fd, STDIN_FILENO) < 0)
 		{
 			perror("dup2 failed");
-			close(fd);
 			*error_found = 1;
 		}
-		close(fd);
 	}
 }
 
@@ -69,9 +66,11 @@ void	redir_output(t_redir	*last_out, int *error_found)
 	int	fd;
 
 	if (last_out->type == R_REDIR_OUT)
-		fd = open(last_out->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		fd = fdmaroc(last_out->filename, REDIR_OUT,
+				OPEN, O_WRONLY | O_CREAT | O_TRUNC);
 	else
-		fd = open(last_out->filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		fd = fdmaroc(last_out->filename, REDIR_OUT,
+				OPEN, O_WRONLY | O_CREAT | O_APPEND);
 	if (fd < 0)
 	{
 		perror("Output Redirection Failed");
@@ -82,10 +81,8 @@ void	redir_output(t_redir	*last_out, int *error_found)
 		if (dup2(fd, STDOUT_FILENO) < 0)
 		{
 			perror("dup2 failed");
-			close(fd);
 			*error_found = 1;
 		}
-		close(fd);
 	}
 }
 
