@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 18:06:55 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/11 23:21:19 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/12 01:11:38 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,7 @@ static int	expander(t_helper *hp)
 	{
 		hp->node->args->argv_cpy = hp->node->args->argv;
 		hp->node->args->argv_cpy = hp->node->args->argv;
-		argv_expander(&hp->node->args->argv,
-			hp->node->args->expand_list, *hp->env, hp->exit_status);
+		argv_expander(&hp->node->args->argv, hp->node->args->expand_list, hp);
 		if (contain_wildcard(hp->node->args->argv, hp->node->args->wildcards))
 			expand_wildcard(&hp->node->args->argv, hp->node->args->wildcards);
 	}

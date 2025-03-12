@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 14:43:35 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/11 21:52:49 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/12 01:09:30 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ t_ambiguous_err	*expand_filnames_helper(t_redir *redirection,
 	char	**expanded;
 
 	expanded = expand_one_arg(redirection->filename,
-			redirection->expand_list, *hp->env, hp->exit_status);
+			redirection->expand_list, hp);
 	if (!is_ambiguous(expanded, redirection->filename[0] == '\0'))
 		redirection->filename = expanded[0];
 	else
