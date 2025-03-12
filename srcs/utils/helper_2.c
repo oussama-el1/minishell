@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 01:22:46 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/08 16:23:36 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/12 00:19:19 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,10 @@ int	non_control2(enum e_token_type type)
 	return (0);
 }
 
-void	herdoc_msg(const char *delimiter)
+void	herdoc_msg(const char *delimiter, t_helper *hp)
 {
 	ft_putstr_fd("minishell: warning: here-document at line ", 1);
-	ft_putnbr_fd(g_signal_info.line_count, 1);
+	ft_putnbr_fd(hp->line_count, 1);
 	ft_putstr_fd(" delimited by end-of-file (wanted `", 1);
 	ft_putstr_fd((char *)delimiter, 1);
 	ft_putstr_fd("')\n", 1);

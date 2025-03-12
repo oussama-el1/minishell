@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redirection_helpers.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 22:24:50 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/11 20:45:55 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/12 00:19:05 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	herdoc_loop(const char *delimiter, int fd, t_helper *hp)
 		line = readline("> ");
 		tmp = line;
 		if (!line)
-			return (herdoc_msg(delimiter));
+			return (herdoc_msg(delimiter, hp));
 		if (ft_strcmp(line, delimiter) == 0)
 			return (free(tmp), (void)0);
 		write(fd, line, ft_strlen(line));

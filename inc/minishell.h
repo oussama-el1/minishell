@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/11 21:23:34 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/12 00:19:38 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,15 +30,7 @@
 # include <errno.h>
 # include <dirent.h>
 
-typedef struct	s_signal_info
-{
-	int received_signal;
-	int line_count;
-	int skip_herdoc;
-	int	delim;
-}	t_signal_info;
-
-extern t_signal_info g_signal_info;
+extern int	received_signal;
 
 enum e_token_type
 {
@@ -142,7 +134,7 @@ typedef struct s_env
 typedef struct s_helper
 {
 	int			exit_status;
-	int			tour;
+	int			line_count;
 	t_env		**env;
 	t_tree		*node;
 }	t_helper;
@@ -227,7 +219,7 @@ int		check_brackets(t_token *token);
 void	while_ft(t_token **token, t_token **last, t_syntax *syntax);
 int		check_operators(t_token *token);
 int		check_redirections(t_token *token);
-void	herdoc_msg(const char *delimiter);
+void	herdoc_msg(const char *delimiter, t_helper *hp);
 int		end_with_op(t_token *token);
 
 void	init_token(t_token **token, int allocate);
