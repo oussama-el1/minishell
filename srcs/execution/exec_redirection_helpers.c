@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redirection_helpers.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
+/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 22:24:50 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/12 00:19:05 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/12 10:35:25 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,10 @@ char	*handle_heredoc(const char *delimiter, t_helper *hp, int skip)
 	if (!skip)
 	{
 		filename = ft_strjoin("/tmp/heredoc_", ft_itoa(++id, CMD), CMD);
-		fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		fd = fdmaroc(filename, HEREDOC, OPEN, O_WRONLY | O_CREAT | O_TRUNC);
 		if (fd < 0)
 			return (perror("open failed\n"), NULL);
 		herdoc_loop(delimiter, fd, hp);
-		close(fd);
 		return (filename);
 	}
 	else
@@ -98,17 +97,16 @@ void	open_output_error(t_redir *redirection, int error_index,
 				|| redirection->type == R_REDIR_APPEND))
 		{
 			if (redirection->type == R_REDIR_OUT)
-				fd = open(redirection->filename,
-						O_WRONLY | O_CREAT | O_TRUNC, 0644);
+				fd = fdmaroc(redirection->filename, REDIR_OUT,
+						OPEN, O_WRONLY | O_CREAT | O_TRUNC);
 			else
-				fd = open(redirection->filename,
-						O_WRONLY | O_CREAT | O_APPEND, 0644);
+				fd = fdmaroc(redirection->filename, REDIR_OUT,
+						OPEN, O_WRONLY | O_CREAT | O_APPEND);
 			if (fd < 0)
 			{
 				file_error_handler(redirection, error_found, 0, NULL);
 				break ;
 			}
-			close(fd);
 		}
 		i++;
 		redirection = redirection->next;

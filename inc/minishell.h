@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
+/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/12 07:15:45 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/12 10:46:49 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 # include <errno.h>
 # include <dirent.h>
 
-extern int	g_received_signal;
+int	g_received_signal = 0;
 
 enum e_token_type
 {
@@ -56,7 +56,7 @@ typedef enum e_tree_type
 	T_PIPE,
 	T_CMD,
 	T_SUBSHELL
-} t_tree_type;
+}	t_tree_type;
 
 typedef enum e_redir_type
 {
@@ -64,7 +64,7 @@ typedef enum e_redir_type
 	R_REDIR_OUT,
 	R_REDIR_APPEND,
 	R_HEREDOC,
-} t_redir_type;
+}	t_redir_type;
 
 enum e_gc
 {
@@ -123,7 +123,7 @@ typedef struct s_tree
 	t_args			*args;
 	struct s_tree	*left;
 	struct s_tree	*right;
-} t_tree;
+}	t_tree;
 
 typedef struct s_env
 {
@@ -141,7 +141,6 @@ typedef struct s_helper
 	t_tree		*node;
 }	t_helper;
 
-
 typedef struct s_hredir
 {
 	t_redir	*last_in;
@@ -149,7 +148,7 @@ typedef struct s_hredir
 	t_redir	*last_heredoc;
 	int		last_her_idx;
 	int		last_in_idx;
-} t_hredir;
+}	t_hredir;
 
 typedef struct s_vars
 {
@@ -173,10 +172,11 @@ typedef struct s_syntax
 	t_token	*next_after;
 }	t_syntax;
 
-typedef struct {
+typedef struct s_ambiguous_err
+{
 	char	*filename;
 	int		index;
-} t_ambiguous_err;
+}	t_ambiguous_err;
 
 // Garbage Collector
 typedef struct s_gc
@@ -187,11 +187,11 @@ typedef struct s_gc
 	struct s_gc	*prev;
 }	t_gc;
 
-typedef struct	s_fd_gc
+typedef struct s_fd_gc
 {
 	int					fd;
 	char				*filename;
-	int					type;;
+	int					type;
 	struct s_fd_gc		*next;
 }	t_fd_gc;
 
@@ -202,59 +202,58 @@ typedef struct s_gc_manager
 }	t_gc_manager;
 
 /* helper.c && helper2.c && string_utils.c && list_utils.c */
-int		is_space(char c);
-int		empty(char *str);
-int		isquote(char c);
-int		special_d(char c);
-int		isparenth(char c);
-int		is_alnum(char c);
-int		isredirect(enum e_token_type type);
-int		is_dilim(enum e_token_type type);
-int		non_control(enum e_token_type type);
-int		islogical(enum e_token_type type);
-int		is_quote(enum e_token_type type);
-int 	is_regular(enum e_token_type type);
-int		get_type(const char *str);
-int		ft_strcmp(const char *s1, const char *s2);
-t_token	*last_token(t_token *token);
-t_token	*lst_dup(t_token *token);
-t_token	*sublist(t_token *start, t_token *end);
-int		contains_unquoted_ampersand(const char *str);
-char 	*remove_quote(t_token *curr, char *str);
-void	is_wildcard(t_token *curr, bool *wildcard);
-int		non_control2(enum e_token_type type);
-char	*input_cmd(t_token *token);
-void	concat_str(char **arg, char *tmp, int bef_space);
+int			is_space(char c);
+int			empty(char *str);
+int			isquote(char c);
+int			special_d(char c);
+int			isparenth(char c);
+int			is_alnum(char c);
+int			isredirect(enum e_token_type type);
+int			is_dilim(enum e_token_type type);
+int			non_control(enum e_token_type type);
+int			islogical(enum e_token_type type);
+int			is_quote(enum e_token_type type);
+int			is_regular(enum e_token_type type);
+int			get_type(const char *str);
+int			ft_strcmp(const char *s1, const char *s2);
+t_token		*last_token(t_token *token);
+t_token		*lst_dup(t_token *token);
+t_token		*sublist(t_token *start, t_token *end);
+int			contains_unquoted_ampersand(const char *str);
+char		*remove_quote(t_token *curr, char *str);
+void		is_wildcard(t_token *curr, bool *wildcard);
+int			non_control2(enum e_token_type type);
+char		*input_cmd(t_token *token);
+void		concat_str(char **arg, char *tmp, int bef_space);
+
 /* syntax_helper.c */
-int		print_syntax_error(char *token);
-int		check_brackets(t_token *token);
-void	while_ft(t_token **token, t_token **last, t_syntax *syntax);
-int		check_operators(t_token *token);
-int		check_redirections(t_token *token);
-void	herdoc_msg(const char *delimiter, t_helper *hp);
-int		end_with_op(t_token *token);
-
-void	init_token(t_token **token, int allocate);
-int		before_space(char *str, int i);
-
-int		process_input(char *line, t_token **token, t_helper *helper, int base);
-void	init_vars(t_vars **vars, char *line);
-void	ft_newnode(t_token **token, char *value, int before_space);
-
-char	*get_next_line(int fd);
+int			print_syntax_error(char *token);
+int			check_brackets(t_token *token);
+void		while_ft(t_token **token, t_token **last, t_syntax *syntax);
+int			check_operators(t_token *token);
+int			check_redirections(t_token *token);
+void		herdoc_msg(const char *delimiter, t_helper *hp);
+int			end_with_op(t_token *token);
+void		init_token(t_token **token, int allocate);
+int			before_space(char *str, int i);
+int			process_input(char *line, t_token **token,
+				t_helper *helper, int base);
+void		init_vars(t_vars **vars, char *line);
+void		ft_newnode(t_token **token, char *value, int before_space);
+char		*get_next_line(int fd);
 
 // /* parsing_type.c && parser.c */
-void	ft_space(t_vars **vars, int *ret);
-void	parse_char(t_token **token, t_vars **vars, int *ret);
-int		parse_quote(t_token **token, t_vars **vars, int *ret);
-void	parse_dollar(t_token **token, t_vars **vars, int *ret);
-void	parse_separator(t_token **token, t_vars **vars, int *ret);
-void	parse_parenthesis(t_token **token, t_vars **vars, int *ret);
-int		check_syntax(t_token *token, t_helper *hp);
-void	init_setup(t_helper *hp, t_env **env);
+void		ft_space(t_vars **vars, int *ret);
+void		parse_char(t_token **token, t_vars **vars, int *ret);
+int			parse_quote(t_token **token, t_vars **vars, int *ret);
+void		parse_dollar(t_token **token, t_vars **vars, int *ret);
+void		parse_separator(t_token **token, t_vars **vars, int *ret);
+void		parse_parenthesis(t_token **token, t_vars **vars, int *ret);
+int			check_syntax(t_token *token, t_helper *hp);
+void		init_setup(t_helper *hp, t_env **env);
 
 /* tree.c */
-t_tree 		*build_ast(t_token *token);
+t_tree		*build_ast(t_token *token);
 t_tree		*fetch_pipe_or_subshell(t_token *token);
 t_tree		*found_logical(t_token *token);
 t_tree		*found_pipe(t_token *token, int subshell);
@@ -264,41 +263,43 @@ void		skip_brackets_prev(t_token **token);
 t_tree		*create_subshell(t_token *token);
 t_tree		*create_cmd(t_token *token);
 void		extract_args(t_args *args, t_token *token);
-t_tree_type get_tree_type(int type);
+t_tree_type	get_tree_type(int type);
 t_token		*back_prev(t_token *token);
-char		*quoted_process(t_token **curr, t_expand **expansion_list, bool *wildcard);
+char		*quoted_process(t_token **curr,
+				t_expand **expansion_list, bool *wildcard);
 t_token		*left_back(t_token *token);
 int			args_count(t_token *token);
-void		expansion_func(t_expand	**head, t_token *curr, char **str, size_t *start);
+void		expansion_func(t_expand	**head, t_token *curr,
+				char **str, size_t *start);
 void		handle_redirection(t_redir **redir_list, t_token **curr);
-void 		extract_subshell_args(t_args **args, t_token *token);
-void		process_token(t_token **curr, t_args *args, t_redir **redir, int *i);
-
+void		extract_subshell_args(t_args **args, t_token *token);
+void		process_token(t_token **curr, t_args *args,
+				t_redir **redir, int *i);
 
 // builtins
-int	ft_cd(char **argv, t_env *env, int exit_status);
-int	ft_echo(char **argv, char **arg_cpy);
-int	exec_command(t_tree *cmd, t_env **env, int exit_status);
-int	ft_pwd(t_env *env, int exit_status);
-int	ft_export(char **argv, t_env *env, int exit_status);
-int	ft_unset(char **argv, t_env **env);
-int	ft_env(char **argv, t_env *env);
-int	ft_exit(char **argv1);
-int	not_valid_idenrifier(char *env);
+int			ft_cd(char **argv, t_env *env, int exit_status);
+int			ft_echo(char **argv, char **arg_cpy);
+int			exec_command(t_tree *cmd, t_env **env, int exit_status);
+int			ft_pwd(t_env *env, int exit_status);
+int			ft_export(char **argv, t_env *env, int exit_status);
+int			ft_unset(char **argv, t_env **env);
+int			ft_env(char **argv, t_env *env);
+int			ft_exit(char **argv1);
+int			not_valid_idenrifier(char *env);
 
 // env_utils
-t_env	*init_env(char **envp);
-void	add_env_var(t_env **env, char *key,
-		char *value, int exported);
-void	print_export(t_env *env, int declare);
-void	print_env(t_env *env);
-int		unset_env_var(t_env **env, char *key);
-char	*get_env_var(t_env *env, char *key, int exit_status);
-void	set_env_var(t_env **env, char *key, char *value, int exported);
-char	**get_env_array(t_env *env);
-t_env	*dup_env(t_env *original);
-int		validate_var_name(const char *var);
-int		set_name_and_value(char *env, char **name, char **value);
+t_env		*init_env(char **envp);
+void		add_env_var(t_env **env, char *key,
+				char *value, int exported);
+void		print_export(t_env *env, int declare);
+void		print_env(t_env *env);
+int			unset_env_var(t_env **env, char *key);
+char		*get_env_var(t_env *env, char *key, int exit_status);
+void		set_env_var(t_env **env, char *key, char *value, int exported);
+char		**get_env_array(t_env *env);
+t_env		*dup_env(t_env *original);
+int			validate_var_name(const char *var);
+int			set_name_and_value(char *env, char **name, char **value);
 
 // exec
 void		setup_signals(void);
@@ -312,7 +313,8 @@ void		rl_replace_line(const char *text, int clear_undo);
 void		herdoc_loop(const char *delimiter, int fd, t_helper *hp);
 char		*handle_heredoc(const char *delimiter, t_helper *hp, int mode);
 void		herdoc_runner(t_redir *redirection, t_helper *hp);
-void		file_error_handler(t_redir *redirection, int *error_found, int ambigous, t_ambiguous_err *err);
+void		file_error_handler(t_redir *redirection, int *error_found,
+				int ambigous, t_ambiguous_err *err);
 void		clean_resources(t_helper *hp, int saved_in, int saved_out);
 char		**expand_one_arg(char *argument, t_expand *curr, t_helper *hp);
 void		expand_string(char **string, t_helper *hp, int fromherdoc);
@@ -320,18 +322,19 @@ void		argv_expander(char ***argv, t_expand **expandArr, t_helper *hp);
 void		print_ast(t_tree *node, int depth, const char *relation);
 void		ambiguous_redirect(char *file);
 int			is_builtin(char *cmd);
-int			exec_builtin(char **argv, char **arg_cpy, t_env **env, int exit_status);
+int			exec_builtin(char **argv, char **arg_cpy,
+				t_env **env, int exit_status);
 void		process_herdocs(t_helper *hp, int left);
 void		print_cd_error(char *path);
 int			get_last_in(t_redir *redirection, t_redir **last_in,
-			int *error_found, t_ambiguous_err	*err);
+				int *error_found, t_ambiguous_err	*err);
 void		iterate_output_redirection(t_redir *redirection,
-			t_redir **last_out, int *error_found);
+				t_redir **last_out, int *error_found);
 void		redir_input(t_helper *hp, t_hredir *hr, int *error_found);
 void		redir_output(t_redir	*last_out, int *error_found);
 int			is_ambiguous(char **expanded, int empty_flag);
 void		open_output_error(t_redir *redirection, int error_index,
-			int *error_found);
+				int *error_found);
 void		subshell_worker(t_helper hp_cpy);
 void		subshell_handler(t_helper *hp, pid_t pid);
 char		*extract_key(char *str);
@@ -340,10 +343,10 @@ int			count_matching_files(const char *pattern, int *count);
 char		**split_arg(char *new_arg, t_expand *cp);
 
 /*  Garbage Collector */
-void	*maroc(size_t size, int flag, int type);
-int		fdmaroc(char *filename, int type, int flag, int flags);
-void	expand_wildcard(char ***argv, bool *wildcards);
-int		contain_wildcard(char **argv, bool *wildcards);
+void		*maroc(size_t size, int flag, int type);
+int			fdmaroc(char *filename, int type, int flag, int flags);
+void		expand_wildcard(char ***argv, bool *wildcards);
+int			contain_wildcard(char **argv, bool *wildcards);
 
 // libft
 int			ft_handle_overflow(unsigned long nbr, int ndigit, int sign);
@@ -384,4 +387,4 @@ char		*ft_substr(char const *s, unsigned int start, size_t len, int type);
 #  define BUFFER_SIZE 50
 # endif
 
-# endif
+#endif

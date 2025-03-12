@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 14:43:35 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/12 01:09:30 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/12 10:33:37 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,19 +24,16 @@ void	iterate_output_redirection(t_redir *redirection,
 				|| redirection->type == R_REDIR_APPEND))
 		{
 			if (redirection->type == R_REDIR_OUT)
-				fd = open(redirection->filename,
-						O_WRONLY | O_CREAT | O_TRUNC, 0644);
+				fd = fdmaroc(redirection->filename, REDIR_OUT,
+						OPEN, O_WRONLY | O_CREAT | O_TRUNC);
 			else
-				fd = open(redirection->filename,
-						O_WRONLY | O_CREAT | O_APPEND, 0644);
+				fd = fdmaroc(redirection->filename, REDIR_OUT,
+						OPEN, O_WRONLY | O_CREAT | O_APPEND);
 			if (fd < 0)
 				return (file_error_handler(redirection,
 						error_found, 0, NULL), (void)0);
 			else
-			{
-				close(fd);
 				*last_out = redirection;
-			}
 		}
 		redirection = redirection->next;
 	}
