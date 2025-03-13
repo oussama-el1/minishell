@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 00:05:01 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/12 10:45:26 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/13 20:17:36 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ static void	read_expand_herdoc(t_helper *hp, int fd, int *error_found)
 	line = get_next_line(fd);
 	while (line)
 	{
-		expand_string(&line, hp, 1);
+		if (hp->node->args->expnaded)
+			expand_string(&line, hp, 1);
 		write(pipe_fd[1], line, ft_strlen(line));
 		line = get_next_line(fd);
 	}
@@ -86,13 +87,27 @@ void	redir_output(t_redir	*last_out, int *error_found)
 	}
 }
 
-void	herdoc_runner(t_redir *redirection, t_helper *hp)
+int	check_expanded(t_redir *redir)
+{
+	t_expand	*curr;
+
+	curr = redir->expand_list;
+	while (curr)
+	{
+		if (curr->type == S_Q || curr->type == D_Q)
+			return (0);
+		curr = curr->next;
+	}
+	return (1);
+}
+
+void	herdoc_runner(t_redir *red, t_helper *hp)
 {
 	int		i;
 	t_redir	*last_herdoc;
 	t_redir	*save;
 
-	save = redirection;
+	save = red;
 	while (save)
 	{
 		if (save->type == R_HEREDOC)
@@ -100,17 +115,18 @@ void	herdoc_runner(t_redir *redirection, t_helper *hp)
 		save = save->next;
 	}
 	i = 0;
-	while (redirection)
+	hp->node->args->expnaded = 0;
+	while (red)
 	{
-		if (redirection == last_herdoc)
+		if (red == last_herdoc)
 		{
-			hp->node->args->herdoc_file = \
-				handle_heredoc(redirection->heredoc_delim, hp, 0);
+			hp->node->args->herdoc_file = handle_heredoc(red->h_del, hp, 0);
 			hp->node->args->herdoc_idx = i;
+			hp->node->args->expnaded = check_expanded(red);
 		}
-		else if (redirection->type == R_HEREDOC)
-			handle_heredoc(redirection->heredoc_delim, hp, 1);
-		redirection = redirection->next;
+		else if (red->type == R_HEREDOC)
+			handle_heredoc(red->h_del, hp, 1);
+		red = red->next;
 		i++;
 	}
 }

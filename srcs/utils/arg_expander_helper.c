@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 00:33:21 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/12 06:04:49 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/13 20:41:11 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static void	expand_key(t_helper *hp, char **string, char **expanded, int *i)
 		temp = ft_strjoin(*expanded, &key[1], CMD);
 	else
 	{
-		value = get_env_var(*hp->env, key, hp->exit_status);
+		value = get_env_var(*hp->env, key);
 		if (value)
 			temp = ft_strjoin(*expanded, value, CMD);
 		else

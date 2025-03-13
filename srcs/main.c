@@ -6,11 +6,13 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:08:50 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/13 20:28:32 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/13 20:54:38 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	g_exit_status = 0;
 
 static void	parse_exec_cmd(t_token **token, t_helper*helper);
 static void	bash_loop(t_env **env);

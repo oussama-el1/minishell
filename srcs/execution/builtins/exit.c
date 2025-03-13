@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 18:04:04 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/09 01:57:18 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/13 20:24:18 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int	ft_exit(char **argv)
 {
 	long long	exit_code;
 
-	exit_code = 0;
+	exit_code = g_exit_status;
 	if (!argv)
 		maroc(0, FULLFREE, 0);
 	else if (argv[1])

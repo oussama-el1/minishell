@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 23:46:35 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/12 00:45:04 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/13 20:40:58 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,10 @@ int	unset_env_var(t_env **env, char *key)
 	return (1);
 }
 
-char	*get_env_var(t_env *env, char *key, int exit_status)
+char	*get_env_var(t_env *env, char *key)
 {
 	if (ft_strcmp(key, "?") == 0)
-		return (ft_itoa(exit_status, CMD));
+		return (ft_itoa(g_exit_status, CMD));
 	while (env)
 	{
 		if (ft_strcmp(env->key, key) == 0)
