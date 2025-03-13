@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
+/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:16:05 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/12 08:15:08 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/13 02:52:04 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ static int	update_env(char **argv, char *old_pwd, t_env *env)
 	if (!new_pwd)
 	{
 		ft_putstr_fd("chdir: error retrieving current directory: getcwd: ", 2);
-		ft_putstr_fd("cannot access parent directories: No such file or directory\n", 2);
+		ft_putstr_fd("cannot access parent directories", 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
 		set_env_var(&env, ft_strdup("OLDPWD", ENV), ft_strdup(old_pwd, ENV), 1);
 		change_home_dir(argv, env, 0, 1);
 		set_env_var(&env, ft_strdup("PWD", ENV),

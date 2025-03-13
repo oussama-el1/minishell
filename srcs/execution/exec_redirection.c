@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 14:43:35 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/12 10:33:37 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/13 02:17:29 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ static int	redirect_and_exec_helper(t_helper *hp, t_hredir *hr,
 	if (error_found)
 		res = 1;
 	else if (hp->node->type == T_CMD && hp->node->args->argv[0])
-		res = exec_command(hp->node, hp->env, hp->exit_status);
+		res = exec_command(hp->node, hp);
 	if (hp->node->type != T_SUBSHELL)
 		clean_resources(hp, saved_in, saved_out);
 	return (res);

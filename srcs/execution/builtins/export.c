@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 15:25:02 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/04 17:27:57 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/13 02:49:13 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,21 +90,29 @@ static int	process_env(char *env, t_env *env_ls, int exit_status)
 	return (0);
 }
 
-int	ft_export(char **argv, t_env *env, int exit_status)
+int	ft_export(char **argv, t_helper *hp)
 {
-	int	i;
-	int	status;
+	int		i;
+	int		status;
+	char	**splitted;
 
 	i = 1;
 	status = 0;
 	if (!argv[1])
-	{
-		print_export(env, 1);
-		return (0);
-	}
+		return (print_export(*hp->env, 1), 0);
 	while (argv[i])
 	{
-		if (process_env(argv[i], env, exit_status))
+		if (hp->splited == 1 && ft_strchr(argv[i], ' '))
+		{
+			splitted = ft_split(argv[i], ' ', CMD);
+			while (*splitted)
+			{
+				if (process_env(*splitted, *hp->env, hp->exit_status))
+					status = 1;
+				splitted++;
+			}
+		}
+		else if (process_env(argv[i], *hp->env, hp->exit_status))
 			status = 1;
 		i++;
 	}

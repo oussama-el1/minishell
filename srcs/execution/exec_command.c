@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:04:38 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/05 22:34:29 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/13 02:07:30 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int	exec_binary(char **argv, t_env *env, int exit_status)
 	return (1);
 }
 
-int	exec_command(t_tree *cmd, t_env **env, int exit_status)
+int	exec_command(t_tree *cmd, t_helper *hp)
 {
 	char		**argv;
 	t_expand	**expand;
@@ -104,6 +104,6 @@ int	exec_command(t_tree *cmd, t_env **env, int exit_status)
 	if (!argv[0])
 		return (0);
 	if (is_builtin(argv[0]))
-		return (exec_builtin(argv, cmd->args->argv_cpy, env, exit_status));
-	return (exec_binary(argv, *env, exit_status));
+		return (exec_builtin(argv, cmd->args->argv_cpy, hp));
+	return (exec_binary(argv, *hp->env, hp->exit_status));
 }

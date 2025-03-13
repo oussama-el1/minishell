@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
+/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:08:50 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/12 08:45:18 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/13 02:51:05 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,10 @@
 static void	parse_exec_cmd(t_token **token, t_helper*helper);
 static void	bash_loop(t_env **env);
 
-// void	f(void)
-// {
-// 	system("leaks minishell");
-// }
-
 int	main(int ac, char **av, char **envp)
 {
 	t_env	*env;
 
-	// atexit(f);
 	(void)ac;
 	(void)av;
 	env = init_env(envp);

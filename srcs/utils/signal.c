@@ -6,11 +6,13 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 17:31:02 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/12 10:47:10 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/13 02:50:42 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	g_received_signal = 0;
 
 void	handle_sigint(int sig)
 {

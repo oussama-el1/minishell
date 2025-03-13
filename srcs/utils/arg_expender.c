@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 21:12:37 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/12 04:26:02 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/13 02:43:24 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ char	**expand_one_arg(char *argument, t_expand *curr, t_helper *hp)
 		new_arg = ft_strjoin(sub, new_arg, CMD);
 		curr = curr->prev;
 	}
-	return (split_arg(new_arg, cp));
+	return (split_arg(new_arg, cp, hp));
 }
 
 int	count_final_argument(char **argv, t_expand **expandArr, t_helper *hp)
@@ -103,6 +103,8 @@ void	argv_expander(char ***argv, t_expand **expandArr, t_helper *hp)
 		}
 		else
 			new_argv[j++] = (*argv)[i];
+		if (i == 0 && !ft_strcmp(new_argv[0], "export"))
+			hp->export = 1;
 		i++;
 	}
 	new_argv[j] = NULL;

@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 22:28:39 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/12 10:33:29 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/13 02:48:57 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,19 @@ static int	is_splited(t_expand *expand)
 {
 	while (expand)
 	{
-		if (expand->type != DOLLAR)
+		if (expand->type != DOLLAR && expand->type != EXPR)
 			return (0);
 		expand = expand->next;
 	}
 	return (1);
 }
 
-char	**split_arg(char *new_arg, t_expand *cp)
+char	**split_arg(char *new_arg, t_expand *cp, t_helper *hp)
 {
 	char	**splitted;
 
-	if (ft_strchr(new_arg, ' ') && !ft_strchr(new_arg, '=') && is_splited(cp))
+	hp->splited = is_splited(cp);
+	if (ft_strchr(new_arg, ' ') && !hp->export && hp->splited)
 		return (ft_split(new_arg, ' ', CMD));
 	splitted = maroc(sizeof(char *) * 2, ALLOC, CMD);
 	splitted[0] = new_arg;

@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/12 10:46:49 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/13 02:37:19 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 # include <errno.h>
 # include <dirent.h>
 
-int	g_received_signal = 0;
+extern int	g_received_signal;
 
 enum e_token_type
 {
@@ -137,6 +137,8 @@ typedef struct s_helper
 {
 	int			exit_status;
 	int			line_count;
+	int			splited;
+	int			export;
 	t_env		**env;
 	t_tree		*node;
 }	t_helper;
@@ -279,9 +281,9 @@ void		process_token(t_token **curr, t_args *args,
 // builtins
 int			ft_cd(char **argv, t_env *env, int exit_status);
 int			ft_echo(char **argv, char **arg_cpy);
-int			exec_command(t_tree *cmd, t_env **env, int exit_status);
+int			exec_command(t_tree *cmd, t_helper *hp);
 int			ft_pwd(t_env *env, int exit_status);
-int			ft_export(char **argv, t_env *env, int exit_status);
+int			ft_export(char **argv, t_helper *hp);
 int			ft_unset(char **argv, t_env **env);
 int			ft_env(char **argv, t_env *env);
 int			ft_exit(char **argv1);
@@ -322,8 +324,7 @@ void		argv_expander(char ***argv, t_expand **expandArr, t_helper *hp);
 void		print_ast(t_tree *node, int depth, const char *relation);
 void		ambiguous_redirect(char *file);
 int			is_builtin(char *cmd);
-int			exec_builtin(char **argv, char **arg_cpy,
-				t_env **env, int exit_status);
+int			exec_builtin(char **argv, char **arg_cpy, t_helper *hp);
 void		process_herdocs(t_helper *hp, int left);
 void		print_cd_error(char *path);
 int			get_last_in(t_redir *redirection, t_redir **last_in,
@@ -340,7 +341,7 @@ void		subshell_handler(t_helper *hp, pid_t pid);
 char		*extract_key(char *str);
 int			matches_pattern(const char *filename, const char *pattern);
 int			count_matching_files(const char *pattern, int *count);
-char		**split_arg(char *new_arg, t_expand *cp);
+char		**split_arg(char *new_arg, t_expand *cp, t_helper *hp);
 
 /*  Garbage Collector */
 void		*maroc(size_t size, int flag, int type);

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   buitin.c                                           :+:      :+:    :+:   */
+/*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 23:10:12 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/10 23:47:05 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/13 02:11:41 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,20 +51,20 @@ int	is_builtin(char *cmd)
 	return (0);
 }
 
-int	exec_builtin(char **argv, char **arg_cpy, t_env **env, int exit_status)
+int	exec_builtin(char **argv, char **arg_cpy, t_helper *hp)
 {
 	if (ft_strcmp(argv[0], "echo") == 0)
 		return (ft_echo(argv, arg_cpy));
 	if (ft_strcmp(argv[0], "cd") == 0)
-		return (ft_cd(argv, *env, exit_status));
+		return (ft_cd(argv, *hp->env, hp->exit_status));
 	if (ft_strcmp(argv[0], "pwd") == 0)
-		return (ft_pwd(*env, exit_status));
+		return (ft_pwd(*hp->env, hp->exit_status));
 	if (ft_strcmp(argv[0], "export") == 0)
-		return (ft_export(argv, *env, exit_status));
+		return (ft_export(argv, hp));
 	if (ft_strcmp(argv[0], "unset") == 0)
-		return (ft_unset(argv, env));
+		return (ft_unset(argv, hp->env));
 	if (ft_strcmp(argv[0], "env") == 0)
-		return (ft_env(argv, *env));
+		return (ft_env(argv, *hp->env));
 	if (ft_strcmp(argv[0], "exit") == 0)
 		return (ft_exit(argv));
 	return (0);
