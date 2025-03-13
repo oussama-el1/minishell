@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:08:50 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/13 02:51:05 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/13 20:28:32 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ static void	bash_loop(t_env **env)
 	{
 		init_token(&token, 1);
 		parse_exec_cmd(&token, &hp);
+		fdmaroc(NULL, 0, CLEAR, 0);
 		maroc(0, FREE, CMD);
 	}
 }

@@ -57,7 +57,7 @@ $(NAME): $(OBJS)
 		@printf "\t\t\t\t🎩 Crafted by: $(BOLD)$(GREEN)oel-hadr$(DEF_COLOR) 🛠️ $(GREEN)yslami$(DEF_COLOR)\n"
 		@printf "$(CYAN)\t\t\t    _____________________________________________$(DEF_COLOR)\n"
 		@printf "\n$(GREEN) 🚀 SUCCESS: Minishell compiled successfully! 🚀\n$(DEF_COLOR)"
-#@printf "\n$(GREEN)minishell compilation done!\n$(DEF_COLOR)"	
+#@printf "\n$(GREEN)minishell compilation done!\n$(DEF_COLOR)"
 
 create:
 	@$(MKDIR) $(OBJ_DIR)

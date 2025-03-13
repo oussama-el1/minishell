@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 04:35:59 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/12 07:14:08 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/13 04:42:30 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ int	fdmaroc(char *filename, int type, int flag, int flags)
 		return (fd);
 	}
 	if (flag == CLEAR)
-		return (fdmaroc_free(&head), -1);
-	return (-1);
+		return (fdmaroc_free(&head), 0);
+	return (0);
 }
 
 static void	append_fdnode(t_fd_gc	**head, int fd, char *filename, int type)
@@ -59,17 +59,14 @@ static void	append_fdnode(t_fd_gc	**head, int fd, char *filename, int type)
 static void	fdmaroc_free(t_fd_gc **head)
 {
 	t_fd_gc	*curr;
-	t_fd_gc	*tmp;
 
 	curr = *head;
 	while (curr)
 	{
-		tmp = curr;
 		close(curr->fd);
 		if (curr->type == HEREDOC)
 			unlink(curr->filename);
 		curr = curr->next;
-		free(tmp);
 	}
 	*head = NULL;
 }

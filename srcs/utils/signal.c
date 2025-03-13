@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 17:31:02 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/13 02:50:42 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/13 20:39:44 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ int	g_received_signal = 0;
 
 void	handle_sigint(int sig)
 {
-	g_received_signal = sig;
+	(void)sig;
+	// exit_status = 130;
 	ft_putstr_fd("\n", 1);
 	rl_replace_line("", 0);
 	rl_on_new_line();
