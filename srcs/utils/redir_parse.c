@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir_parse.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
+/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 21:16:50 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/04 21:46:58 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/13 20:10:00 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,12 @@ static t_redir	*create_redir_node(int type, char *filename, \
 
 	new_redir = (t_redir *)maroc(sizeof(t_redir), ALLOC, CMD);
 	new_redir->filename = NULL;
-	new_redir->heredoc_delim = NULL;
+	new_redir->h_del = NULL;
 	new_redir->type = get_redir_type(type);
 	if (new_redir->type != R_HEREDOC)
 		new_redir->filename = filename;
 	else
-		new_redir->heredoc_delim = filename;
+		new_redir->h_del = filename;
 	new_redir->expand_list = expand_list;
 	new_redir->next = NULL;
 	return (new_redir);

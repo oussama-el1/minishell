@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 01:01:04 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/13 02:38:36 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/13 20:50:22 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	process_input(char *line, t_token **token, t_helper *helper, \
 	if (tokenizer(token, vars) == 0)
 	{
 		give_type(token);
-		if (!check_syntax(*token, helper))
+		if (!check_syntax(*token))
 			return (add_history(line), 0);
 		if (!handle_end_of_line(&line, token, helper))
 			return (0);

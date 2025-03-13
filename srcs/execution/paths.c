@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 20:12:48 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/09 01:44:33 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/13 20:39:28 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,12 @@ static char	*find_binary_in_path_helper(char **dirs, char *cmd)
 	return (NULL);
 }
 
-static char	*find_binary_in_path(char *cmd, t_env *env, int exit_status)
+static char	*find_binary_in_path(char *cmd, t_env *env)
 {
 	char	**dirs;
 	char	*secure_dirs;
 
-	secure_dirs = get_env_var(env, "PATH", exit_status);
+	secure_dirs = get_env_var(env, "PATH");
 	if (!secure_dirs)
 	{
 		ft_putendl_fd("$PATH var not found", 2);
@@ -69,7 +69,7 @@ static char	*find_binary_in_path(char *cmd, t_env *env, int exit_status)
 	return (find_binary_in_path_helper(dirs, cmd));
 }
 
-char	*get_executable_path(char *cmd, t_env *env, int exit_status)
+char	*get_executable_path(char *cmd, t_env *env)
 {
 	if (cmd[0] == '/' || ((cmd[0] == '.' && cmd[1] == '/')
 			|| (cmd[0] == '.' && cmd[1] == '.' && cmd[2] == '/')))
@@ -78,5 +78,5 @@ char	*get_executable_path(char *cmd, t_env *env, int exit_status)
 			return (ft_strdup(cmd, CMD));
 		return (NULL);
 	}
-	return (find_binary_in_path(cmd, env, exit_status));
+	return (find_binary_in_path(cmd, env));
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
+/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 13:18:10 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/12 07:15:50 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/13 20:50:02 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,14 @@ static int	handle_special_tokens(t_token *curr);
 static int	check_syntax_1(t_token **token, int inside_brackets);
 static int	check_next_closed(t_token *token);
 
-int	check_syntax(t_token *token, t_helper *hp)
+int	check_syntax(t_token *token)
 {
 	t_token	*copy;
 
 	copy = lst_dup(token);
 	if (check_syntax_1(&copy, 0))
 		return (1);
-	hp->exit_status = 2;
+	g_exit_status = 2;
 	return (0);
 }
 

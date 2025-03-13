@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 14:43:35 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/13 02:17:29 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/13 20:43:13 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ t_ambiguous_err	*expand_filnames(t_redir *redirection, t_helper *hp)
 	return (NULL);
 }
 
-static int	redirect_and_exec_helper(t_helper *hp, t_hredir *hr,
+static void redirect_and_exec_helper(t_helper *hp, t_hredir *hr,
 									int error_found, int error_index)
 {
 	int	res;
@@ -100,10 +100,10 @@ static int	redirect_and_exec_helper(t_helper *hp, t_hredir *hr,
 		res = exec_command(hp->node, hp);
 	if (hp->node->type != T_SUBSHELL)
 		clean_resources(hp, saved_in, saved_out);
-	return (res);
+	g_exit_status = res;
 }
 
-int	redirect_and_exec(t_helper *hp)
+void	redirect_and_exec(t_helper *hp)
 {
 	int				error_found;
 	int				error_index;
@@ -127,5 +127,5 @@ int	redirect_and_exec(t_helper *hp)
 		}
 		error_found = 1;
 	}
-	return (redirect_and_exec_helper(hp, &redir_h, error_found, error_index));
+	redirect_and_exec_helper(hp, &redir_h, error_found, error_index);
 }

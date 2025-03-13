@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   helper_4.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
+/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 21:26:48 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/12 04:30:17 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/13 20:41:18 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static int	contain_wild(char *str)
 
 void	init_setup(t_helper *hp, t_env **env)
 {
-	hp->exit_status = 0;
+	g_exit_status = 0;
 	hp->line_count = 0;
 	hp->env = env;
 }

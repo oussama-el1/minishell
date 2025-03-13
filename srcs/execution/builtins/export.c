@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 15:25:02 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/13 02:49:13 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/13 20:40:22 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	set_name_and_value(char *env, char **name, char **value)
 	return (concat_flag);
 }
 
-static int	process_env(char *env, t_env *env_ls, int exit_status)
+static int	process_env(char *env, t_env *env_ls)
 {
 	char	*name;
 	char	*value;
@@ -79,13 +79,13 @@ static int	process_env(char *env, t_env *env_ls, int exit_status)
 	value = ft_strtrim(value, " ", ENV);
 	if (value)
 	{
-		env_value = get_env_var(env_ls, name, exit_status);
+		env_value = get_env_var(env_ls, name);
 		if (concat_flag && env_value)
 			set_env_var(&env_ls, name, ft_strjoin(env_value, value, ENV), 1);
 		else
 			set_env_var(&env_ls, name, value, 1);
 	}
-	else if (!get_env_var(env_ls, name, exit_status))
+	else if (!get_env_var(env_ls, name))
 		set_env_var(&env_ls, name, NULL, 0);
 	return (0);
 }
@@ -107,12 +107,12 @@ int	ft_export(char **argv, t_helper *hp)
 			splitted = ft_split(argv[i], ' ', CMD);
 			while (*splitted)
 			{
-				if (process_env(*splitted, *hp->env, hp->exit_status))
+				if (process_env(*splitted, *hp->env))
 					status = 1;
 				splitted++;
 			}
 		}
-		else if (process_env(argv[i], *hp->env, hp->exit_status))
+		else if (process_env(argv[i], *hp->env))
 			status = 1;
 		i++;
 	}

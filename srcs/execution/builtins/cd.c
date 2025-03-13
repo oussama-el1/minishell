@@ -6,19 +6,19 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:16:05 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/13 02:52:04 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/13 20:27:43 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../inc/minishell.h"
 
-static int	change_home_dir(char **argv, t_env *env, int exit_status, int force)
+static int	change_home_dir(char **argv, t_env *env, int force)
 {
 	char	*home;
 
 	if (argv[1] == NULL || (!ft_strcmp(argv[1], "~") && !argv[2]) || force)
 	{
-		home = get_env_var(env, "HOME", exit_status);
+		home = get_env_var(env, "HOME");
 		if (!home)
 		{
 			ft_putstr_fd("cd: HOME not set\n", 2);
@@ -47,9 +47,9 @@ static int	update_env(char **argv, char *old_pwd, t_env *env)
 		ft_putstr_fd("cannot access parent directories", 2);
 		ft_putstr_fd(": No such file or directory\n", 2);
 		set_env_var(&env, ft_strdup("OLDPWD", ENV), ft_strdup(old_pwd, ENV), 1);
-		change_home_dir(argv, env, 0, 1);
+		change_home_dir(argv, env, 1);
 		set_env_var(&env, ft_strdup("PWD", ENV),
-			ft_strdup(get_env_var(env, "HOME", 0), ENV), 1);
+			ft_strdup(get_env_var(env, "HOME"), ENV), 1);
 		return (1);
 	}
 	set_env_var(&env, ft_strdup("OLDPWD", ENV), ft_strdup(old_pwd, ENV), 1);
@@ -74,14 +74,14 @@ static int	ft_cd_helper(char **argv)
 	return (0);
 }
 
-int	ft_cd(char **argv, t_env *env, int exit_status)
+int	ft_cd(char **argv, t_env *env)
 {
 	char		*old_pwd;
 	int			home_res;
 	char		*oldpwd;
 
-	old_pwd = get_env_var(env, "PWD", exit_status);
-	home_res = change_home_dir(argv, env, exit_status, 0);
+	old_pwd = get_env_var(env, "PWD");
+	home_res = change_home_dir(argv, env, 0);
 	if (home_res == 1)
 		return (1);
 	if (home_res == 0)
@@ -90,7 +90,7 @@ int	ft_cd(char **argv, t_env *env, int exit_status)
 		return (ft_putstr_fd("minishell: cd: too many arguments\n", 2), 1);
 	if (argv[1] && !ft_strcmp(argv[1], "-"))
 	{
-		oldpwd = get_env_var(env, "OLDPWD", exit_status);
+		oldpwd = get_env_var(env, "OLDPWD");
 		if (chdir(oldpwd) == -1)
 			return (print_cd_error(oldpwd), 1);
 		printf("%s\n", oldpwd);

@@ -6,19 +6,16 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:08:50 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/13 04:44:08 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/13 20:51:09 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+int	g_exit_status = 0;
+
 static void	parse_exec_cmd(t_token **token, t_helper*helper);
 static void	bash_loop(t_env **env);
-
-void f()
-{
-	system("leaks minishell.c");
-}
 
 int	main(int ac, char **av, char **envp)
 {
@@ -51,7 +48,6 @@ static void	parse_exec_cmd(t_token **token, t_helper *hp)
 	char	*line;
 	char	*tmp;
 
-	atexit(f);
 	hp->line_count++;
 	line = readline("minishell$> ");
 	if (!line)

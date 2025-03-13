@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/13 02:37:19 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/13 20:50:56 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 # include <errno.h>
 # include <dirent.h>
 
-extern int	g_received_signal;
+extern int	g_exit_status;
 
 enum e_token_type
 {
@@ -100,7 +100,7 @@ typedef struct s_expand
 typedef struct s_redir
 {
 	char			*filename;
-	char			*heredoc_delim;
+	char			*h_del;
 	t_expand		*expand_list;
 	t_redir_type	type;
 	struct s_redir	*next;
@@ -115,6 +115,7 @@ typedef struct s_args
 	bool		*wildcards;
 	char		*herdoc_file;
 	int			herdoc_idx;
+	int			expnaded;
 }	t_args;
 
 typedef struct s_tree
@@ -135,7 +136,6 @@ typedef struct s_env
 
 typedef struct s_helper
 {
-	int			exit_status;
 	int			line_count;
 	int			splited;
 	int			export;
@@ -251,7 +251,7 @@ int			parse_quote(t_token **token, t_vars **vars, int *ret);
 void		parse_dollar(t_token **token, t_vars **vars, int *ret);
 void		parse_separator(t_token **token, t_vars **vars, int *ret);
 void		parse_parenthesis(t_token **token, t_vars **vars, int *ret);
-int			check_syntax(t_token *token, t_helper *hp);
+int			check_syntax(t_token *token);
 void		init_setup(t_helper *hp, t_env **env);
 
 /* tree.c */
@@ -279,10 +279,10 @@ void		process_token(t_token **curr, t_args *args,
 				t_redir **redir, int *i);
 
 // builtins
-int			ft_cd(char **argv, t_env *env, int exit_status);
+int			ft_cd(char **argv, t_env *env);
 int			ft_echo(char **argv, char **arg_cpy);
 int			exec_command(t_tree *cmd, t_helper *hp);
-int			ft_pwd(t_env *env, int exit_status);
+int			ft_pwd(t_env *env);
 int			ft_export(char **argv, t_helper *hp);
 int			ft_unset(char **argv, t_env **env);
 int			ft_env(char **argv, t_env *env);
@@ -296,7 +296,7 @@ void		add_env_var(t_env **env, char *key,
 void		print_export(t_env *env, int declare);
 void		print_env(t_env *env);
 int			unset_env_var(t_env **env, char *key);
-char		*get_env_var(t_env *env, char *key, int exit_status);
+char		*get_env_var(t_env *env, char *key);
 void		set_env_var(t_env **env, char *key, char *value, int exported);
 char		**get_env_array(t_env *env);
 t_env		*dup_env(t_env *original);
@@ -305,12 +305,12 @@ int			set_name_and_value(char *env, char **name, char **value);
 
 // exec
 void		setup_signals(void);
-char		*get_executable_path(char *cmd, t_env *env, int exit_status);
+char		*get_executable_path(char *cmd, t_env *env);
 void		execute_herdocs(t_helper *hp);
-int			execute_ast(t_helper *hp);
-int			exec_binary(char **argv, t_env *env, int exit_status);
-int			redirect_and_exec(t_helper *hp);
-int			exec_pipe(t_helper *hp);
+void		execute_ast(t_helper *hp);
+int			exec_binary(char **argv, t_env *env);
+void		redirect_and_exec(t_helper *hp);
+void		exec_pipe(t_helper *hp);
 void		rl_replace_line(const char *text, int clear_undo);
 void		herdoc_loop(const char *delimiter, int fd, t_helper *hp);
 char		*handle_heredoc(const char *delimiter, t_helper *hp, int mode);

@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:04:38 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/13 02:07:30 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/13 20:28:26 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,11 @@ static void	error_handler(char *cmd)
 	exit(127);
 }
 
-void	run_binary(char **argv, t_env *env, int exit_status)
+void	run_binary(char **argv, t_env *env)
 {
 	char	*cmd_path;
 
-	cmd_path = get_executable_path(argv[0], env, exit_status);
+	cmd_path = get_executable_path(argv[0], env);
 	if (!cmd_path)
 		error_handler(argv[0]);
 	execve(cmd_path, argv, get_env_array(env));
@@ -61,7 +61,7 @@ void	run_binary(char **argv, t_env *env, int exit_status)
 	exit(1);
 }
 
-int	exec_binary(char **argv, t_env *env, int exit_status)
+int	exec_binary(char **argv, t_env *env)
 {
 	pid_t	pid;
 	int		status;
@@ -70,7 +70,7 @@ int	exec_binary(char **argv, t_env *env, int exit_status)
 		return (1);
 	pid = fork();
 	if (pid == 0)
-		run_binary(argv, env, exit_status);
+		run_binary(argv, env);
 	else if (pid > 0)
 	{
 		waitpid(pid, &status, 0);
@@ -105,5 +105,5 @@ int	exec_command(t_tree *cmd, t_helper *hp)
 		return (0);
 	if (is_builtin(argv[0]))
 		return (exec_builtin(argv, cmd->args->argv_cpy, hp));
-	return (exec_binary(argv, *hp->env, hp->exit_status));
+	return (exec_binary(argv, *hp->env));
 }
