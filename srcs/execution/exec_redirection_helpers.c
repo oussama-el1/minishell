@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redirection_helpers.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 22:24:50 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/13 19:53:51 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/14 02:52:33 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,19 +24,30 @@ int	is_ambiguous(char **expanded, int empty_flag)
 	return (0);
 }
 
+static void	handle_sigint_herdc(int sig)
+{
+	if (sig == SIGINT)
+	{
+		g_exit_status = 130;
+		ioctl(STDIN_FILENO, TIOCSTI, "\n");
+	}
+}
+
 void	herdoc_loop(const char *delimiter, int fd, t_helper *hp)
 {
 	char	*line;
 	char	*tmp;
 
-	(void)hp;
 	line = NULL;
+	signal(SIGINT, handle_sigint_herdc);
 	while (1)
 	{
 		line = readline("> ");
 		tmp = line;
 		if (!line)
 			return (herdoc_msg(delimiter, hp));
+		if (g_exit_status == 130)
+			break ;
 		if (ft_strcmp(line, delimiter) == 0)
 			return (free(tmp), (void)0);
 		write(fd, line, ft_strlen(line));
@@ -51,7 +62,6 @@ char	*handle_heredoc(const char *delimiter, t_helper *hp, int skip)
 	int			fd;
 	char		*filename;
 
-	signal(SIGINT, SIG_DFL);
 	if (!skip)
 	{
 		filename = ft_strjoin("/tmp/heredoc_", ft_itoa(++id, CMD), CMD);

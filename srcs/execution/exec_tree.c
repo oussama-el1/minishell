@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_tree.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 18:06:55 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/13 20:38:04 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/14 01:55:10 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,6 @@ static void	expander(t_helper *hp)
 		if (contain_wildcard(hp->node->args->argv, hp->node->args->wildcards))
 			expand_wildcard(&hp->node->args->argv, hp->node->args->wildcards);
 	}
-	g_exit_status = 0;
 }
 
 void	execute_ast(t_helper *hp)

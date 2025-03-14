@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/13 20:54:18 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/13 21:41:11 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@
 # include <dirent.h>
 
 extern int	g_exit_status;
+
+# define SECOND 828
 
 enum e_token_type
 {

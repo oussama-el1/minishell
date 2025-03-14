@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 01:01:04 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/13 20:54:50 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/14 02:52:35 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,17 @@ int	process_input(char *line, t_token **token, t_helper *helper, \
 		if (!check_syntax(*token))
 			return (add_history(line), 0);
 		if (!handle_end_of_line(&line, token, helper))
-			return (0);
+			return (add_history(line), 0);
 		if (!base)
 			return (1);
 		helper->splited = 0;
 		helper->export = 0;
 		helper->node = build_ast(*token);
 		execute_herdocs(helper);
-		execute_ast(helper);
+		if (g_exit_status == 130)
+			g_exit_status = -1;
+		else
+			execute_ast(helper);
 	}
 	else
 		return (add_history(line), 0);
@@ -109,10 +112,15 @@ static int	handle_end_of_line(char **line, t_token **token, t_helper *helper)
 			add_history(*line);
 		return (1);
 	}
-	// setup_signals();
 	new_line = input_cmd(last_token(*token));
 	if (!new_line)
-		return (printf("minishell: syntax error: unexpected end of file\n"), 0);
+	{
+		if (g_exit_status == 130)
+			return (0);
+		printf("minishell: syntax error: unexpected end of file\n");
+		g_exit_status = 2;
+		return (0);
+	}
 	*line = ft_strjoin(*line, " ", CMD);
 	*line = ft_strjoin(*line, new_line, CMD);
 	free(new_line);

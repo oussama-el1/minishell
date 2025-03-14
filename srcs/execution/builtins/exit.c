@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 18:04:04 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/13 20:24:18 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/13 21:12:00 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,10 @@ int	ft_exit(char **argv)
 
 	exit_code = g_exit_status;
 	if (!argv)
+	{
+		fdmaroc(NULL, 0, CLEAR, 0);
 		maroc(0, FULLFREE, 0);
+	}
 	else if (argv[1])
 	{
 		ft_exit_error(argv, &exit_code);
@@ -96,6 +99,5 @@ int	ft_exit(char **argv)
 		}
 		exit_code = exit_code % 256;
 	}
-	unlink("/tmp/heredoc_tmp");
 	exit(exit_code);
 }
