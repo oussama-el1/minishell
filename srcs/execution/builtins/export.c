@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oussama <oussama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 15:25:02 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/13 22:50:19 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/14 08:00:07 by oussama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,11 +51,14 @@ int	set_name_and_value(char *env, char **name, char **value)
 	int		concat_flag;
 
 	concatination = ft_strchr(env, '+');
-	concat_flag = (concatination && concatination[1] == '=');
 	equal_ptr = ft_strchr(env, '=');
+	concat_flag = 0;
 	if (equal_ptr)
 	{
 		*value = ft_strdup(equal_ptr + 1, ENV);
+		if (concatination && concatination[1] == '='
+			&& concatination + 1 == equal_ptr)
+			concat_flag = 1;
 		*name = getname(env, equal_ptr, concat_flag);
 	}
 	else
@@ -66,7 +69,7 @@ int	set_name_and_value(char *env, char **name, char **value)
 	return (concat_flag);
 }
 
-static int	process_env(char *env, t_env *env_ls)
+static int	process_env(char *env, t_env **env_ls)
 {
 	char	*name;
 	char	*value;
@@ -78,14 +81,14 @@ static int	process_env(char *env, t_env *env_ls)
 		return (not_valid_idenrifier(env));
 	if (value)
 	{
-		env_value = get_env_var(env_ls, name);
+		env_value = get_env_var(*env_ls, name);
 		if (concat_flag && env_value)
-			set_env_var(&env_ls, name, ft_strjoin(env_value, value, ENV), 1);
+			set_env_var(env_ls, name, ft_strjoin(env_value, value, ENV), 1);
 		else
-			set_env_var(&env_ls, name, value, 1);
+			set_env_var(env_ls, name, value, 1);
 	}
-	else if (!get_env_var(env_ls, name))
-		set_env_var(&env_ls, name, NULL, 0);
+	else if (!get_env_var(*env_ls, name))
+		set_env_var(env_ls, name, NULL, 0);
 	return (0);
 }
 
@@ -106,12 +109,12 @@ int	ft_export(char **argv, t_helper *hp)
 			splitted = ft_split(argv[i], ' ', CMD);
 			while (*splitted)
 			{
-				if (process_env(*splitted, *hp->env))
+				if (process_env(*splitted, hp->env))
 					status = 1;
 				splitted++;
 			}
 		}
-		else if (process_env(argv[i], *hp->env))
+		else if (process_env(argv[i], hp->env))
 			status = 1;
 		i++;
 	}
