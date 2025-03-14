@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:26:30 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/08 23:49:30 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/13 21:25:26 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ static int	valid_option(char *option)
 
 	i = 0;
 	if (option[0] != '-')
+		return (0);
+	else if (option[1] == '\0')
 		return (0);
 	else
 	{

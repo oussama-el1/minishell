@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 20:12:48 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/13 20:39:28 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/13 21:55:44 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,12 +71,14 @@ static char	*find_binary_in_path(char *cmd, t_env *env)
 
 char	*get_executable_path(char *cmd, t_env *env)
 {
-	if (cmd[0] == '/' || ((cmd[0] == '.' && cmd[1] == '/')
-			|| (cmd[0] == '.' && cmd[1] == '.' && cmd[2] == '/')))
+	if (cmd[0] == '/' || (cmd[0] == '.' && cmd[1] == '/') ||
+		(cmd[0] == '.' && cmd[1] == '.' && cmd[2] == '/'))
 	{
 		if (is_executable(cmd))
 			return (ft_strdup(cmd, CMD));
 		return (NULL);
 	}
+	if (access(cmd, F_OK) == 0 && is_executable(cmd))
+		return (ft_strdup(cmd, CMD));
 	return (find_binary_in_path(cmd, env));
 }

@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 15:25:02 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/13 20:40:22 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/13 22:50:19 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ static int	process_env(char *env, t_env *env_ls)
 	concat_flag = set_name_and_value(env, &name, &value);
 	if (!validate_var_name(name))
 		return (not_valid_idenrifier(env));
-	value = ft_strtrim(value, " ", ENV);
 	if (value)
 	{
 		env_value = get_env_var(env_ls, name);

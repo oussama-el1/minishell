@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:16:05 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/13 20:27:43 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/13 22:54:04 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,13 @@ static int	change_home_dir(char **argv, t_env *env, int force)
 			ft_putstr_fd("cd: HOME not set\n", 2);
 			return (1);
 		}
-		if (!*home)
+		if (home[0] == '\0')
 			return (0);
 		if (chdir(home) == -1)
 		{
-			perror("cd");
+			ft_putstr_fd("minishell: cd: ", 2);	
+			ft_putstr_fd(home, 2);	
+			ft_putstr_fd(": No such file or directory\n", 2);
 			return (1);
 		}
 		return (0);

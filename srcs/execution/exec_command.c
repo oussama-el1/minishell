@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:04:38 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/13 20:28:26 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/13 21:38:33 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,13 @@ static void	error_handler(char *cmd)
 			ft_putendl_fd(": is a directory", 2);
 			exit(126);
 		}
+		if (access(cmd, X_OK) == -1)
+		{
+			ft_putstr_fd("minishell: ", 2);
+			ft_putstr_fd(cmd, 2);
+			ft_putendl_fd(": Permission denied", 2);
+			exit(126);
+		}
 	}
 	else
 		enoent_handler(cmd);
@@ -48,6 +55,7 @@ static void	error_handler(char *cmd)
 	ft_putendl_fd(": command not found", 2);
 	exit(127);
 }
+
 
 void	run_binary(char **argv, t_env *env)
 {
