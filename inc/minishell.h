@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
+/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/15 19:43:34 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/15 21:16:54 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -321,7 +321,7 @@ void		herdoc_runner(t_redir *redirection, t_helper *hp);
 void		file_error_handler(t_redir *redirection, int *error_found,
 				int ambigous, t_ambiguous_err *err);
 void		clean_resources(t_helper *hp, int saved_in, int saved_out);
-char		**expand_one_arg(char *argument, t_expand *curr, t_helper *hp);
+char		**expand_one_arg(char *argument, t_expand *curr, t_helper *hp, int *size);
 void		expand_string(char **string, t_helper *hp, int fromherdoc);
 void		argv_expander(char ***argv, t_expand **expandArr, t_helper *hp);
 void		print_ast(t_tree *node, int depth, const char *relation);
@@ -336,7 +336,7 @@ void		iterate_output_redirection(t_redir *redirection,
 				t_redir **last_out, int *error_found);
 void		redir_input(t_helper *hp, t_hredir *hr, int *error_found);
 void		redir_output(t_redir	*last_out, int *error_found);
-int			is_ambiguous(char **expanded, int empty_flag);
+int			is_ambiguous(char **expanded, int empty_flag, int size);
 void		open_output_error(t_redir *redirection, int error_index,
 				int *error_found);
 void		subshell_worker(t_helper hp_cpy);
@@ -353,7 +353,7 @@ void		process_splitted(char **final_args, char **splitted,
 /*  Garbage Collector */
 void		*maroc(size_t size, int flag, int type);
 int			fdmaroc(char *filename, int type, int flag, int flags);
-void		expand_wildcard(char ***argv, bool *wildcards);
+void		expand_wildcard(t_helper *hp);
 int			contain_wildcard(char **argv, bool *wildcards);
 
 // libft
