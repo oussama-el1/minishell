@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 01:01:04 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/14 02:52:35 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/14 23:12:20 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,11 @@ int	process_input(char *line, t_token **token, t_helper *helper, \
 		helper->splited = 0;
 		helper->export = 0;
 		helper->node = build_ast(*token);
+		helper->herdoc_sigint = 0;
 		execute_herdocs(helper);
-		if (g_exit_status == 130)
-			g_exit_status = -1;
-		else
-			execute_ast(helper);
+		if (g_exit_status == 130 && helper->herdoc_sigint)
+			return (0);
+		execute_ast(helper);
 	}
 	else
 		return (add_history(line), 0);

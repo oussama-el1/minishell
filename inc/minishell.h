@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/13 21:41:11 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/14 22:16:07 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # include <sys/wait.h>
 # include <errno.h>
 # include <dirent.h>
+# include <sys/ioctl.h>
 
 extern int	g_exit_status;
 
@@ -141,6 +142,7 @@ typedef struct s_helper
 	int			line_count;
 	int			splited;
 	int			export;
+	int			herdoc_sigint;
 	t_env		**env;
 	t_tree		*node;
 }	t_helper;

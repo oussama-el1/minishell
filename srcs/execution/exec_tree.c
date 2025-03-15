@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 18:06:55 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/14 01:55:10 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/15 01:36:24 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,11 +85,17 @@ static void	expander(t_helper *hp)
 	}
 }
 
+static void	sigquit_handler(int sig)
+{
+	(void)sig;
+	ft_putendl_fd("^\\Quit (core dumped)", 1);
+}
+
 void	execute_ast(t_helper *hp)
 {
 	pid_t		pid;
 
-	setup_signals();
+	signal(SIGQUIT, sigquit_handler);
 	expander(hp);
 	if (g_exit_status == 1)
 		return ;

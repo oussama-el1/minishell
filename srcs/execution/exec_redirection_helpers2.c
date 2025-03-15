@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redirection_helpers2.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 00:05:01 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/13 20:17:36 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/14 22:26:08 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ void	herdoc_runner(t_redir *red, t_helper *hp)
 	}
 	i = 0;
 	hp->node->args->expnaded = 0;
-	while (red)
+	while (red && !hp->herdoc_sigint)
 	{
 		if (red == last_herdoc)
 		{

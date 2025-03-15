@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 23:46:35 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/14 01:51:44 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/14 22:28:18 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,12 +67,7 @@ int	unset_env_var(t_env **env, char *key)
 char	*get_env_var(t_env *env, char *key)
 {
 	if (ft_strcmp(key, "?") == 0)
-	{
-		if (g_exit_status == -1)
-			return (ft_itoa(130, CMD));
-		else
-			return (ft_itoa(g_exit_status, CMD));
-	}
+		return (ft_itoa(g_exit_status, CMD));
 	while (env)
 	{
 		if (ft_strcmp(env->key, key) == 0)

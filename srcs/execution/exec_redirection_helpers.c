@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 22:24:50 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/14 02:52:33 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/15 05:12:19 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,9 @@ static void	handle_sigint_herdc(int sig)
 	if (sig == SIGINT)
 	{
 		g_exit_status = 130;
-		ioctl(STDIN_FILENO, TIOCSTI, "\n");
+		// ioctl(STDIN_FILENO, TIOCSTI, "\n");
+		// write(STDOUT_FILENO, "\n", 1);
+		exit(g_exit_status);
 	}
 }
 
@@ -45,11 +47,9 @@ void	herdoc_loop(const char *delimiter, int fd, t_helper *hp)
 		line = readline("> ");
 		tmp = line;
 		if (!line)
-			return (herdoc_msg(delimiter, hp));
-		if (g_exit_status == 130)
-			break ;
+			return (herdoc_msg(delimiter, hp), exit(0));
 		if (ft_strcmp(line, delimiter) == 0)
-			return (free(tmp), (void)0);
+			return (free(tmp), (void)0, exit(0));
 		write(fd, line, ft_strlen(line));
 		write(fd, "\n", 1);
 		free(tmp);
@@ -60,19 +60,55 @@ char	*handle_heredoc(const char *delimiter, t_helper *hp, int skip)
 {
 	static int	id;
 	int			fd;
-	char		*filename;
+	int			pipefd[2];
+	char		*filename = NULL;
+	pid_t		pid;
 
-	if (!skip)
-	{
-		filename = ft_strjoin("/tmp/heredoc_", ft_itoa(++id, CMD), CMD);
-		fd = fdmaroc(filename, HEREDOC, OPEN, O_WRONLY | O_CREAT | O_TRUNC);
-		if (fd < 0)
-			return (perror("open failed\n"), NULL);
-		herdoc_loop(delimiter, fd, hp);
-		return (filename);
+	if (pipe(pipefd) == -1) {
+		perror("pipe failed");
+		return (NULL);
 	}
-	else
-		herdoc_loop(delimiter, -1, hp);
+	pid = fork();
+	hp->herdoc_sigint = 0;
+	if (pid == 0)
+	{
+		close(pipefd[0]);
+		if (!skip)
+		{
+			filename = ft_strjoin("/tmp/heredoc_", ft_itoa(++id, CMD), CMD);
+			fd = fdmaroc(filename, HEREDOC, OPEN, O_WRONLY | O_CREAT | O_TRUNC);
+			if (fd < 0)
+				exit(1);
+
+			// Send filename to parent
+			write(pipefd[1], filename, strlen(filename) + 1);
+			close(pipefd[1]);
+
+			herdoc_loop(delimiter, fd, hp);
+		}
+		else
+		{
+			herdoc_loop(delimiter, -1, hp);
+			close(pipefd[1]);
+		}
+		exit(0);
+	}
+	else if (pid > 0)
+	{
+		close(pipefd[1]);
+		waitpid(-1, &g_exit_status, 0);
+		if (WEXITSTATUS(g_exit_status) == 130)
+		{
+			g_exit_status = WEXITSTATUS(g_exit_status);
+			
+			hp->herdoc_sigint = 1;	
+		}
+		filename = maroc(256, ALLOC, CMD);
+		if (read(pipefd[0], filename, 256) > 0)
+			return (close(pipefd[0]), filename);
+		else
+			return (close(pipefd[0]), NULL);
+	}
 	return (NULL);
 }
 
