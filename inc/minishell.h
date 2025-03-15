@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/15 07:02:46 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/15 07:59:23 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -343,6 +343,11 @@ void		subshell_handler(t_helper *hp, pid_t pid);
 char		*extract_key(char *str);
 int			matches_pattern(const char *filename, const char *pattern);
 int			count_matching_files(const char *pattern, int *count);
+int			check_expanded(t_redir *redir);
+char		**process_sub(char *sub, t_expand *curr,
+				int count, char **final_args);
+void		process_splitted(char **final_args, char **splitted,
+				t_expand *curr, int *count);
 
 /*  Garbage Collector */
 void		*maroc(size_t size, int flag, int type);

@@ -3,26 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redirection_helpers.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
+/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 22:24:50 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/14 02:52:33 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/15 07:50:47 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	is_ambiguous(char **expanded, int empty_flag)
-{
-	int	size;
-
-	size = 0;
-	while (expanded[size])
-		size++;
-	if (size > 1 || (!empty_flag && !*expanded[0]))
-		return (1);
-	return (0);
-}
 
 static void	handle_sigint_herdc(int sig)
 {

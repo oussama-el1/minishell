@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:04:38 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/13 21:38:33 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/15 07:55:30 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ static void	error_handler(char *cmd)
 	ft_putendl_fd(": command not found", 2);
 	exit(127);
 }
-
 
 void	run_binary(char **argv, t_env *env)
 {

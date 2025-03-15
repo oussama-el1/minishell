@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 22:28:39 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/15 07:00:28 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/15 07:55:09 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,4 +40,18 @@ void	clean_resources(t_helper *hp, int saved_in, int saved_out)
 	close(saved_out);
 	if (hp->node->args->herdoc_file)
 		unlink(hp->node->args->herdoc_file);
+}
+
+int	check_expanded(t_redir *redir)
+{
+	t_expand	*curr;
+
+	curr = redir->expand_list;
+	while (curr)
+	{
+		if (curr->type == S_Q || curr->type == D_Q)
+			return (0);
+		curr = curr->next;
+	}
+	return (1);
 }

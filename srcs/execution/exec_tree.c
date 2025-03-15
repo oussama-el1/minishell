@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 18:06:55 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/15 07:11:39 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/15 07:50:05 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,19 +85,23 @@ static void	expander(t_helper *hp)
 	}
 }
 
-void	execute_ast(t_helper *hp)
-{
-	pid_t		pid;
-
-	setup_signals();
-	expander(hp);
-	printf("[");
+/*
+printf("[");
 	if (hp->node->type == T_CMD)
 	{
 		for (int i = 0; hp->node->args->argv[i]; i++)
 			printf("%s, ", hp->node->args->argv[i]);
 		printf("NULL]\n");
 	}
+
+*/
+
+void	execute_ast(t_helper *hp)
+{
+	pid_t		pid;
+
+	setup_signals();
+	expander(hp);
 	if (g_exit_status == 1)
 		return ;
 	if (hp->node->type == T_CMD)

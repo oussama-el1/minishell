@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 14:43:35 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/13 20:43:13 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/15 07:49:30 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ t_ambiguous_err	*expand_filnames(t_redir *redirection, t_helper *hp)
 	return (NULL);
 }
 
-static void redirect_and_exec_helper(t_helper *hp, t_hredir *hr,
+static void	redirect_and_exec_helper(t_helper *hp, t_hredir *hr,
 									int error_found, int error_index)
 {
 	int	res;
