@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:08:50 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/15 07:56:20 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/15 20:19:43 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,7 @@ int	main(int ac, char **av, char **envp)
 {
 	t_env	*env;
 
-	(void)ac;
-	(void)av;
+	((void)ac, (void)av);
 	env = init_env(envp);
 	bash_loop(&env);
 	return (0);
