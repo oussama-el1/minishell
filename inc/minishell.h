@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
+/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/13 21:41:11 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/15 07:02:46 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # include <sys/wait.h>
 # include <errno.h>
 # include <dirent.h>
+# include <sys/ioctl.h>
 
 extern int	g_exit_status;
 
@@ -139,7 +140,6 @@ typedef struct s_env
 typedef struct s_helper
 {
 	int			line_count;
-	int			splited;
 	int			export;
 	t_env		**env;
 	t_tree		*node;
@@ -343,7 +343,6 @@ void		subshell_handler(t_helper *hp, pid_t pid);
 char		*extract_key(char *str);
 int			matches_pattern(const char *filename, const char *pattern);
 int			count_matching_files(const char *pattern, int *count);
-char		**split_arg(char *new_arg, t_expand *cp, t_helper *hp);
 
 /*  Garbage Collector */
 void		*maroc(size_t size, int flag, int type);

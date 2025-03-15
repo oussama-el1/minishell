@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_tree.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
+/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 18:06:55 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/14 01:55:10 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/15 07:11:39 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,13 @@ void	execute_ast(t_helper *hp)
 
 	setup_signals();
 	expander(hp);
+	printf("[");
+	if (hp->node->type == T_CMD)
+	{
+		for (int i = 0; hp->node->args->argv[i]; i++)
+			printf("%s, ", hp->node->args->argv[i]);
+		printf("NULL]\n");
+	}
 	if (g_exit_status == 1)
 		return ;
 	if (hp->node->type == T_CMD)

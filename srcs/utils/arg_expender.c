@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 21:12:37 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/13 02:43:24 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/15 07:29:09 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,29 +28,92 @@ char	*extract_key(char *str)
 	return (key);
 }
 
+static char	**process_sub(char *sub, t_expand *curr, int count, char **final_args)
+{
+	char **splitted;
+
+	if (curr->type == S_Q || curr->type == D_Q)
+	{
+		splitted = maroc(sizeof(char *) * 2, ALLOC, CMD);
+		splitted[0] = sub;
+		splitted[1] = NULL;
+	}
+	else if (curr->type == DOLLAR && ft_strchr(sub, ' '))
+		splitted = ft_split(sub, ' ', CMD);
+	else
+	{
+		splitted = maroc(sizeof(char *) * 2, ALLOC, CMD);
+		splitted[0] = sub;
+		splitted[1] = NULL;
+	}
+	if (curr->type == EXPR && count > 0)
+	{
+		if (final_args[0])
+			final_args[0] = ft_strjoin(sub, final_args[0], CMD);
+		splitted = NULL;
+	}
+	return splitted;
+}
+
+
+void	process_splitted(char **final_args, char **splitted,
+			t_expand *curr, int *count)
+{
+	int	i;
+	int	j;
+
+	i = -1;
+	while (splitted[++i])
+		*count += 1;
+	if (curr->next && curr->next->type == EXPR)
+	{
+		if (splitted[i - 1])
+		{
+			i--;
+			*count -= 1;
+			splitted[i] = ft_strjoin(splitted[i], final_args[0], CMD);
+		}
+		final_args[0] = splitted[i];
+	}
+	j = *count - 1;
+	while (j >= i)
+	{
+		final_args[j] = final_args[j - i];
+		j--;
+	}
+	j = 0;
+	while (j < i)
+	{
+		final_args[j] = splitted[j];
+		j++;
+	}
+}
+
 char	**expand_one_arg(char *argument, t_expand *curr, t_helper *hp)
 {
-	char		*sub;
-	char		*new_arg;
-	t_expand	*cp;
+	char	*sub;
+	char	**splitted;
+	char	**final_args;
+	int		count;
 
-	cp = curr;
 	while (curr->next)
 		curr = curr->next;
-	new_arg = NULL;
+	final_args = maroc(sizeof(char *) * 100, ALLOC, CMD);
+	count = 0;
 	while (curr)
 	{
-		sub = ft_substr(argument, curr->start,
-				curr->end - curr->start, CMD);
+		sub = ft_substr(argument, curr->start, curr->end - curr->start, CMD);
 		if (curr->expanded && ft_strchr(argument, '$'))
 			expand_string(&sub, hp, 0);
-		if (!ft_strcmp(sub, "$") && curr->next
-			&& (curr->type != curr->next->type && curr->next->type != EXPR))
+		if (!ft_strcmp(sub, "$") && curr->next && curr->type != curr->next->type && curr->next->type != EXPR)
 			sub = NULL;
-		new_arg = ft_strjoin(sub, new_arg, CMD);
+		splitted = process_sub(sub, curr, count, final_args);
+		if (splitted)
+			process_splitted(final_args, splitted, curr, &count);
 		curr = curr->prev;
 	}
-	return (split_arg(new_arg, cp, hp));
+	final_args[count] = NULL;
+	return (final_args);
 }
 
 int	count_final_argument(char **argv, t_expand **expandArr, t_helper *hp)
@@ -66,8 +129,7 @@ int	count_final_argument(char **argv, t_expand **expandArr, t_helper *hp)
 	{
 		if (ft_strchr(argv[i], '$'))
 		{
-			expanded_args = expand_one_arg(argv[i],
-					expandArr[i], hp);
+			expanded_args = expand_one_arg(argv[i], expandArr[i], hp);
 			k = 0;
 			while (expanded_args[k])
 			{
@@ -103,8 +165,6 @@ void	argv_expander(char ***argv, t_expand **expandArr, t_helper *hp)
 		}
 		else
 			new_argv[j++] = (*argv)[i];
-		if (i == 0 && !ft_strcmp(new_argv[0], "export"))
-			hp->export = 1;
 		i++;
 	}
 	new_argv[j] = NULL;

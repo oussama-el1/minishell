@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oussama <oussama@student.42.fr>            +#+  +:+       +#+        */
+/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 15:25:02 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/14 08:00:07 by oussama          ###   ########.fr       */
+/*   Updated: 2025/03/15 07:01:01 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,6 @@ int	ft_export(char **argv, t_helper *hp)
 {
 	int		i;
 	int		status;
-	char	**splitted;
 
 	i = 1;
 	status = 0;
@@ -104,17 +103,7 @@ int	ft_export(char **argv, t_helper *hp)
 		return (print_export(*hp->env, 1), 0);
 	while (argv[i])
 	{
-		if (hp->splited == 1 && ft_strchr(argv[i], ' '))
-		{
-			splitted = ft_split(argv[i], ' ', CMD);
-			while (*splitted)
-			{
-				if (process_env(*splitted, hp->env))
-					status = 1;
-				splitted++;
-			}
-		}
-		else if (process_env(argv[i], hp->env))
+		if (process_env(argv[i], hp->env))
 			status = 1;
 		i++;
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
+/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 01:01:04 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/14 02:52:35 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/15 07:08:49 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,122 @@ static int	end_with_operator(char *line);
 static void	give_type(t_token **token);
 static int	handle_end_of_line(char **line, t_token **token, \
 	t_helper *helper);
+
+const char *type_names[] = {
+	"T_AND",
+	"T_OR",
+	"T_PIPE",
+	"T_CMD",
+	"T_SUBSHELL",
+};
+	 
+const char *token_type_names[] = {
+	"REDIR_IN",
+	"REDIR_OUT",
+	"REDIR_APPEND",
+	"HEREDOC",
+	"PIPE",
+	"AND",
+	"OR",
+	"DOLLAR",
+	"OPEN_BRACKET",
+	"CLOSED_BRACKET",
+	"D_Q",
+	"S_Q",
+	"EXPR",
+};
+ 
+static void print_redir_list(t_redir *redir)
+{
+	while (redir)
+	{
+		if (redir->type != R_HEREDOC)
+			printf("  -> Redir: Type = %s, Filename = \"%s\"\n",
+					token_type_names[redir->type], redir->filename);
+		else
+			printf("  -> Redir: Type = %s, Delimiter = \"%s\"\n",
+				token_type_names[redir->type], redir->h_del);
+		for (t_expand *tmp = redir->expand_list; tmp; tmp = tmp->next)
+		{
+			printf("  -> Expand: Start = %zu, End = %zu, Expanded = %s\n",
+			tmp->start, tmp->end, tmp->expanded ? "true" : "false");
+		}
+		redir = redir->next;
+	}
+}
+
+static void print_expand_list(t_expand *expand)
+{
+	while (expand)
+	{
+		printf("   type = %s  -> Expand: Start = %zu, End = %zu, Expanded = %s\n",
+				token_type_names[expand->type], expand->start, expand->end, expand->expanded ? "true" : "false");
+		expand = expand->next;
+	}
+}
+
+void print_ast(t_tree *node, int depth, const char *relation)
+{
+	if (!node)
+		return;
+	 
+	// Print indentation based on the depth
+	for (int i = 0; i < depth; i++)
+		printf("  ");
+	 
+		 // Print node type
+		 printf("[%s] Node: %s", relation, type_names[node->type]);
+	 
+	// If it's a command or subshell, print arguments and redirections
+	if ((node->type == T_CMD || node->type == T_SUBSHELL) && node->args)
+	{
+		if (node->type != T_SUBSHELL)
+		{
+			// Print arguments
+			printf(" (argv: ");
+			for (int i = 0; node->args->argv[i]; i++)
+			{
+				printf("\"%s\"", node->args->argv[i]);
+				if (node->args->argv[i + 1])
+				printf(" : ");
+			}
+			printf(")");
+		}
+	 
+		// Print expansion list if it exists
+		if (node->args->expand_list)
+		{
+			printf("\n");
+			for (int i = 0; node->args->argv[i]; i++)
+			{
+				if (node->args->expand_list[i])
+				{
+					printf("  -> Arg[%d]: \"%s\" Expansion Details:\n", i, node->args->argv[i]);
+					print_expand_list(node->args->expand_list[i]);
+				}
+			}
+		}
+	 
+		// Print redirections if they exist
+		if (node->args->redir)
+		{
+			printf("\n");
+			print_redir_list(node->args->redir);
+		}
+	 
+		// print wildcards bool array
+		for (int i = 0; node->args->argv[i]; i++)
+			printf("  -> Arg[%d]: \"%s\" Wildcard: %s\n", i, node->args->argv[i], node->args->wildcards[i] ? "true" : "false");
+	}
+
+	printf("\n");
+
+	// Recursively print left and right children (if any)
+	if (node->left)
+		print_ast(node->left, depth + 1, "Left");
+	if (node->right)
+		print_ast(node->right, depth + 1, "Right");
+}
 
 int	process_input(char *line, t_token **token, t_helper *helper, \
 	int base)
@@ -34,14 +150,11 @@ int	process_input(char *line, t_token **token, t_helper *helper, \
 			return (add_history(line), 0);
 		if (!base)
 			return (1);
-		helper->splited = 0;
 		helper->export = 0;
 		helper->node = build_ast(*token);
 		execute_herdocs(helper);
-		if (g_exit_status == 130)
-			g_exit_status = -1;
-		else
-			execute_ast(helper);
+		execute_ast(helper);
+		// print_ast(helper->node, 0, "Root");
 	}
 	else
 		return (add_history(line), 0);
