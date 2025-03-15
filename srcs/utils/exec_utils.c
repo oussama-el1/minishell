@@ -6,35 +6,11 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 22:28:39 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/13 02:48:57 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/15 07:55:09 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static int	is_splited(t_expand *expand)
-{
-	while (expand)
-	{
-		if (expand->type != DOLLAR && expand->type != EXPR)
-			return (0);
-		expand = expand->next;
-	}
-	return (1);
-}
-
-char	**split_arg(char *new_arg, t_expand *cp, t_helper *hp)
-{
-	char	**splitted;
-
-	hp->splited = is_splited(cp);
-	if (ft_strchr(new_arg, ' ') && !hp->export && hp->splited)
-		return (ft_split(new_arg, ' ', CMD));
-	splitted = maroc(sizeof(char *) * 2, ALLOC, CMD);
-	splitted[0] = new_arg;
-	splitted[1] = NULL;
-	return (splitted);
-}
 
 int	count_matching_files(const char *pattern, int *count)
 {
@@ -64,4 +40,18 @@ void	clean_resources(t_helper *hp, int saved_in, int saved_out)
 	close(saved_out);
 	if (hp->node->args->herdoc_file)
 		unlink(hp->node->args->herdoc_file);
+}
+
+int	check_expanded(t_redir *redir)
+{
+	t_expand	*curr;
+
+	curr = redir->expand_list;
+	while (curr)
+	{
+		if (curr->type == S_Q || curr->type == D_Q)
+			return (0);
+		curr = curr->next;
+	}
+	return (1);
 }

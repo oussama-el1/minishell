@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 14:43:35 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/14 23:12:30 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/15 19:42:01 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ t_ambiguous_err	*expand_filnames(t_redir *redirection, t_helper *hp)
 	return (NULL);
 }
 
-static void redirect_and_exec_helper(t_helper *hp, t_hredir *hr,
+static void	redirect_and_exec_helper(t_helper *hp, t_hredir *hr,
 									int error_found, int error_index)
 {
 	int	res;

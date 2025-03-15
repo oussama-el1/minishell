@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 00:05:01 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/14 22:26:08 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/15 19:43:20 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,20 +87,6 @@ void	redir_output(t_redir	*last_out, int *error_found)
 	}
 }
 
-int	check_expanded(t_redir *redir)
-{
-	t_expand	*curr;
-
-	curr = redir->expand_list;
-	while (curr)
-	{
-		if (curr->type == S_Q || curr->type == D_Q)
-			return (0);
-		curr = curr->next;
-	}
-	return (1);
-}
-
 void	herdoc_runner(t_redir *red, t_helper *hp)
 {
 	int		i;
@@ -115,8 +101,7 @@ void	herdoc_runner(t_redir *red, t_helper *hp)
 		save = save->next;
 	}
 	i = 0;
-	hp->node->args->expnaded = 0;
-	while (red && !hp->herdoc_sigint)
+	while (red)
 	{
 		if (red == last_herdoc)
 		{

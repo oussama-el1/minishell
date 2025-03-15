@@ -6,23 +6,11 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 22:24:50 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/15 05:12:19 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/15 19:41:49 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	is_ambiguous(char **expanded, int empty_flag)
-{
-	int	size;
-
-	size = 0;
-	while (expanded[size])
-		size++;
-	if (size > 1 || (!empty_flag && !*expanded[0]))
-		return (1);
-	return (0);
-}
 
 static void	handle_sigint_herdc(int sig)
 {
@@ -100,8 +88,8 @@ char	*handle_heredoc(const char *delimiter, t_helper *hp, int skip)
 		if (WEXITSTATUS(g_exit_status) == 130)
 		{
 			g_exit_status = WEXITSTATUS(g_exit_status);
-			
-			hp->herdoc_sigint = 1;	
+
+			hp->herdoc_sigint = 1;
 		}
 		filename = maroc(256, ALLOC, CMD);
 		if (read(pipefd[0], filename, 256) > 0)
