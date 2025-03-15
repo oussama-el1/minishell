@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 22:24:50 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/15 19:41:49 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/15 22:07:41 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,13 @@ static void	handle_sigint_herdc(int sig)
 {
 	if (sig == SIGINT)
 	{
-		g_exit_status = 130;
-		// ioctl(STDIN_FILENO, TIOCSTI, "\n");
-		// write(STDOUT_FILENO, "\n", 1);
-		exit(g_exit_status);
+		printf("tststst\n");
+		write(STDOUT_FILENO, "\n", 1);
+		tcsetattr(STDIN_FILENO, TCSANOW, &signals.term);
+		rl_replace_line("", 0); // Clear current input line
+		rl_on_new_line();       // Move cursor to new line
+		rl_done = 1;       // Exit readline immediately // header file is <readline/readline.h>
+		signals.sigint_heredoc = 1;
 	}
 }
 
@@ -35,9 +38,14 @@ void	herdoc_loop(const char *delimiter, int fd, t_helper *hp)
 		line = readline("> ");
 		tmp = line;
 		if (!line)
-			return (herdoc_msg(delimiter, hp), exit(0));
+			return (herdoc_msg(delimiter, hp));
+		if (signals.sigint_heredoc)
+		{
+			signals.sigint_heredoc = 0;
+			return (free(tmp), (void)0);
+		}
 		if (ft_strcmp(line, delimiter) == 0)
-			return (free(tmp), (void)0, exit(0));
+			return (free(tmp), (void)0);
 		write(fd, line, ft_strlen(line));
 		write(fd, "\n", 1);
 		free(tmp);
@@ -48,57 +56,59 @@ char	*handle_heredoc(const char *delimiter, t_helper *hp, int skip)
 {
 	static int	id;
 	int			fd;
-	int			pipefd[2];
 	char		*filename = NULL;
-	pid_t		pid;
 
-	if (pipe(pipefd) == -1) {
-		perror("pipe failed");
-		return (NULL);
-	}
-	pid = fork();
-	hp->herdoc_sigint = 0;
-	if (pid == 0)
+	if (!skip)
 	{
-		close(pipefd[0]);
-		if (!skip)
-		{
-			filename = ft_strjoin("/tmp/heredoc_", ft_itoa(++id, CMD), CMD);
-			fd = fdmaroc(filename, HEREDOC, OPEN, O_WRONLY | O_CREAT | O_TRUNC);
-			if (fd < 0)
-				exit(1);
-
-			// Send filename to parent
-			write(pipefd[1], filename, strlen(filename) + 1);
-			close(pipefd[1]);
-
-			herdoc_loop(delimiter, fd, hp);
-		}
-		else
-		{
-			herdoc_loop(delimiter, -1, hp);
-			close(pipefd[1]);
-		}
-		exit(0);
+		filename = ft_strjoin("/tmp/heredoc_", ft_itoa(++id, CMD), CMD);
+		fd = fdmaroc(filename, HEREDOC, OPEN, O_WRONLY | O_CREAT | O_TRUNC);
+		if (fd < 0)
+			return (perror("open failed\n"), NULL);
+		herdoc_loop(delimiter, fd, hp);
+		return (filename);
 	}
-	else if (pid > 0)
-	{
-		close(pipefd[1]);
-		waitpid(-1, &g_exit_status, 0);
-		if (WEXITSTATUS(g_exit_status) == 130)
-		{
-			g_exit_status = WEXITSTATUS(g_exit_status);
-
-			hp->herdoc_sigint = 1;
-		}
-		filename = maroc(256, ALLOC, CMD);
-		if (read(pipefd[0], filename, 256) > 0)
-			return (close(pipefd[0]), filename);
-		else
-			return (close(pipefd[0]), NULL);
-	}
+	else
+		herdoc_loop(delimiter, -1, hp);
 	return (NULL);
 }
+
+	// if (pid == 0)
+	// {
+	// 	close(pipefd[0]);
+	// 	if (!skip)
+	// 	{
+	// 		filename = ft_strjoin("/tmp/heredoc_", ft_itoa(++id, CMD), CMD);
+	// 		fd = fdmaroc(filename, HEREDOC, OPEN, O_WRONLY | O_CREAT | O_TRUNC);
+	// 		if (fd < 0)
+	// 			exit(1);
+	// 		write(pipefd[1], filename, ft_strlen(filename) + 1);
+	// 		ft_putstr_fd(filename, 1);
+	// 		close(pipefd[1]);
+
+	// 		herdoc_loop(delimiter, fd, hp);
+	// 	}
+	// 	else
+	// 	{
+	// 		herdoc_loop(delimiter, -1, hp);
+	// 		close(pipefd[1]);
+	// 	}
+	// 	exit(0);
+	// }
+	// else if (pid > 0)
+	// {
+	// 	close(pipefd[1]);
+	// 	waitpid(-1, &g_exit_status, 0);
+	// 	if (WEXITSTATUS(g_exit_status) == 130)
+	// 	{
+	// 		g_exit_status = WEXITSTATUS(g_exit_status);
+	// 		hp->herdoc_sigint = 1;
+	// 	}
+	// 	filename = maroc(256, ALLOC, CMD);
+	// 	if (read(pipefd[0], filename, 256) > 0)
+	// 		return (close(pipefd[0]), filename);
+	// 	else
+	// 		return (close(pipefd[0]), NULL);
+	// }
 
 void	file_error_handler(t_redir *redirection, int *error_found,
 		int ambiguous, t_ambiguous_err *err)

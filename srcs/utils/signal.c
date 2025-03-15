@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 17:31:02 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/15 07:54:15 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/15 21:52:06 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,10 @@
 
 int	g_received_signal = 0;
 
+t_signals signals = {{0}, 0, 0};
+
 void	handle_sigint(int sig)
 {
-	static struct termios term;
 	(void)sig;
 	if (sig == SIGINT)
 	{
@@ -25,10 +26,6 @@ void	handle_sigint(int sig)
 		else
 		{
 			ft_putstr_fd("\n", 1);
-			// Reset terminal attributes
-			tcgetattr(STDIN_FILENO, &term);
-			term.c_lflag &= ~ECHOCTL;
-			tcsetattr(STDIN_FILENO, TCSANOW, &term);
 			rl_replace_line("", 0);
 			rl_on_new_line();
 			rl_redisplay();

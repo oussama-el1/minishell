@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/15 19:43:34 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/15 21:40:20 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,15 @@
 # include <sys/ioctl.h>
 
 extern int	g_exit_status;
+
+typedef struct	s_signals
+{
+	struct termios	term;
+	int	sigint_heredoc;
+	int	sigint_child;
+}	t_signals;
+
+extern t_signals signals;
 
 # define SECOND 828
 
