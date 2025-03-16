@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/15 22:14:05 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/16 03:02:31 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -345,7 +345,6 @@ void		iterate_output_redirection(t_redir *redirection,
 				t_redir **last_out, int *error_found);
 void		redir_input(t_helper *hp, t_hredir *hr, int *error_found);
 void		redir_output(t_redir	*last_out, int *error_found);
-int			is_ambiguous(char **expanded, int empty_flag, int size);
 void		open_output_error(t_redir *redirection, int error_index,
 				int *error_found);
 void		subshell_worker(t_helper hp_cpy);
@@ -386,7 +385,7 @@ int			ft_atoi(const char *str);
 void		*ft_calloc(size_t nmemb, size_t size, int type);
 char		*ft_strdup(const char *s, int type);
 char		*ft_strjoin(char const *s1, char const *s2, int type);
-char		**ft_split(char const *s, char c, int type);
+char		**ft_split(char const *s, char *del, int type);
 char		*ft_itoa(int n, int type);
 int			ft_putchar_fd(char c, int fd);
 void		ft_putstr_fd(char *s, int fd);

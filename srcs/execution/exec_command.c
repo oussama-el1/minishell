@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:04:38 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/15 22:01:17 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/16 00:04:54 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,10 +92,6 @@ int	exec_command(t_tree *cmd, t_helper *hp)
 	char	**argv;
 
 	argv = cmd->args->argv;
-	printf("[");
-	for (int k = 0; argv[k]; k++)
-		printf("%s, ", argv[k]);
-	printf("NULL]\n");
 	if (!argv[0])
 		return (0);
 	if (is_builtin(argv[0]))
