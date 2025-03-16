@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:04:38 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/16 08:44:15 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/16 09:38:56 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static void	error_handler(char *cmd)
 			ft_putendl_fd(": is a directory", 2);
 			exit(126);
 		}
-		if (access(cmd, X_OK) == -1)
+		if (is_executable(cmd) == 0)
 		{
 			ft_putstr_fd("minishell: ", 2);
 			ft_putstr_fd(cmd, 2);

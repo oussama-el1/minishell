@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/16 09:16:17 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/16 09:39:48 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -395,6 +395,7 @@ void		ft_putnbr_fd(int n, int fd);
 int			ft_putstrn_fd(char *s, int fd, int n);
 int			ft_putnchar_fd(char c, int fd, int n);
 char		*ft_substr(char const *s, unsigned int start, size_t len, int type);
+int			is_executable(char *path);
 
 # ifndef MAX_FILES_OPENED
 #  define MAX_FILES_OPENED 1024

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   paths.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 20:12:48 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/16 03:02:39 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/16 09:39:14 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	ambiguous_redirect(char *file)
 	ft_putstr_fd(": ambiguous redirect\n", 2);
 }
 
-static int	is_executable(char *path)
+int	is_executable(char *path)
 {
 	struct stat	buf;
 
