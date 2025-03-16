@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 18:06:55 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/16 09:16:39 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/16 09:22:35 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,15 +103,6 @@ void	execute_ast(t_helper *hp)
 	if (!hp->node)
 		return ;
 	expander(hp);
-	if (hp->node->args)
-	{
-		printf("[");
-		for (int k = 0; hp->node->args->argv[k]; k++)
-			printf("%s, ", hp->node->args->argv[k]);
-		printf("NULL]\n");
-	}
-	if (g_exit_status == 1)
-		return ;
 	if (hp->node->type == T_CMD)
 		redirect_and_exec(hp);
 	if (hp->node->type == T_PIPE)

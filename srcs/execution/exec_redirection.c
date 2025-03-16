@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redirection.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 14:43:35 by oel-hadr          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/03/16 06:47:04 by yslami           ###   ########.fr       */
-=======
-/*   Updated: 2025/03/16 07:14:52 by oel-hadr         ###   ########.fr       */
->>>>>>> 7b86cb1814102bbdccb05aa0c8c8d0611855a28d
+/*   Updated: 2025/03/16 09:22:01 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +47,7 @@ t_ambiguous_err	*expand_filnames_helper(t_redir *redirection,
 
 	size = 0;
 	expanded = expand_one_arg(redirection->filename,
-			redirection->expand_list, hp, &size, 0);
+			redirection->expand_list, hp, &size);
 	if (size == 1)
 		redirection->filename = expanded[0];
 	else
