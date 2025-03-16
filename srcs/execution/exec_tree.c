@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 18:06:55 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/15 21:42:55 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/16 07:10:14 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ static void	expander(t_helper *hp)
 	{
 		hp->node->args->argv_cpy = hp->node->args->argv;
 		hp->node->args->argv_cpy = hp->node->args->argv;
-		argv_expander(&hp->node->args->argv, hp->node->args->expand_list, hp);
+		argv_expander(&hp->node->args->argv, hp->node->args->expand_list, hp);;
 		if (contain_wildcard(hp->node->args->argv, hp->node->args->wildcards))
 			expand_wildcard(hp);
 	}
@@ -97,6 +97,13 @@ void	execute_ast(t_helper *hp)
 
 	signal(SIGQUIT, sigquit_handler);
 	expander(hp);
+	if (hp->node->args)
+	{
+		printf("[");
+		for (int k = 0; hp->node->args->argv[k]; k++)
+			printf("%s, ", hp->node->args->argv[k]);
+		printf("NULL]\n");
+	}
 	if (g_exit_status == 1)
 		return ;
 	if (hp->node->type == T_CMD)

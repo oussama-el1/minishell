@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 07:45:38 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/16 03:03:48 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/16 07:13:28 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,10 @@ char	**process_sub(char *sub, t_expand *curr,
 		splitted[0] = sub;
 		splitted[1] = NULL;
 	}
-	if (curr->type == EXPR && count > 0)
+	if (count > 0)
 	{
 		if (final_args[0])
-			final_args[0] = ft_strjoin(sub, final_args[0], CMD);
+			final_args[0] = ft_strjoin(splitted[0], final_args[0], CMD);
 		splitted = NULL;
 	}
 	return (splitted);
@@ -63,6 +63,7 @@ void	process_splitted(char **final_args, char **splitted,
 	i = -1;
 	while (splitted[++i])
 		(*count)++;
+
 	if (curr->next && curr->next->type == EXPR)
 		handle_expr_join(final_args, splitted, &i, count);
 	j = *count - 1;

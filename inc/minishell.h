@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/16 03:02:31 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/16 06:00:43 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -330,7 +330,7 @@ void		herdoc_runner(t_redir *redirection, t_helper *hp);
 void		file_error_handler(t_redir *redirection, int *error_found,
 				int ambigous, t_ambiguous_err *err);
 void		clean_resources(t_helper *hp, int saved_in, int saved_out);
-char		**expand_one_arg(char *argument, t_expand *curr, t_helper *hp, int *size);
+char		**expand_one_arg(char *argument, t_expand *curr, t_helper *hp, int *size, int debug);
 void		expand_string(char **string, t_helper *hp, int fromherdoc);
 void		argv_expander(char ***argv, t_expand **expandArr, t_helper *hp);
 void		print_ast(t_tree *node, int depth, const char *relation);
