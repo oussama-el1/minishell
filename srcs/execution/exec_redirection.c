@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 14:43:35 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/16 03:45:25 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/16 05:22:41 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,12 @@ t_ambiguous_err	*expand_filnames_helper(t_redir *redirection,
 					t_ambiguous_err **err, t_helper *hp, int i)
 {
 	char	**expanded;
+	int		size;
 
+	size = 0;
 	expanded = expand_one_arg(redirection->filename,
-			redirection->expand_list, hp);
-	if (!is_ambiguous(expanded, redirection->filename[0] == '\0'))
+			redirection->expand_list, hp, &size);
+	if (size == 1)
 		redirection->filename = expanded[0];
 	else
 	{

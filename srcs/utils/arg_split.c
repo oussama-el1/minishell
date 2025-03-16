@@ -6,23 +6,11 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 07:45:38 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/15 07:58:31 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/16 03:03:48 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	is_ambiguous(char **expanded, int empty_flag)
-{
-	int	size;
-
-	size = 0;
-	while (expanded[size])
-		size++;
-	if (size > 1 || (!empty_flag && !*expanded[0]))
-		return (1);
-	return (0);
-}
 
 char	**process_sub(char *sub, t_expand *curr,
 	int count, char **final_args)
@@ -35,8 +23,10 @@ char	**process_sub(char *sub, t_expand *curr,
 		splitted[0] = sub;
 		splitted[1] = NULL;
 	}
-	else if (curr->type == DOLLAR && ft_strchr(sub, ' '))
-		splitted = ft_split(sub, ' ', CMD);
+	else if (curr->type == DOLLAR && !ft_strcmp(sub, ""))
+		return (NULL);
+	else if (curr->type == DOLLAR)
+		splitted = ft_split(sub, " \t\n\v\f\r", CMD);
 	else
 	{
 		splitted = maroc(sizeof(char *) * 2, ALLOC, CMD);

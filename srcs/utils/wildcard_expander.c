@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/02 00:34:27 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/12 05:32:59 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/15 21:16:43 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,17 +101,17 @@ static int	count_wildcard(char **old_argv, bool *wildcards)
 	return (count);
 }
 
-void	expand_wildcard(char ***argv, bool *wildcards)
+void	expand_wildcard(t_helper *hp)
 {
 	char	**old_argv;
 	char	**new_argv;
 	int		count;
 
-	old_argv = *argv;
-	count = count_wildcard(old_argv, wildcards);
+	old_argv = hp->node->args->argv;
+	count = count_wildcard(old_argv, hp->node->args->wildcards);
 	new_argv = maroc((count + 1) * sizeof(char *), ALLOC, CMD);
 	if (!new_argv)
 		return ;
-	fill_new_argv(new_argv, old_argv, wildcards);
-	*argv = new_argv;
+	fill_new_argv(new_argv, old_argv, hp->node->args->wildcards);
+	hp->node->args->argv = new_argv;
 }

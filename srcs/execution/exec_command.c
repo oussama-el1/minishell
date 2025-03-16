@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:04:38 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/15 07:55:30 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/16 00:04:54 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,25 +89,9 @@ int	exec_binary(char **argv, t_env *env)
 
 int	exec_command(t_tree *cmd, t_helper *hp)
 {
-	char		**argv;
-	t_expand	**expand;
-	int			i;
+	char	**argv;
 
 	argv = cmd->args->argv;
-	expand = cmd->args->expand_list;
-	if (!*argv[0])
-	{
-		i = 0;
-		while (argv[i] && !*argv[i] && expand[i] && expand[i]->type == DOLLAR)
-			i++;
-		if (argv[i] && !*argv[i])
-		{
-			ft_putstr_fd("minishell: : command not found\n", 2);
-			return (127);
-		}
-		argv = &argv[i];
-		cmd->args->argv = argv;
-	}
 	if (!argv[0])
 		return (0);
 	if (is_builtin(argv[0]))

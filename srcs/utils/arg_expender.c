@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 21:12:37 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/15 07:45:08 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/15 21:49:47 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ char	*extract_key(char *str)
 	return (key);
 }
 
-char	**expand_one_arg(char *argument, t_expand *curr, t_helper *hp)
+char	**expand_one_arg(char *argument, t_expand *curr, t_helper *hp, int *len)
 {
 	char	*sub;
 	char	**splitted;
@@ -53,6 +53,7 @@ char	**expand_one_arg(char *argument, t_expand *curr, t_helper *hp)
 		curr = curr->prev;
 	}
 	final_args[count] = NULL;
+	*len += count;
 	return (final_args);
 }
 
@@ -60,23 +61,13 @@ int	count_final_argument(char **argv, t_expand **expandArr, t_helper *hp)
 {
 	int		i;
 	int		count;
-	char	**expanded_args;
-	int		k;
 
 	i = 0;
 	count = 0;
 	while (argv[i])
 	{
 		if (ft_strchr(argv[i], '$'))
-		{
-			expanded_args = expand_one_arg(argv[i], expandArr[i], hp);
-			k = 0;
-			while (expanded_args[k])
-			{
-				count++;
-				k++;
-			}
-		}
+			expand_one_arg(argv[i], expandArr[i], hp, &count);
 		else
 			count++;
 		i++;
@@ -88,6 +79,8 @@ void	argv_expander(char ***argv, t_expand **expandArr, t_helper *hp)
 {
 	int		i;
 	int		j;
+	int		k;
+	int		count;
 	char	**new_argv;
 	char	**return_arg;
 
@@ -99,9 +92,14 @@ void	argv_expander(char ***argv, t_expand **expandArr, t_helper *hp)
 	{
 		if (ft_strchr((*argv)[i], '$'))
 		{
-			return_arg = expand_one_arg((*argv)[i], expandArr[i], hp);
-			while (*return_arg)
+			count = 0;
+			return_arg = expand_one_arg((*argv)[i], expandArr[i], hp, &count);
+			k = 0;
+			while (k < count)
+			{
 				new_argv[j++] = *return_arg++;
+				k++;
+			}
 		}
 		else
 			new_argv[j++] = (*argv)[i];

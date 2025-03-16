@@ -3,30 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
+/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 17:13:22 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/02 23:55:21 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/16 03:21:03 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	ft_allocate(char **strings, char const *s, char sep, int type)
+static int	ft_allocate(char **strings, char const *s, char *delims, int type)
 {
 	char		**strings1;
 	char const	*temp;
 
 	strings1 = strings;
-	temp = s;
 	while (*s)
 	{
-		while (*s && *s == sep)
+		while (*s && ft_strchr(delims, *s))
 			++s;
 		temp = s;
-		while (*temp && *temp != sep)
+		while (*temp && !ft_strchr(delims, *temp))
 			++temp;
-		if (*temp == sep || temp > s)
+		if (temp > s)
 		{
 			*strings1 = ft_substr(s, 0, temp - s, type);
 			s = temp;
@@ -37,7 +36,7 @@ static int	ft_allocate(char **strings, char const *s, char sep, int type)
 	return (1);
 }
 
-static int	ft_count_words(char const *s, char c)
+static int	ft_count_words(char const *s, char *delims)
 {
 	int	i;
 	int	count;
@@ -46,30 +45,26 @@ static int	ft_count_words(char const *s, char c)
 	count = 0;
 	while (s[i])
 	{
-		while (s[i] && s[i] == c)
-		{
+		while (s[i] && ft_strchr(delims, s[i]))
 			i++;
-		}
 		if (s[i])
 			count++;
-		while (s[i] && s[i] != c)
-		{
+		while (s[i] && !ft_strchr(delims, s[i]))
 			i++;
-		}
 	}
 	return (count);
 }
 
-char	**ft_split(char const *s, char c, int type)
+char	**ft_split(char const *s, char *delims, int type)
 {
 	char	**strings;
 	int		count;
 
-	if (!s || !*s)
+	if (!s || !*s || !delims)
 		return (NULL);
-	count = ft_count_words(s, c);
+	count = ft_count_words(s, delims);
 	strings = (char **)maroc((count + 1) * sizeof(char *), \
 		ALLOC, type);
-	ft_allocate(strings, s, c, type);
+	ft_allocate(strings, s, delims, type);
 	return (strings);
 }
