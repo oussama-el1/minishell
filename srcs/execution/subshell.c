@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   subshell.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 21:21:46 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/13 20:49:48 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/16 02:28:01 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	subshell_worker(t_helper hp)
 		}
 		else
 			g_exit_status = 1;
-		clean_resources(&hp, saved_in, saved_out);
+		clean_resources(saved_in, saved_out);
 		exit(g_exit_status);
 	}
 	exit(0);

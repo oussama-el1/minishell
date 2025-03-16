@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 17:31:02 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/15 21:52:06 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/16 04:34:28 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,17 @@
 
 int	g_received_signal = 0;
 
-t_signals signals = {{0}, 0, 0};
+t_signals g_signals = {{0}, 0, 0};
 
 void	handle_sigint(int sig)
 {
-	(void)sig;
 	if (sig == SIGINT)
 	{
-		if (g_exit_status == SECOND)
-			ioctl(STDIN_FILENO, TIOCSTI, "\n");
-		else
-		{
-			ft_putstr_fd("\n", 1);
-			rl_replace_line("", 0);
-			rl_on_new_line();
-			rl_redisplay();
-		}
 		g_exit_status = 130;
+		write(1, "\n", 1);
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		rl_redisplay();
 	}
 }
 

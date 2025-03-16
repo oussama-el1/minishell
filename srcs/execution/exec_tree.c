@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 18:06:55 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/15 19:44:10 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/16 03:44:33 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,6 @@ static void	exec_or(t_helper *hp)
 
 static void	expander(t_helper *hp)
 {
-	if (!hp->node)
-		g_exit_status = 1;
 	if (hp->node->args && hp->node->args->argv && hp->node->args->expand_list)
 	{
 		hp->node->args->argv_cpy = hp->node->args->argv;
@@ -96,9 +94,9 @@ void	execute_ast(t_helper *hp)
 	pid_t		pid;
 
 	signal(SIGQUIT, sigquit_handler);
-	expander(hp);
-	if (g_exit_status == 1)
+	if (!hp->node)
 		return ;
+	expander(hp);
 	if (hp->node->type == T_CMD)
 		redirect_and_exec(hp);
 	if (hp->node->type == T_PIPE)
