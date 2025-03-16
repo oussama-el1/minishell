@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 01:01:04 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/16 09:09:38 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/16 09:16:10 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ static int	end_with_operator(char *line);
 static void	give_type(t_token **token);
 static int	handle_end_of_line(char **line, t_token **token, \
 	t_helper *helper);
+
 
 int	process_input(char *line, t_token **token, t_helper *helper, \
 	int base)
