@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 18:04:04 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/13 21:12:00 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/16 06:47:04 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int	ft_exit(char **argv)
 {
 	long long	exit_code;
 
-	exit_code = g_exit_status;
+	exit_code = g_signals.exit_status;
 	if (!argv)
 	{
 		fdmaroc(NULL, 0, CLEAR, 0);

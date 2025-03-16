@@ -6,21 +6,19 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 17:31:02 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/16 04:34:28 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/16 09:14:14 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	g_received_signal = 0;
-
-t_signals g_signals = {{0}, 0, 0};
+t_signals	g_signals = {0, 0, 0};
 
 void	handle_sigint(int sig)
 {
 	if (sig == SIGINT)
 	{
-		g_exit_status = 130;
+		g_signals.exit_status = 130;
 		write(1, "\n", 1);
 		rl_replace_line("", 0);
 		rl_on_new_line();
@@ -28,7 +26,7 @@ void	handle_sigint(int sig)
 	}
 }
 
-void	setup_signals(void)
+void	setup_signals(t_helper *hp)
 {
 	struct termios	term;
 
@@ -37,6 +35,7 @@ void	setup_signals(void)
 		tcgetattr(STDIN_FILENO, &term);
 		term.c_lflag &= ~ECHOCTL;
 		tcsetattr(STDIN_FILENO, TCSANOW, &term);
+		hp->term = term;
 		signal(SIGINT, handle_sigint);
 		signal(SIGQUIT, SIG_IGN);
 	}

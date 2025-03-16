@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 21:21:46 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/16 02:28:01 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/16 06:47:04 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@ void	subshell_worker(t_helper hp)
 			execute_ast(&hp);
 		}
 		else
-			g_exit_status = 1;
+			g_signals.exit_status = 1;
 		clean_resources(saved_in, saved_out);
-		exit(g_exit_status);
+		exit(g_signals.exit_status);
 	}
 	exit(0);
 }
@@ -47,6 +47,6 @@ void	subshell_handler(t_helper *hp, pid_t pid)
 	else
 	{
 		waitpid(pid, &status, 0);
-		g_exit_status = WEXITSTATUS(status);
+		g_signals.exit_status = WEXITSTATUS(status);
 	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipe.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 21:40:37 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/13 20:48:34 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/16 06:47:04 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void	wait_and_cleanup(int *fd, pid_t left_cmd,
 	close(fd[1]);
 	waitpid(left_cmd, &status, 0);
 	waitpid(right_cmd, &status, 0);
-	g_exit_status = WEXITSTATUS(status);
+	g_signals.exit_status = WEXITSTATUS(status);
 }
 
 static void	exec_pipe_side(t_helper *hp, int *fd, int left)
@@ -39,7 +39,7 @@ static void	exec_pipe_side(t_helper *hp, int *fd, int left)
 		close(fd[0]);
 	}
 	execute_ast(hp);
-	exit(g_exit_status);
+	exit(g_signals.exit_status);
 }
 
 static void	exec_pipe_helper(t_helper *hp, int *fd)
@@ -52,7 +52,7 @@ static void	exec_pipe_helper(t_helper *hp, int *fd)
 	left_cmd = fork();
 	if (left_cmd == -1)
 	{
-		g_exit_status = 1;
+		g_signals.exit_status = 1;
 		return (perror("fork failed"), (void)0);
 	}
 	hp->node = parent->left;
@@ -61,7 +61,7 @@ static void	exec_pipe_helper(t_helper *hp, int *fd)
 	right_cmd = fork();
 	if (right_cmd == -1)
 	{
-		g_exit_status = 1;
+		g_signals.exit_status = 1;
 		return (perror("fork failed"), (void)0);
 	}
 	hp->node = parent->right;
@@ -76,10 +76,10 @@ void	exec_pipe(t_helper *hp)
 	int			fd[2];
 
 	if (!hp->node || !hp->node->left || !hp->node->right)
-		g_exit_status = 1;
+		g_signals.exit_status = 1;
 	if (pipe(fd) == -1)
 	{
-		g_exit_status = 1;
+		g_signals.exit_status = 1;
 		perror("pipe failed");
 		return ;
 	}

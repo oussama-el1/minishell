@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 18:06:55 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/16 05:22:25 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/16 09:05:54 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static void	exec_and(t_helper *hp)
 	parent = hp->node;
 	hp->node = parent->left;
 	execute_ast(hp);
-	if (g_exit_status == 0)
+	if (g_signals.exit_status == 0)
 	{
 		hp->node = parent->right;
 		execute_ast(hp);
@@ -63,7 +63,7 @@ static void	exec_or(t_helper *hp)
 	parent = hp->node;
 	hp->node = parent->left;
 	execute_ast(hp);
-	if (g_exit_status != 0)
+	if (g_signals.exit_status != 0)
 	{
 		hp->node = parent->right;
 		execute_ast(hp);
@@ -83,17 +83,23 @@ static void	expander(t_helper *hp)
 	}
 }
 
-static void	sigquit_handler(int sig)
+static void	sighandler_exec(int sig)
 {
-	(void)sig;
-	ft_putendl_fd("^\\Quit (core dumped)", 1);
+	if (sig == SIGINT)
+		g_signals.sigint_child = CTRL_C;
+	if (sig == SIGQUIT)
+	{
+		ft_putendl_fd("Quit (core dumped)", 1);
+		g_signals.sigint_child = QUIT;
+	}
 }
 
 void	execute_ast(t_helper *hp)
 {
 	pid_t		pid;
 
-	signal(SIGQUIT, sigquit_handler);
+	signal(SIGQUIT, sighandler_exec);
+	signal(SIGINT, sighandler_exec);
 	if (!hp->node)
 		return ;
 	expander(hp);
@@ -109,11 +115,14 @@ void	execute_ast(t_helper *hp)
 	{
 		pid = fork();
 		if (pid == -1)
-		{
-			perror("fork failed");
-			g_exit_status = 1;
-		}
+			(perror("fork failed"), g_signals.exit_status = 1);
 		else
 			subshell_handler(hp, pid);
+	}
+	if (g_signals.sigint_child)
+	{
+		g_signals.exit_status = g_signals.sigint_child;
+		g_signals.sigint_child = 0;
+		tcsetattr(STDIN_FILENO, TCSANOW, &hp->term);
 	}
 }

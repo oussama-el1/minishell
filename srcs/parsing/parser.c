@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 01:01:04 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/16 03:45:12 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/16 09:09:38 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,13 @@ int	process_input(char *line, t_token **token, t_helper *helper, \
 		give_type(token);
 		if (!check_syntax(*token))
 			return (add_history(line), 0);
+		signal(SIGINT, SIG_IGN);
 		if (!handle_end_of_line(&line, token, helper))
 			return (add_history(line), 0);
 		if (!base)
 			return (1);
 		helper->node = build_ast(*token);
-		signal(SIGINT, SIG_IGN);
 		execute_herdocs(helper);
-		// printf("g_signals.sigint_heredoc: %d\n", g_signals.sigint_heredoc);
 		if (g_signals.sigint_heredoc)
 		{
 			g_signals.sigint_heredoc = 0;
@@ -106,6 +105,13 @@ static int	end_with_operator(char *line)
 	return (0);
 }
 
+static void	sigint_not_end(int sig)
+{
+	(void)sig;
+	g_signals.sigint_child = 1;
+	ioctl(STDIN_FILENO, TIOCSTI, "\n");
+}
+
 static int	handle_end_of_line(char **line, t_token **token, t_helper *helper)
 {
 	char	*new_line;
@@ -116,17 +122,24 @@ static int	handle_end_of_line(char **line, t_token **token, t_helper *helper)
 			add_history(*line);
 		return (1);
 	}
+	signal(SIGINT, sigint_not_end);
 	new_line = input_cmd(last_token(*token));
 	if (!new_line)
 	{
-		if (g_exit_status == 130)
+		if (g_signals.exit_status == 130)
+		{
+			g_signals.sigint_child = 0;
+			signal(SIGINT, handle_sigint);
 			return (0);
+		}
+		signal(SIGINT, handle_sigint);
 		printf("minishell: syntax error: unexpected end of file\n");
-		g_exit_status = 2;
+		g_signals.exit_status = 2;
 		return (0);
 	}
 	*line = ft_strjoin(*line, " ", CMD);
 	*line = ft_strjoin(*line, new_line, CMD);
 	free(new_line);
+	signal(SIGINT, handle_sigint);
 	return (process_input(*line, token, helper, 0));
 }

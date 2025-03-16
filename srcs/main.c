@@ -6,13 +6,11 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:08:50 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/16 03:31:17 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/16 08:52:08 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	g_exit_status = 0;
 
 static void	parse_exec_cmd(t_token **token, t_helper*helper);
 static void	bash_loop(t_env **env);
@@ -33,7 +31,7 @@ static void	bash_loop(t_env **env)
 	t_helper	hp;
 
 	init_setup(&hp, env);
-	setup_signals();
+	setup_signals(&hp);
 	// rl_catch_signals = 0;
 	while (1)
 	{

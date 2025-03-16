@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 16:17:23 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/13 21:56:17 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/16 07:08:43 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,17 @@ char	*input_cmd(t_token *token)
 
 	if (!token)
 		return (NULL);
-	g_exit_status = SECOND;
+
 	line = NULL;
+	if (g_signals.sigint_child)
+		return (g_signals.exit_status = 130, NULL);
 	if (token->type == AND)
 		line = readline("cmdand> ");
 	else if (token->type == OR)
 		line = readline("cmdor> ");
 	else if (token->type == PIPE)
 		line = readline("cmdpipe> ");
-	if (g_exit_status == 130)
+	if (g_signals.exit_status == 130)
 		return (NULL);
 	return (line);
 }

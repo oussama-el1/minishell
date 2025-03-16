@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 14:43:35 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/16 05:22:41 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/16 06:47:04 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ static void	redirect_and_exec_helper(t_helper *hp, t_hredir *hr,
 		res = exec_command(hp->node, hp);
 	if (hp->node->type != T_SUBSHELL)
 		clean_resources(saved_in, saved_out);
-	g_exit_status = res;
+	g_signals.exit_status = res;
 }
 
 void	redirect_and_exec(t_helper *hp)

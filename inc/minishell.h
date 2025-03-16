@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/16 05:23:26 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/16 09:13:35 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,18 +31,17 @@
 # include <dirent.h>
 # include <sys/ioctl.h>
 
-extern int	g_exit_status;
-
-typedef struct	s_signals
+typedef struct s_signals
 {
-	struct termios	term;
+	int	exit_status;
 	int	sigint_heredoc;
 	int	sigint_child;
 }	t_signals;
 
-extern t_signals g_signals;
+extern t_signals	g_signals;
 
-# define SECOND 828
+# define CTRL_C 130
+# define QUIT 131
 
 enum e_token_type
 {
@@ -148,11 +147,12 @@ typedef struct s_env
 
 typedef struct s_helper
 {
-	int			line_count;
-	int			export;
-	int			herdoc_sigint;
-	t_env		**env;
-	t_tree		*node;
+	struct termios	term;
+	int				line_count;
+	int				export;
+	int				herdoc_sigint;
+	t_env			**env;
+	t_tree			*node;
 }	t_helper;
 
 typedef struct s_hredir
@@ -317,7 +317,7 @@ int			validate_var_name(const char *var);
 int			set_name_and_value(char *env, char **name, char **value);
 
 // exec
-void		setup_signals(void);
+void		setup_signals(t_helper *hp);
 char		*get_executable_path(char *cmd, t_env *env);
 void		execute_herdocs(t_helper *hp);
 void		execute_ast(t_helper *hp);

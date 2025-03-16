@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 21:26:48 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/16 03:06:45 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/16 08:51:21 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +57,4 @@ void	init_setup(t_helper *hp, t_env **env)
 {
 	hp->line_count = 0;
 	hp->env = env;
-	tcgetattr(STDIN_FILENO, &g_signals.term);
 }

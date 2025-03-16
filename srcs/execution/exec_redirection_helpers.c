@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 22:24:50 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/16 05:20:52 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/16 08:58:06 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,8 @@ static void	handle_sigint_herdc(int sig)
 {
 	if (sig == SIGINT)
 	{
-		// ioctl(STDIN_FILENO, TIOCSTI, "\n");
-		rl_replace_line("", 0); // Clear the current input
-		// rl_on_new_line();
-		// rl_redisplay();
-		rl_done = 1;
 		g_signals.sigint_heredoc = 1;
+		ioctl(STDIN_FILENO, TIOCSTI, "\n");
 	}
 }
 
@@ -34,11 +30,7 @@ void	herdoc_loop(const char *delimiter, int fd, t_helper *hp)
 	while (1)
 	{
 		if (g_signals.sigint_heredoc)
-		{
-			g_exit_status = 130;
-			// signals.sigint_heredoc = 0;
-			break ;
-		}
+			return (g_signals.exit_status = 130, (void)0);
 		line = readline("> ");
 		tmp = line;
 		if (!line)
@@ -55,9 +47,10 @@ char	*handle_heredoc(const char *delimiter, t_helper *hp, int skip)
 {
 	static int	id;
 	int			fd;
-	char		*filename = NULL;
+	char		*filename;
 
 	signal(SIGINT, handle_sigint_herdc);
+	filename = NULL;
 	if (!skip)
 	{
 		filename = ft_strjoin("/tmp/heredoc_", ft_itoa(++id, CMD), CMD);
