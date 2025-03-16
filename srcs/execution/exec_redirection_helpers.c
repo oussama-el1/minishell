@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redirection_helpers.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
+/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 22:24:50 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/16 05:20:52 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/16 07:39:57 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	handle_sigint_herdc(int sig)
 		rl_replace_line("", 0); // Clear the current input
 		// rl_on_new_line();
 		// rl_redisplay();
-		rl_done = 1;
+		// rl_done = 1;
 		g_signals.sigint_heredoc = 1;
 	}
 }

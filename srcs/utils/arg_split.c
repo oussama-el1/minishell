@@ -6,14 +6,13 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 07:45:38 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/16 07:13:28 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/16 08:20:48 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	**process_sub(char *sub, t_expand *curr,
-	int count, char **final_args)
+static char	**handle_splitting(char *sub, t_expand *curr)
 {
 	char	**splitted;
 
@@ -33,25 +32,31 @@ char	**process_sub(char *sub, t_expand *curr,
 		splitted[0] = sub;
 		splitted[1] = NULL;
 	}
-	if (count > 0)
-	{
-		if (final_args[0])
-			final_args[0] = ft_strjoin(splitted[0], final_args[0], CMD);
-		splitted = NULL;
-	}
 	return (splitted);
 }
 
-static void	handle_expr_join(char **final_args,
-		char **splitted, int *i, int *count)
+char	**process_sub(char *sub, t_expand *curr, int count, char **final_args)
 {
-	if (splitted[*i - 1])
+	char	**splitted;
+	int		i;
+
+	splitted = handle_splitting(sub, curr);
+	if (!splitted || count == 0 || !final_args[0])
+		return (splitted);
+	if (curr->type == S_Q || curr->type == D_Q || curr->type == EXPR)
 	{
-		(*i)--;
-		(*count)--;
-		splitted[*i] = ft_strjoin(splitted[*i], final_args[0], CMD);
+		final_args[0] = ft_strjoin(splitted[0], final_args[0], CMD);
+		splitted = NULL;
 	}
-	final_args[0] = splitted[*i];
+	else if (curr->type == DOLLAR)
+	{
+		i = 0;
+		while (splitted[i])
+			i++;
+		final_args[0] = ft_strjoin(splitted[i - 1], final_args[0], CMD);
+		splitted[i - 1] = NULL;
+	}
+	return (splitted);
 }
 
 void	process_splitted(char **final_args, char **splitted,
@@ -63,9 +68,7 @@ void	process_splitted(char **final_args, char **splitted,
 	i = -1;
 	while (splitted[++i])
 		(*count)++;
-
-	if (curr->next && curr->next->type == EXPR)
-		handle_expr_join(final_args, splitted, &i, count);
+	(void)curr;
 	j = *count - 1;
 	while (j >= i)
 	{
