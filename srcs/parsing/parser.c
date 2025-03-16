@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 01:01:04 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/16 06:17:21 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/16 07:15:47 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,16 +153,18 @@ int	process_input(char *line, t_token **token, t_helper *helper, \
 			return (add_history(line), 0);
 		if (!base)
 			return (1);
-		helper->export = 0;
 		helper->node = build_ast(*token);
-		helper->herdoc_sigint = 0;
+		signal(SIGINT, SIG_IGN);
 		execute_herdocs(helper);
-		if (g_exit_status == 130 && helper->herdoc_sigint)
+		// printf("g_signals.sigint_heredoc: %d\n", g_signals.sigint_heredoc);
+		if (g_signals.sigint_heredoc)
+		{
+			g_signals.sigint_heredoc = 0;
 			return (0);
+		}
 		execute_ast(helper);
-		// printf("\n===== AST Structure =====\n");
-        // print_ast(helper->node, 0, "Root");
-        // printf("=========================\n\n");
+		signal(SIGINT, handle_sigint);
+		signal(SIGQUIT, SIG_IGN);
 	}
 	else
 		return (add_history(line), 0);

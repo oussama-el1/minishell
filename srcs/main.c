@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:08:50 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/15 20:19:43 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/16 03:31:17 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ static void	bash_loop(t_env **env)
 
 	init_setup(&hp, env);
 	setup_signals();
+	// rl_catch_signals = 0;
 	while (1)
 	{
 		init_token(&token, 1);

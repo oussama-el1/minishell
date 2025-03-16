@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 18:06:55 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/16 07:10:14 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/16 07:16:18 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,6 @@ static void	exec_or(t_helper *hp)
 
 static void	expander(t_helper *hp)
 {
-	if (!hp->node)
-		g_exit_status = 1;
 	if (hp->node->args && hp->node->args->argv && hp->node->args->expand_list)
 	{
 		hp->node->args->argv_cpy = hp->node->args->argv;
@@ -96,6 +94,8 @@ void	execute_ast(t_helper *hp)
 	pid_t		pid;
 
 	signal(SIGQUIT, sigquit_handler);
+	if (!hp->node)
+		return ;
 	expander(hp);
 	if (hp->node->args)
 	{
