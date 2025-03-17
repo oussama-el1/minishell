@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
+/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 23:46:35 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/16 06:47:04 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/17 03:56:52 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,20 +23,6 @@ void	print_env(t_env *env)
 			else
 				printf("%s=\n", env->key);
 		}
-		env = env->next;
-	}
-}
-
-void	print_export(t_env *env, int declare)
-{
-	while (env)
-	{
-		if (declare)
-			printf("declare -x ");
-		if (env->value)
-			printf("%s=\"%s\"\n", env->key, env->value);
-		else
-			printf("%s\n", env->key);
 		env = env->next;
 	}
 }
