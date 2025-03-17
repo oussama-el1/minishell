@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   string_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
+/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 16:17:23 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/16 07:08:43 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/16 22:29:17 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ char	*input_cmd(t_token *token)
 
 	if (!token)
 		return (NULL);
-
 	line = NULL;
 	if (g_signals.sigint_child)
 		return (g_signals.exit_status = 130, NULL);

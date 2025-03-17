@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
+/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:08:50 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/16 08:52:08 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/16 22:57:42 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ static void	bash_loop(t_env **env)
 
 	init_setup(&hp, env);
 	setup_signals(&hp);
-	// rl_catch_signals = 0;
 	while (1)
 	{
 		init_token(&token, 1);
