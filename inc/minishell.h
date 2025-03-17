@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
+/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/16 09:39:48 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/16 23:53:55 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -331,7 +331,8 @@ void		herdoc_runner(t_redir *redirection, t_helper *hp);
 void		file_error_handler(t_redir *redirection, int *error_found,
 				int ambigous, t_ambiguous_err *err);
 void		clean_resources(int saved_in, int saved_out);
-char		**expand_one_arg(char *argument, t_expand *curr, t_helper *hp, int *size);
+char		**expand_one_arg(char *argument, t_expand *curr,
+				t_helper *hp, int *size);
 void		expand_string(char **string, t_helper *hp, int fromherdoc);
 void		argv_expander(char ***argv, t_expand **expandArr, t_helper *hp);
 void		print_ast(t_tree *node, int depth, const char *relation);
@@ -358,6 +359,8 @@ char		**process_sub(char *sub, t_expand *curr,
 				int count, char **final_args);
 void		process_splitted(char **final_args, char **splitted,
 				t_expand *curr, int *count);
+void		signint_helper(t_helper *hp);
+void		sigint_not_end(int sig);
 
 /*  Garbage Collector */
 void		*maroc(size_t size, int flag, int type);

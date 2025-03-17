@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
+/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 01:01:04 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/16 09:16:10 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/16 23:52:06 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,12 @@ static void	give_type(t_token **token);
 static int	handle_end_of_line(char **line, t_token **token, \
 	t_helper *helper);
 
-
 int	process_input(char *line, t_token **token, t_helper *helper, \
 	int base)
 {
 	t_vars	*vars;
 
-	init_vars(&vars, line);
-	init_token(token, 0);
+	(init_vars(&vars, line), init_token(token, 0));
 	if (tokenizer(token, vars) == 0)
 	{
 		give_type(token);
@@ -44,12 +42,9 @@ int	process_input(char *line, t_token **token, t_helper *helper, \
 			return (0);
 		}
 		execute_ast(helper);
-		signal(SIGINT, handle_sigint);
-		signal(SIGQUIT, SIG_IGN);
+		(signal(SIGINT, handle_sigint), signal(SIGQUIT, SIG_IGN));
 	}
-	else
-		return (add_history(line), 0);
-	return (1);
+	return (add_history(line), 0);
 }
 
 static int	tokenizer(t_token **token, t_vars *vars)
@@ -106,13 +101,6 @@ static int	end_with_operator(char *line)
 	return (0);
 }
 
-static void	sigint_not_end(int sig)
-{
-	(void)sig;
-	g_signals.sigint_child = 1;
-	ioctl(STDIN_FILENO, TIOCSTI, "\n");
-}
-
 static int	handle_end_of_line(char **line, t_token **token, t_helper *helper)
 {
 	char	*new_line;
@@ -130,17 +118,14 @@ static int	handle_end_of_line(char **line, t_token **token, t_helper *helper)
 		if (g_signals.exit_status == 130)
 		{
 			g_signals.sigint_child = 0;
-			signal(SIGINT, handle_sigint);
-			return (0);
+			return (signal(SIGINT, handle_sigint), 0);
 		}
 		signal(SIGINT, handle_sigint);
-		printf("minishell: syntax error: unexpected end of file\n");
 		g_signals.exit_status = 2;
 		return (0);
 	}
 	*line = ft_strjoin(*line, " ", CMD);
 	*line = ft_strjoin(*line, new_line, CMD);
-	free(new_line);
-	signal(SIGINT, handle_sigint);
+	(free(new_line), signal(SIGINT, handle_sigint));
 	return (process_input(*line, token, helper, 0));
 }

@@ -3,16 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
+/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 17:31:02 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/16 09:14:14 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/16 23:52:21 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 t_signals	g_signals = {0, 0, 0};
+
+void	sigint_not_end(int sig)
+{
+	(void)sig;
+	g_signals.sigint_child = 1;
+	ioctl(STDIN_FILENO, TIOCSTI, "\n");
+}
+
+void	signint_helper(t_helper *hp)
+{
+	g_signals.exit_status = g_signals.sigint_child;
+	g_signals.sigint_child = 0;
+	tcsetattr(STDIN_FILENO, TCSANOW, &hp->term);
+}
 
 void	handle_sigint(int sig)
 {

@@ -3,43 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   exec_tree.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
+/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 18:06:55 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/16 09:22:35 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/16 22:54:01 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	execute_herdocs(t_helper *hp)
-{
-	t_tree	*parent;
-
-	if (!hp->node)
-		return ;
-	if (hp->node->args && hp->node->type == T_CMD)
-		herdoc_runner(hp->node->args->redir, hp);
-	if (hp->node->type == T_SUBSHELL)
-	{
-		parent = hp->node;
-		hp->node = parent->left;
-		execute_herdocs(hp);
-		hp->node = parent;
-		if (hp->node->args)
-			herdoc_runner(hp->node->args->redir, hp);
-	}
-	if (hp->node->type == T_PIPE
-		|| hp->node->type == T_AND || hp->node->type == T_OR)
-	{
-		parent = hp->node;
-		hp->node = parent->left;
-		execute_herdocs(hp);
-		hp->node = parent->right;
-		execute_herdocs(hp);
-		hp->node = parent;
-	}
-}
 
 static void	exec_and(t_helper *hp)
 {
@@ -77,7 +48,7 @@ static void	expander(t_helper *hp)
 	{
 		hp->node->args->argv_cpy = hp->node->args->argv;
 		hp->node->args->argv_cpy = hp->node->args->argv;
-		argv_expander(&hp->node->args->argv, hp->node->args->expand_list, hp);;
+		argv_expander(&hp->node->args->argv, hp->node->args->expand_list, hp);
 		if (contain_wildcard(hp->node->args->argv, hp->node->args->wildcards))
 			expand_wildcard(hp);
 	}
@@ -98,8 +69,7 @@ void	execute_ast(t_helper *hp)
 {
 	pid_t		pid;
 
-	signal(SIGQUIT, sighandler_exec);
-	signal(SIGINT, sighandler_exec);
+	(signal(SIGQUIT, sighandler_exec), signal(SIGINT, sighandler_exec));
 	if (!hp->node)
 		return ;
 	expander(hp);
@@ -120,9 +90,5 @@ void	execute_ast(t_helper *hp)
 			subshell_handler(hp, pid);
 	}
 	if (g_signals.sigint_child)
-	{
-		g_signals.exit_status = g_signals.sigint_child;
-		g_signals.sigint_child = 0;
-		tcsetattr(STDIN_FILENO, TCSANOW, &hp->term);
-	}
+		signint_helper(hp);
 }
