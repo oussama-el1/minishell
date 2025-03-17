@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/17 03:56:18 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/17 04:01:39 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -338,7 +338,7 @@ void		argv_expander(char ***argv, t_expand **expandArr, t_helper *hp);
 void		print_ast(t_tree *node, int depth, const char *relation);
 void		ambiguous_redirect(char *file);
 int			is_builtin(char *cmd);
-int			exec_builtin(char **argv, char **arg_cpy, t_helper *hp);
+int			exec_builtin(char **argv, t_helper *hp);
 void		process_herdocs(t_helper *hp, int left);
 void		print_cd_error(char *path);
 int			get_last_in(t_redir *redirection, t_redir **last_in,

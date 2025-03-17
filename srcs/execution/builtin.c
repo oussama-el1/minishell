@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 23:10:12 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/17 03:56:03 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/17 04:01:18 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	is_builtin(char *cmd)
 	return (0);
 }
 
-int	exec_builtin(char **argv, char **arg_cpy, t_helper *hp)
+int	exec_builtin(char **argv, t_helper *hp)
 {
 	if (ft_strcmp(argv[0], "echo") == 0)
 		return (ft_echo(argv));
