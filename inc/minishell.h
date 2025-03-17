@@ -6,30 +6,25 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/17 09:03:24 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/17 09:45:45 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include <stdint.h>
 # include <string.h>
 # include <stdio.h>
 # include <readline/readline.h>
-# include <readline/history.h>
 # include <stdlib.h>
-# include <stdio.h>
 # include <unistd.h>
 # include <fcntl.h>
 # include <signal.h>
 # include <termios.h>
 # include <stdbool.h>
 # include <sys/stat.h>
-# include <sys/wait.h>
 # include <errno.h>
 # include <dirent.h>
-# include <sys/ioctl.h>
 
 typedef struct s_signals
 {
@@ -299,7 +294,7 @@ int			ft_export(char **argv, t_helper *hp);
 int			ft_unset(char **argv, t_env **env);
 int			ft_env(char **argv, t_env *env);
 int			ft_exit(char **argv1);
-int			not_valid_idenrifier(char *env);
+int			not_valid_idenrifier(char *env, int export);
 
 // env_utils
 t_env		*init_env(char **envp);

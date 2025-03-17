@@ -17,7 +17,6 @@ endif
 # srcs
 HEADER         		:=		inc/minishell.h
 SRC_DIR         	:=      srcs
-# SRCS            	:=      $(shell find $(SRC_DIR) -type f -name "*.c")
 SRCS				:= srcs/main.c \
 					srcs/execution/exec_command.c \
 					srcs/execution/builtin.c \
@@ -86,6 +85,7 @@ SRCS				:= srcs/main.c \
 					srcs/utils/redir_parse.c \
 					srcs/utils/syntax_helper.c \
 					srcs/utils/env_utils.c \
+					srcs/utils/env_utils1.c \
 					srcs/utils/garbage_collec.c \
 					srcs/utils/helper_4.c \
 					srcs/utils/signal.c \
@@ -114,10 +114,6 @@ $(NAME): $(OBJS)
 		@printf "\t\t\t\t🎩 Crafted by: $(BOLD)$(GREEN)oel-hadr$(DEF_COLOR) 🛠️ $(GREEN)yslami$(DEF_COLOR)\n"
 		@printf "$(CYAN)\t\t\t    _____________________________________________$(DEF_COLOR)\n"
 		@printf "\n$(GREEN) 🚀 SUCCESS: Minishell compiled successfully! 🚀\n$(DEF_COLOR)"
-
-# create:
-# 	@$(MKDIR) $(OBJ_DIR)
-# | create
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(HEADER)
 		@$(MKDIR) $(dir $@)

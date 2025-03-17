@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 15:25:02 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/15 07:01:01 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/17 09:46:01 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ static int	process_env(char *env, t_env **env_ls)
 
 	concat_flag = set_name_and_value(env, &name, &value);
 	if (!validate_var_name(name))
-		return (not_valid_idenrifier(env));
+		return (not_valid_idenrifier(env, 1));
 	if (value)
 	{
 		env_value = get_env_var(*env_ls, name);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:16:05 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/15 07:48:51 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/17 10:02:19 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,6 @@ int	ft_cd(char **argv, t_env *env)
 		return (1);
 	if (home_res == 0)
 		return (update_env(argv, old_pwd, env), 0);
-	if (argv[1] && argv[2])
-		return (ft_putstr_fd("minishell: cd: too many arguments\n", 2), 1);
 	if (argv[1] && !ft_strcmp(argv[1], "-"))
 	{
 		oldpwd = get_env_var(env, "OLDPWD");
