@@ -1,5 +1,5 @@
 CC              	:=      gcc
-CFLAGS          	:=      -Wall -Wextra -Werror -g -fsanitize=address
+CFLAGS          	:=      -Wall -Wextra -Werror -fsanitize=leak
 NAME            	:=      minishell
 RM              	:=      rm -rf
 MKDIR           	:=      mkdir -p

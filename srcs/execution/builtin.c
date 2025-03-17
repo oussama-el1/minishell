@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 23:10:12 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/13 20:26:07 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/17 03:56:03 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	is_builtin(char *cmd)
 int	exec_builtin(char **argv, char **arg_cpy, t_helper *hp)
 {
 	if (ft_strcmp(argv[0], "echo") == 0)
-		return (ft_echo(argv, arg_cpy));
+		return (ft_echo(argv));
 	if (ft_strcmp(argv[0], "cd") == 0)
 		return (ft_cd(argv, *hp->env));
 	if (ft_strcmp(argv[0], "pwd") == 0)

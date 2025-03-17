@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/17 02:13:59 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/17 03:56:18 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -293,7 +293,7 @@ void		process_token(t_token **curr, t_args *args,
 
 // builtins
 int			ft_cd(char **argv, t_env *env);
-int			ft_echo(char **argv, char **arg_cpy);
+int			ft_echo(char **argv);
 int			exec_command(t_tree *cmd, t_helper *hp);
 int			ft_pwd(t_env *env);
 int			ft_export(char **argv, t_helper *hp);
