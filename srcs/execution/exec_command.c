@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:04:38 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/16 09:38:56 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/17 04:02:52 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,6 @@ int	exec_command(t_tree *cmd, t_helper *hp)
 	if (!argv[0])
 		return (0);
 	if (is_builtin(argv[0]))
-		return (exec_builtin(argv, cmd->args->argv_cpy, hp));
+		return (exec_builtin(argv, hp));
 	return (exec_binary(argv, *hp->env));
 }

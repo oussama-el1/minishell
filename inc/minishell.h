@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/16 23:53:55 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/17 04:01:39 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -293,7 +293,7 @@ void		process_token(t_token **curr, t_args *args,
 
 // builtins
 int			ft_cd(char **argv, t_env *env);
-int			ft_echo(char **argv, char **arg_cpy);
+int			ft_echo(char **argv);
 int			exec_command(t_tree *cmd, t_helper *hp);
 int			ft_pwd(t_env *env);
 int			ft_export(char **argv, t_helper *hp);
@@ -317,7 +317,7 @@ int			validate_var_name(const char *var);
 int			set_name_and_value(char *env, char **name, char **value);
 
 // exec
-void		setup_signals(t_helper *hp);
+int			setup_signals(t_helper *hp);
 char		*get_executable_path(char *cmd, t_env *env);
 void		execute_herdocs(t_helper *hp);
 void		execute_ast(t_helper *hp);
@@ -338,7 +338,7 @@ void		argv_expander(char ***argv, t_expand **expandArr, t_helper *hp);
 void		print_ast(t_tree *node, int depth, const char *relation);
 void		ambiguous_redirect(char *file);
 int			is_builtin(char *cmd);
-int			exec_builtin(char **argv, char **arg_cpy, t_helper *hp);
+int			exec_builtin(char **argv, t_helper *hp);
 void		process_herdocs(t_helper *hp, int left);
 void		print_cd_error(char *path);
 int			get_last_in(t_redir *redirection, t_redir **last_in,

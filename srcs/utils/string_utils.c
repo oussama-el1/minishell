@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   string_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 16:17:23 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/16 22:29:17 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/17 02:41:04 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,14 @@ char	*input_cmd(t_token *token)
 		return (NULL);
 	line = NULL;
 	if (g_signals.sigint_child)
-		return (g_signals.exit_status = 130, NULL);
+		return (g_signals.exit_status = CTRL_C, NULL);
 	if (token->type == AND)
 		line = readline("cmdand> ");
 	else if (token->type == OR)
 		line = readline("cmdor> ");
 	else if (token->type == PIPE)
 		line = readline("cmdpipe> ");
-	if (g_signals.exit_status == 130)
+	if (g_signals.sigint_child)
 		return (NULL);
 	return (line);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:08:50 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/16 22:57:42 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/17 02:45:37 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	main(int ac, char **av, char **envp)
 	((void)ac, (void)av);
 	env = init_env(envp);
 	bash_loop(&env);
-	return (0);
+	return (g_signals.exit_status);
 }
 
 static void	bash_loop(t_env **env)
@@ -31,7 +31,8 @@ static void	bash_loop(t_env **env)
 	t_helper	hp;
 
 	init_setup(&hp, env);
-	setup_signals(&hp);
+	if (!setup_signals(&hp))
+		return ;
 	while (1)
 	{
 		init_token(&token, 1);
@@ -55,4 +56,5 @@ static void	parse_exec_cmd(t_token **token, t_helper *hp)
 	tmp = ft_strdup(line, CMD);
 	free(line);
 	process_input(tmp, token, hp, 1);
+	(signal(SIGINT, handle_sigint), signal(SIGQUIT, SIG_IGN));
 }

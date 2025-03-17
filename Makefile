@@ -1,5 +1,5 @@
 CC              	:=      gcc
-CFLAGS          	:=      -Wall -Wextra -Werror -g
+CFLAGS          	:=      -Wall -Wextra -Werror
 NAME            	:=      minishell
 RM              	:=      rm -rf
 MKDIR           	:=      mkdir -p

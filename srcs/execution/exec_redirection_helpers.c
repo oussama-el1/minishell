@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 22:24:50 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/16 09:16:32 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/17 02:40:44 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	herdoc_loop(const char *delimiter, int fd, t_helper *hp)
 	while (1)
 	{
 		if (g_signals.sigint_heredoc)
-			return (g_signals.exit_status = 130, (void)0);
+			return (g_signals.exit_status = CTRL_C, (void)0);
 		line = readline("> ");
 		tmp = line;
 		if (!line)

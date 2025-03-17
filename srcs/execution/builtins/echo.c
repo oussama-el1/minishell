@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:26:30 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/16 08:06:02 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/17 03:57:08 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,31 +34,13 @@ static int	valid_option(char *option)
 	return (1);
 }
 
-static int	ft_strcmp_arg(char **expanded, char **argv)
-{
-	int	size1;
-	int	size2;
-
-	if (!expanded || !argv)
-		return (0);
-	size1 = 0;
-	while (expanded[size1])
-		size1++;
-	size2 = 0;
-	while (argv[size2])
-		size2++;
-	return (size1 != size2);
-}
-
-int	ft_echo(char **argv, char **arg_cpy)
+int	ft_echo(char **argv)
 {
 	int	i;
 	int	newline;
-	int	changed;
 
 	i = 1;
 	newline = 0;
-	changed = ft_strcmp_arg(argv, arg_cpy);
 	while (argv[i] && valid_option(argv[i]))
 	{
 		newline = 1;
