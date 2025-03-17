@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 17:31:02 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/17 02:46:01 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/17 09:04:51 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void	handle_sigint(int sig)
 	if (sig == SIGINT)
 	{
 		g_signals.exit_status = CTRL_C;
+		nb_lines(1);
 		write(1, "\n", 1);
 		rl_replace_line("", 0);
 		rl_on_new_line();

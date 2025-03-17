@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/17 04:01:39 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/17 09:03:24 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,6 @@ typedef struct s_env
 typedef struct s_helper
 {
 	struct termios	term;
-	int				line_count;
 	int				export;
 	int				herdoc_sigint;
 	t_env			**env;
@@ -240,6 +239,7 @@ int			non_control2(enum e_token_type type);
 char		*input_cmd(t_token *token);
 void		concat_str(char **arg, char *tmp, int bef_space);
 void		handle_sigint(int sig);
+int			nb_lines(int state);
 
 /* syntax_helper.c */
 int			print_syntax_error(char *token);
@@ -265,7 +265,6 @@ void		parse_dollar(t_token **token, t_vars **vars, int *ret);
 void		parse_separator(t_token **token, t_vars **vars, int *ret);
 void		parse_parenthesis(t_token **token, t_vars **vars, int *ret);
 int			check_syntax(t_token *token);
-void		init_setup(t_helper *hp, t_env **env);
 
 /* tree.c */
 t_tree		*build_ast(t_token *token);

@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 01:22:46 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/12 00:19:19 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/17 08:59:16 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ void	ft_space(t_vars **vars, int *ret)
 
 int	before_space(char *str, int i)
 {
+	if (i < 0)
+		return (0);
 	return (is_space(str[i]));
 }
 
@@ -68,8 +70,9 @@ int	non_control2(enum e_token_type type)
 
 void	herdoc_msg(const char *delimiter, t_helper *hp)
 {
+	(void)hp;
 	ft_putstr_fd("minishell: warning: here-document at line ", 1);
-	ft_putnbr_fd(hp->line_count, 1);
+	ft_putnbr_fd(nb_lines(0), 1);
 	ft_putstr_fd(" delimited by end-of-file (wanted `", 1);
 	ft_putstr_fd((char *)delimiter, 1);
 	ft_putstr_fd("')\n", 1);

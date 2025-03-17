@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 21:26:48 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/17 02:32:56 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/17 09:03:37 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,11 @@ static int	contain_wild(char *str)
 	return (0);
 }
 
-void	init_setup(t_helper *hp, t_env **env)
+int	nb_lines(int state)
 {
-	hp->line_count = 0;
-	hp->env = env;
+	static int	nb_lines = 0;
+
+	if (state == 1)
+		nb_lines++;
+	return (nb_lines);
 }

@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:08:50 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/17 02:45:37 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/17 09:03:02 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static void	bash_loop(t_env **env)
 	t_token		*token;
 	t_helper	hp;
 
-	init_setup(&hp, env);
+	hp.env = env;
 	if (!setup_signals(&hp))
 		return ;
 	while (1)
@@ -47,7 +47,7 @@ static void	parse_exec_cmd(t_token **token, t_helper *hp)
 	char	*line;
 	char	*tmp;
 
-	hp->line_count++;
+	nb_lines(1);
 	line = readline("minishell$> ");
 	if (!line)
 		ft_exit(NULL);

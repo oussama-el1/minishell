@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 01:01:04 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/17 02:32:23 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/17 06:00:11 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,8 @@ static int	tokenizer(t_token **token, t_vars *vars)
 			parse_parenthesis(token, &vars, &ret);
 		else
 			parse_char(token, &vars, &ret);
+		if (ret == 1)
+			return (ret);
 	}
 	return (ret);
 }

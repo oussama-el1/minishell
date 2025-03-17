@@ -6,7 +6,7 @@
 /*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 18:04:04 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/17 02:54:29 by yslami           ###   ########.fr       */
+/*   Updated: 2025/03/17 08:48:17 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,10 +100,4 @@ int	ft_exit(char **argv)
 		exit_code = exit_code % 256;
 	}
 	exit(exit_code);
-}
-
-void	ft_clean_exit(void)
-{
-	fdmaroc(NULL, 0, CLEAR, 0);
-	maroc(0, FREE, CMD);
 }
