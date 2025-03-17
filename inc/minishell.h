@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 11:11:42 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/16 23:53:55 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/17 02:13:59 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -317,7 +317,7 @@ int			validate_var_name(const char *var);
 int			set_name_and_value(char *env, char **name, char **value);
 
 // exec
-void		setup_signals(t_helper *hp);
+int			setup_signals(t_helper *hp);
 char		*get_executable_path(char *cmd, t_env *env);
 void		execute_herdocs(t_helper *hp);
 void		execute_ast(t_helper *hp);

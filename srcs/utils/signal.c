@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 17:31:02 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/16 23:52:21 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/17 02:46:01 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void	sigint_not_end(int sig)
 {
 	(void)sig;
 	g_signals.sigint_child = 1;
+	g_signals.exit_status = CTRL_C;
 	ioctl(STDIN_FILENO, TIOCSTI, "\n");
 }
 
@@ -32,7 +33,7 @@ void	handle_sigint(int sig)
 {
 	if (sig == SIGINT)
 	{
-		g_signals.exit_status = 130;
+		g_signals.exit_status = CTRL_C;
 		write(1, "\n", 1);
 		rl_replace_line("", 0);
 		rl_on_new_line();
@@ -40,7 +41,7 @@ void	handle_sigint(int sig)
 	}
 }
 
-void	setup_signals(t_helper *hp)
+int	setup_signals(t_helper *hp)
 {
 	struct termios	term;
 
@@ -52,10 +53,9 @@ void	setup_signals(t_helper *hp)
 		hp->term = term;
 		signal(SIGINT, handle_sigint);
 		signal(SIGQUIT, SIG_IGN);
+		return (1);
 	}
-	else
-	{
-		signal(SIGINT, SIG_DFL);
-		signal(SIGQUIT, SIG_DFL);
-	}
+	ft_putstr_fd("minishell: stdin is not a tty\n", STDERR_FILENO);
+	g_signals.exit_status = 1;
+	return (0);
 }

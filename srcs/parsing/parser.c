@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yslami <yslami@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 01:01:04 by yslami            #+#    #+#             */
-/*   Updated: 2025/03/16 23:52:06 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/17 02:32:23 by yslami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,10 @@ int	process_input(char *line, t_token **token, t_helper *helper, \
 		helper->node = build_ast(*token);
 		execute_herdocs(helper);
 		if (g_signals.sigint_heredoc)
-		{
-			g_signals.sigint_heredoc = 0;
-			return (0);
-		}
+			return (g_signals.sigint_heredoc = 0, 0);
 		execute_ast(helper);
-		(signal(SIGINT, handle_sigint), signal(SIGQUIT, SIG_IGN));
 	}
-	return (add_history(line), 0);
+	return (0);
 }
 
 static int	tokenizer(t_token **token, t_vars *vars)
@@ -115,10 +111,10 @@ static int	handle_end_of_line(char **line, t_token **token, t_helper *helper)
 	new_line = input_cmd(last_token(*token));
 	if (!new_line)
 	{
-		if (g_signals.exit_status == 130)
+		if (g_signals.sigint_child)
 		{
 			g_signals.sigint_child = 0;
-			return (signal(SIGINT, handle_sigint), 0);
+			return (signal(SIGINT, SIG_IGN), 0);
 		}
 		signal(SIGINT, handle_sigint);
 		g_signals.exit_status = 2;
