@@ -6,7 +6,7 @@
 /*   By: oel-hadr <oel-hadr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 03:58:04 by oel-hadr          #+#    #+#             */
-/*   Updated: 2025/03/17 04:06:18 by oel-hadr         ###   ########.fr       */
+/*   Updated: 2025/03/17 10:51:50 by oel-hadr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,11 @@ static char	**env_to_array(t_env *env)
 	while (env)
 	{
 		if (env->value)
+		{
 			entry = ft_strjoin(env->key, ft_strjoin("=\"",
 						env->value, CMD), CMD);
+			entry = ft_strjoin(entry, "\"", CMD);
+		}
 		else
 			entry = ft_strdup(env->key, CMD);
 		env_arr[i++] = entry;
@@ -86,7 +89,7 @@ void	print_export(t_env *env, int declare)
 	while (env_arr[i])
 	{
 		if (declare)
-			printf("declare -x %s\"\n", env_arr[i]);
+			printf("declare -x %s\n", env_arr[i]);
 		else
 			printf("%s\n", env_arr[i]);
 		i++;
